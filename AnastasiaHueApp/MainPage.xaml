@@ -17,6 +17,12 @@
 
             <Label
                 Text="{Binding Text}"/>
+
+            <Editor 
+                Text="{Binding BoxText}"/>
+
+            <Button 
+                Command="{Binding RetrieveBridgeConfigCommand}"/>
         </VerticalStackLayout>
     </ScrollView>
 
