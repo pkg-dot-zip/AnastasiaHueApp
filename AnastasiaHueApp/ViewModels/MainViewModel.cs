@@ -1,4 +1,8 @@
-﻿using System.Net.Http.Json;
+﻿using System.Diagnostics;
+using System.Net.Http.Json;
+using AnastasiaHueApp.Models.Message;
+using AnastasiaHueApp.Util.Extensions;
+using AnastasiaHueApp.Util.Json;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
@@ -6,7 +10,8 @@ using Microsoft.Extensions.Logging;
 namespace AnastasiaHueApp.ViewModels;
 
 public partial class MainViewModel(
-    ILogger<MainViewModel> logger)
+    ILogger<MainViewModel> logger,
+    IJsonRegistry registry)
     : BaseViewModel
 {
     [ObservableProperty] private string _text = "TestText!";
@@ -27,8 +32,17 @@ public partial class MainViewModel(
                 devicetype = "my_hue_app#iphone peter", // From: https://developers.meethue.com/develop/get-started-2/
             });
             response.EnsureSuccessStatusCode();
-            var respString = await response.Content.ReadAsStringAsync();
-            BoxText = respString;
+            var either = await response.Content.ReadAsEitherAsync<UsernameResponse, ErrorResponse>(registry);
+
+            if (either.IsType<UsernameResponse>(out var username))
+            {
+                BoxText = username!.Username;
+            }
+
+            if (either.IsType<ErrorResponse>(out var error))
+            {
+                BoxText = $"Error: {error!.Description}";
+            }
         }
         catch (HttpRequestException e)
         {
