@@ -1,4 +1,5 @@
-﻿using AnastasiaHueApp.Models.Message;
+﻿using AnastasiaHueApp.Models;
+using AnastasiaHueApp.Models.Message;
 using AnastasiaHueApp.Util.Alerts;
 using AnastasiaHueApp.Util.Hue;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -50,12 +51,31 @@ public partial class MainViewModel(
         {
             var either = await hueHandler.GetLights(_username);
 
-            if (either.IsType<LightsResponse>(out var lights))
+            if (either.IsType<List<HueLight>>(out var lights))
             {
-                foreach (var light in lights!.Lights)
+                foreach (var light in lights!)
                 {
                     logger.LogInformation($"{light.Name} - {light.State.Brightness}");
                 }
+            }
+        }
+        catch (HttpRequestException e)
+        {
+            logger.LogError(e, "Code {0}. Returning null.", e.StatusCode);
+            await displayAlertHandler.DisplayAlert("NETWORK ERROR", "Code {0}. Returning null.");
+        }
+    }
+
+    [RelayCommand]
+    private async Task RetrieveLight()
+    {
+        try
+        {
+            var either = await hueHandler.GetLight(_username, 1);
+
+            if (either.IsType<HueLight>(out var light))
+            {
+                logger.LogInformation($"{light!.Name} - {light.State.Brightness}");
             }
         }
         catch (HttpRequestException e)

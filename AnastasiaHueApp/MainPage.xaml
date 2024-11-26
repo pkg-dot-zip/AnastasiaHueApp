@@ -29,6 +29,10 @@
             <Button
                 Text="Retrieve Lights"
                 Command="{Binding RetrieveAllLightsCommand}" />
+
+            <Button
+                Text="Retrieve Light 1"
+                Command="{Binding RetrieveLightCommand}" />
         </VerticalStackLayout>
     </ScrollView>
 

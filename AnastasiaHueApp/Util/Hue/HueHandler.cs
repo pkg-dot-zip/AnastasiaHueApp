@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Json;
+using AnastasiaHueApp.Models;
 using AnastasiaHueApp.Models.Message;
 using AnastasiaHueApp.Util.Extensions;
 using AnastasiaHueApp.Util.Json;
@@ -23,10 +24,18 @@ public class HueHandler(IJsonRegistry registry)
         return await response.Content.ReadAsEitherAsync<UsernameResponse, ErrorResponse>(registry);
     }
 
-    public async Task<Either<LightsResponse, ErrorResponse>> GetLights(string username)
+    public async Task<Either<List<HueLight>, ErrorResponse>> GetLights(string username)
     {
         var response = await HttpClient.GetAsync($"{username}/lights");
         response.EnsureSuccessStatusCode();
-        return await response.Content.ReadAsEitherAsync<LightsResponse, ErrorResponse>(registry);
+        return await response.Content.ReadAsEitherAsync<List<HueLight>, ErrorResponse>(registry);
+    }
+
+    public async Task<Either<HueLight, ErrorResponse>> GetLight(string username, int index)
+    {
+        if (index <= 0) throw new ArgumentOutOfRangeException(nameof(index));
+        var response = await HttpClient.GetAsync($"{username}/lights/{index}");
+        response.EnsureSuccessStatusCode();
+        return await response.Content.ReadAsEitherAsync<HueLight, ErrorResponse>(registry);
     }
 }
