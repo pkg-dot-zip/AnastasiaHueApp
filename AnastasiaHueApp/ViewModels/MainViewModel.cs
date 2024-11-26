@@ -15,7 +15,6 @@ public partial class MainViewModel(
     IHueHandler hueHandler)
     : BaseViewModel
 {
-    [ObservableProperty] private string _text = "TestText!";
     [ObservableProperty] private string _boxText = string.Empty;
     [ObservableProperty] private int _lightSelectedValueStepper = 1;
 
