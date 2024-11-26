@@ -1,6 +1,8 @@
 ﻿using AnastasiaHueApp.Models;
 using AnastasiaHueApp.Models.Message;
 using AnastasiaHueApp.Util.Alerts;
+using AnastasiaHueApp.Util.Color;
+using AnastasiaHueApp.Util.Extensions;
 using AnastasiaHueApp.Util.Hue;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -64,11 +66,11 @@ public partial class MainViewModel(
     private async Task TurnLightOff() => await hueHandler.LightSwitch(LightSelectedValueStepper, false);
 
     [RelayCommand]
-    private async Task SetLightToRed() => await hueHandler.SetColorTo(LightSelectedValueStepper, Color.FromRgb(255, 0, 0));
+    private async Task SetLightToRed() => await hueHandler.SetColorTo(LightSelectedValueStepper, ColorHandler.Red);
 
     [RelayCommand]
-    private async Task SetLightToGreen() => await hueHandler.SetColorTo(LightSelectedValueStepper, Color.FromRgb(0, 255, 0));
+    private async Task SetLightToGreen() => await hueHandler.SetColorTo(LightSelectedValueStepper, ColorHandler.Green);
 
     [RelayCommand]
-    private async Task SetLightToBlue() => await hueHandler.SetColorTo(LightSelectedValueStepper, Color.FromRgb(0, 0, 255));
+    private async Task SetLightToBlue() => await hueHandler.SetColorTo(LightSelectedValueStepper, ColorHandler.Blue);
 }

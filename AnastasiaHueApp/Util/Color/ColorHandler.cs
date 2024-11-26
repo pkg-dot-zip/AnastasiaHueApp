@@ -1,7 +1,11 @@
 ﻿namespace AnastasiaHueApp.Util.Color;
 
-public class ColorHandler
+public static class ColorHandler
 {
+    public static Color Red { get; } = Color.FromHex(0xFFFF0000);
+    public static Color Green { get; } = Color.FromHex(0xFF00FF00);
+    public static Color Blue { get; } = Color.FromHex(0xFF0000FF);
+
     private const float Tolerance = 1.0f;
 
     // NOTE: This method is partially written by AI. 🤖 RGB ranges from 0-255.

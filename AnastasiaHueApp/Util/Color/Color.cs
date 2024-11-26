@@ -54,4 +54,33 @@ public class Color
         if (!blue.IsInRange(0, 255)) throw new ArgumentOutOfRangeException(nameof(blue));
         return ColorHandler.RGBToHueHSB(red, green, blue);
     }
+
+    // NOTE: This method is partially written by AI. 🤖
+    /// <summary>
+    /// Allows initialization of <see cref="Color"/> from the <a href="https://en.wikipedia.org/wiki/Hexadecimal">HEX model</a>.
+    /// Please note that although <i>alpha</i> is calculated, it will not be passed on to the new instance of <see cref="Color"/>.
+    /// </summary>
+    /// <param name="hex">Hexadecimal number to convert into a <see cref="Color"/>.</param>
+    /// <returns>A new instance of <see cref="Color"/>.</returns>
+    public static Color FromHex(uint hex)
+    {
+        int r, g, b, a;
+
+        if ((hex & 0xFF000000) != 0) // Check if the hex includes alpha (e.g., 0xRRGGBBAA).
+        {
+            a = (int)((hex >> 24) & 0xFF);
+            r = (int)((hex >> 16) & 0xFF);
+            g = (int)((hex >> 8) & 0xFF);
+            b = (int)(hex & 0xFF);
+        }
+        else // If no alpha is provided, assume 255 (fully opaque).
+        {
+            a = 255;
+            r = (int)((hex >> 16) & 0xFF);
+            g = (int)((hex >> 8) & 0xFF);
+            b = (int)(hex & 0xFF);
+        }
+
+        return FromRgb(r, g, b);
+    }
 }
