@@ -2,15 +2,18 @@
 
 namespace AnastasiaHueApp.Util.Json;
 
+/// <inheritdoc />
 public class JsonRegistry : IJsonRegistry
 {
     private readonly Dictionary<Type, Func<string, object>> _parsers = new();
 
+    /// <inheritdoc />
     public void Register<T>(Func<string, T> parser)
     {
         _parsers[typeof(T)] = json => parser(json);
     }
 
+    /// <inheritdoc />
     public T? Parse<T>([StringSyntax(StringSyntaxAttribute.Json)] string json)
     {
         if (json == string.Empty) throw new ArgumentException(nameof(json));

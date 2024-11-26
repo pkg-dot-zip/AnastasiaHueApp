@@ -43,14 +43,13 @@ public class JsonRegistryTest
         });
 
         // Act.
-        string passportString = """
-                                {
-                                  "FullName": "John Doe",
-                                  "Nationality": "American",
-                                  "Age": 34
-                                }
-                                """;
-        var passport = registry.Parse<Passport>(passportString);
+        var passport = registry.Parse<Passport>("""
+                                                {
+                                                  "FullName": "John Doe",
+                                                  "Nationality": "American",
+                                                  "Age": 34
+                                                }
+                                                """);
 
         // Assert.
         passport.FullName.Should().Be("John Doe");
@@ -75,14 +74,13 @@ public class JsonRegistryTest
         });
 
         // Act.
-        string jsonString = """
-                                {
-                                  "FavouriteFood": "Pizza",
-                                  "BestFootballer": "Cristiano Ronaldo",
-                                  "FavouriteChildhoodGame": "Minecraft"
-                                }
-                                """;
-        var passport = registry.Parse<Passport>(jsonString);
+        var passport = registry.Parse<Passport>("""
+                                                {
+                                                  "FavouriteFood": "Pizza",
+                                                  "BestFootballer": "Cristiano Ronaldo",
+                                                  "FavouriteChildhoodGame": "Minecraft"
+                                                }
+                                                """);
 
         // Assert.
         passport.Should().BeNull("the json string was incorrect, thus it is not of this type of object");
