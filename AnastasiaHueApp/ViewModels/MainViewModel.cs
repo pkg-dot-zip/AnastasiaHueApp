@@ -62,4 +62,10 @@ public partial class MainViewModel(
 
         if (either.IsType<ErrorResponse>(out var error)) await displayAlertHandler.DisplayAlert(error!);
     }
+
+    [RelayCommand]
+    private async Task TurnLightOn() => await hueHandler.LightSwitch(_username, LightSelectedValueStepper, true);
+
+    [RelayCommand]
+    private async Task TurnLightOff() => await hueHandler.LightSwitch(_username, LightSelectedValueStepper, false);
 }

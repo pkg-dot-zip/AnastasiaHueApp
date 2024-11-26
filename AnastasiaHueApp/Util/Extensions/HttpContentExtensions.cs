@@ -11,6 +11,12 @@ public static class HttpContentExtensions
     // TODO: Verify json here. If not of Json format throw exception.
     public static async Task<string> ReadAsJsonString(this HttpContent content) => await content.ReadAsStringAsync();
 
+    public static async Task<T?> ReadAsOrNullAsync<T>(this HttpContent content, IJsonRegistry registry)
+    {
+        var json = await content.ReadAsJsonString();
+        return registry.Parse<T>(json);
+    }
+
     public static async Task<Either<T1, T2>> ReadAsEitherAsync<T1, T2>(this HttpContent content, IJsonRegistry registry)
     {
         var json = await content.ReadAsJsonString();

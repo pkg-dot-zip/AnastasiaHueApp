@@ -42,6 +42,14 @@
                     Text="{Binding LightSelectedValueStepper,
                     StringFormat='Retrieve Light {0}'}"
                     Command="{Binding RetrieveLightCommand}" />
+
+                <Button
+                    Text="Turn Off"
+                    Command="{Binding TurnLightOffCommand}" />
+
+                <Button
+                    Text="Turn On"
+                    Command="{Binding TurnLightOnCommand}" />
             </HorizontalStackLayout>
         </VerticalStackLayout>
     </ScrollView>

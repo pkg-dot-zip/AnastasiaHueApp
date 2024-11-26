@@ -64,4 +64,23 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry)
             return new Either<HueLight, ErrorResponse>(new ErrorResponse(e));
         }
     }
+
+    public async Task<ErrorResponse?> LightSwitch(string username, int index, bool turnOn)
+    {
+        try
+        {
+            if (index <= 0) throw new ArgumentOutOfRangeException(nameof(index));
+            var response = await HttpClient.PutAsJsonAsync($"{username}/lights/{index}/state", new
+            {
+                On = turnOn,
+            });
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsOrNullAsync<ErrorResponse>(registry);
+        }
+        catch (HttpRequestException e)
+        {
+            logger.LogError(e, "Code {0}. Returning ErrorResponse.", e.StatusCode);
+            return new ErrorResponse(e);
+        }
+    }
 }
