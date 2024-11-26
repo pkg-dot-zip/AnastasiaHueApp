@@ -16,6 +16,7 @@ public partial class MainViewModel(
 {
     [ObservableProperty] private string _text = "TestText!";
     [ObservableProperty] private string _boxText = string.Empty;
+    [ObservableProperty] private int _lightSelectedValueStepper = 1;
 
     private string _username = string.Empty;
 
@@ -58,6 +59,11 @@ public partial class MainViewModel(
                     logger.LogInformation($"{light.Name} - {light.State.Brightness}");
                 }
             }
+
+            if (either.IsType<ErrorResponse>(out var error))
+            {
+                await displayAlertHandler.DisplayAlert("Error", error!.Description);
+            }
         }
         catch (HttpRequestException e)
         {
@@ -71,11 +77,16 @@ public partial class MainViewModel(
     {
         try
         {
-            var either = await hueHandler.GetLight(_username, 1);
+            var either = await hueHandler.GetLight(_username, LightSelectedValueStepper);
 
             if (either.IsType<HueLight>(out var light))
             {
                 logger.LogInformation($"{light!.Name} - {light.State.Brightness}");
+            }
+
+            if (either.IsType<ErrorResponse>(out var error))
+            {
+                await displayAlertHandler.DisplayAlert("Error", error!.Description);
             }
         }
         catch (HttpRequestException e)

@@ -30,9 +30,19 @@
                 Text="Retrieve Lights"
                 Command="{Binding RetrieveAllLightsCommand}" />
 
-            <Button
-                Text="Retrieve Light 1"
-                Command="{Binding RetrieveLightCommand}" />
+            <HorizontalStackLayout>
+                <Stepper 
+                    Value="{Binding LightSelectedValueStepper}"
+                    Minimum="1"
+                    Maximum="50"
+                    Increment="1"
+                    />
+
+                <Button
+                    Text="{Binding LightSelectedValueStepper,
+                    StringFormat='Retrieve Light {0}'}"
+                    Command="{Binding RetrieveLightCommand}" />
+            </HorizontalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
 
