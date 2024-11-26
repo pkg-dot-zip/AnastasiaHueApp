@@ -1,4 +1,6 @@
-﻿namespace AnastasiaHueApp.Util.Alerts;
+﻿using AnastasiaHueApp.Models.Message;
+
+namespace AnastasiaHueApp.Util.Alerts;
 
 /// <summary>
 /// Simple class that handles alert, implementing an interface so we can mock it and our code is not UI dependent.
@@ -16,5 +18,11 @@ public class DisplayAlertHandler : IDisplayAlertHandler
     {
         // TODO: Handle null (see warning).
         return await Application.Current!.MainPage!.DisplayAlert(title, message, accept, cancel, flowDirection);
+    }
+
+    /// <inheritdoc cref="IDisplayAlertHandler.DisplayAlert(ErrorResponse)"/>
+    public async Task<bool> DisplayAlert(ErrorResponse error)
+    {
+        return await DisplayAlert($"Error {error.Type}", error.Description);
     }
 }

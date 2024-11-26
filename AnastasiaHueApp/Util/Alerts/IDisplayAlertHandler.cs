@@ -1,4 +1,6 @@
-﻿namespace AnastasiaHueApp.Util.Alerts;
+﻿using AnastasiaHueApp.Models.Message;
+
+namespace AnastasiaHueApp.Util.Alerts;
 
 public interface IDisplayAlertHandler
 {
@@ -21,4 +23,11 @@ public interface IDisplayAlertHandler
     /// <param name="flowDirection">The flow direction to be used by the alert.</param>
     /// <returns>A <see cref="Task"/> that contains the user's choice as a <see cref="bool"/> value. <see langword="true"/> indicates that the user accepted the alert. <see langword="false"/> indicates that the user cancelled the alert.</returns>
     public Task<bool> DisplayAlert(string? title, string message, string? accept, string cancel, FlowDirection flowDirection);
+
+    /// <summary>
+    /// Helper method that calls <see cref="DisplayAlert(string?,string,string)"/> with params based on <paramref name="error"/>.
+    /// </summary>
+    /// <param name="error">Error to display in the alert.</param>
+    /// <returns>Always <see langword="false"/>, since there is only a cancel button.</returns>
+    public Task<bool> DisplayAlert(ErrorResponse error);
 }

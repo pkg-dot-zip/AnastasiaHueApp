@@ -23,76 +23,43 @@ public partial class MainViewModel(
     [RelayCommand]
     private async Task RetrieveBridgeConfig()
     {
-        try
-        {
-            var either = await hueHandler.AttemptLinkAsync();
+        var either = await hueHandler.AttemptLinkAsync();
 
-            if (either.IsType<UsernameResponse>(out var username))
-            {
-                BoxText = username!.Username;
-                _username = username.Username;
-            }
-
-            if (either.IsType<ErrorResponse>(out var error))
-            {
-                await displayAlertHandler.DisplayAlert("Error", error!.Description);
-            }
-        }
-        catch (HttpRequestException e)
+        if (either.IsType<UsernameResponse>(out var username))
         {
-            logger.LogError(e, "Code {0}. Returning null.", e.StatusCode);
-            await displayAlertHandler.DisplayAlert("NETWORK ERROR", "Code {0}. Returning null.");
+            BoxText = username!.Username;
+            _username = username.Username;
         }
+
+        if (either.IsType<ErrorResponse>(out var error)) await displayAlertHandler.DisplayAlert(error!);
     }
 
     [RelayCommand]
     private async Task RetrieveAllLights()
     {
-        try
+        var either = await hueHandler.GetLights(_username);
+
+        if (either.IsType<List<HueLight>>(out var lights))
         {
-            var either = await hueHandler.GetLights(_username);
-
-            if (either.IsType<List<HueLight>>(out var lights))
+            foreach (var light in lights!)
             {
-                foreach (var light in lights!)
-                {
-                    logger.LogInformation($"{light.Name} - {light.State.Brightness}");
-                }
-            }
-
-            if (either.IsType<ErrorResponse>(out var error))
-            {
-                await displayAlertHandler.DisplayAlert("Error", error!.Description);
+                logger.LogInformation($"{light.Name} - {light.State.Brightness}");
             }
         }
-        catch (HttpRequestException e)
-        {
-            logger.LogError(e, "Code {0}. Returning null.", e.StatusCode);
-            await displayAlertHandler.DisplayAlert("NETWORK ERROR", "Code {0}. Returning null.");
-        }
+
+        if (either.IsType<ErrorResponse>(out var error)) await displayAlertHandler.DisplayAlert(error!);
     }
 
     [RelayCommand]
     private async Task RetrieveLight()
     {
-        try
-        {
-            var either = await hueHandler.GetLight(_username, LightSelectedValueStepper);
+        var either = await hueHandler.GetLight(_username, LightSelectedValueStepper);
 
-            if (either.IsType<HueLight>(out var light))
-            {
-                logger.LogInformation($"{light!.Name} - {light.State.Brightness}");
-            }
-
-            if (either.IsType<ErrorResponse>(out var error))
-            {
-                await displayAlertHandler.DisplayAlert("Error", error!.Description);
-            }
-        }
-        catch (HttpRequestException e)
+        if (either.IsType<HueLight>(out var light))
         {
-            logger.LogError(e, "Code {0}. Returning null.", e.StatusCode);
-            await displayAlertHandler.DisplayAlert("NETWORK ERROR", "Code {0}. Returning null.");
+            logger.LogInformation($"{light!.Name} - {light.State.Brightness}");
         }
+
+        if (either.IsType<ErrorResponse>(out var error)) await displayAlertHandler.DisplayAlert(error!);
     }
 }
