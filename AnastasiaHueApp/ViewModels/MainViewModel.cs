@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Net.Http.Json;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 
@@ -21,7 +22,10 @@ public partial class MainViewModel(
     {
         try
         {
-            var response = await HttpClient.GetAsync("newdeveloper");
+            var response = await HttpClient.PostAsJsonAsync("", new
+            {
+                devicetype = "my_hue_app#iphone peter", // From: https://developers.meethue.com/develop/get-started-2/
+            });
             response.EnsureSuccessStatusCode();
             var respString = await response.Content.ReadAsStringAsync();
             BoxText = respString;

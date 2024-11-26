@@ -60,6 +60,19 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Remove="Util\NewFolder1\**" />
+	  <Compile Remove="Util\NewFolder\**" />
+	  <EmbeddedResource Remove="Util\NewFolder1\**" />
+	  <EmbeddedResource Remove="Util\NewFolder\**" />
+	  <MauiCss Remove="Util\NewFolder1\**" />
+	  <MauiCss Remove="Util\NewFolder\**" />
+	  <MauiXaml Remove="Util\NewFolder1\**" />
+	  <MauiXaml Remove="Util\NewFolder\**" />
+	  <None Remove="Util\NewFolder1\**" />
+	  <None Remove="Util\NewFolder\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
