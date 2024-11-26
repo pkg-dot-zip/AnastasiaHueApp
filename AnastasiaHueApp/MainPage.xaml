@@ -4,6 +4,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AnastasiaHueApp.MainPage"
              xmlns:viewModels="clr-namespace:AnastasiaHueApp.ViewModels"
+             xmlns:color="clr-namespace:AnastasiaHueApp.Util.Color"
              x:DataType="viewModels:MainViewModel">
 
     <ScrollView>
@@ -50,18 +51,30 @@
 
                 <Button
                     Text="Set Color To Red"
-                    Command="{Binding SetLightToRedCommand}"
-                    BackgroundColor="Red"/>
+                    Command="{Binding SetLightToColorCommand}"
+                    BackgroundColor="Red">
+                    <Button.CommandParameter>
+                        <color:RgbColor R="255" G="0" B="0"/>
+                    </Button.CommandParameter>
+                </Button>
 
                 <Button
                     Text="Set Color To Green"
-                    Command="{Binding SetLightToGreenCommand}"
-                    BackgroundColor="Green"/>
+                    Command="{Binding SetLightToColorCommand}"
+                    BackgroundColor="Green">
+                    <Button.CommandParameter>
+                        <color:RgbColor R="0" G="255" B="0"/>
+                    </Button.CommandParameter>
+                </Button>
 
                 <Button
                     Text="Set Color To Blue"
-                    Command="{Binding SetLightToBlueCommand}"
-                    BackgroundColor="Blue"/>
+                    Command="{Binding SetLightToColorCommand}"
+                    BackgroundColor="Blue">
+                    <Button.CommandParameter>
+                        <color:RgbColor R="0" G="0" B="255"/>
+                    </Button.CommandParameter>
+                </Button>
             </HorizontalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
