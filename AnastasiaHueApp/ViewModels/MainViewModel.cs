@@ -62,4 +62,13 @@ public partial class MainViewModel(
 
     [RelayCommand]
     private async Task TurnLightOff() => await hueHandler.LightSwitch(LightSelectedValueStepper, false);
+
+    [RelayCommand]
+    private async Task SetLightToRed() => await hueHandler.SetColorTo(LightSelectedValueStepper, 0, 100, 254);
+
+    [RelayCommand]
+    private async Task SetLightToGreen() => await hueHandler.SetColorTo(LightSelectedValueStepper, 20000, 100, 254);
+
+    [RelayCommand]
+    private async Task SetLightToBlue() => await hueHandler.SetColorTo(LightSelectedValueStepper, 40000, 100, 254);
 }

@@ -50,6 +50,21 @@
                 <Button
                     Text="Turn On"
                     Command="{Binding TurnLightOnCommand}" />
+
+                <Button
+                    Text="Set Color To Red"
+                    Command="{Binding SetLightToRedCommand}"
+                    BackgroundColor="Red"/>
+
+                <Button
+                    Text="Set Color To Green"
+                    Command="{Binding SetLightToGreenCommand}"
+                    BackgroundColor="Green"/>
+
+                <Button
+                    Text="Set Color To Blue"
+                    Command="{Binding SetLightToBlueCommand}"
+                    BackgroundColor="Blue"/>
             </HorizontalStackLayout>
         </VerticalStackLayout>
     </ScrollView>

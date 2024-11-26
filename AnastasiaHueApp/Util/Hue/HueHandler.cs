@@ -68,16 +68,42 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry)
         }
     }
 
-    public async Task<ErrorResponse?> LightSwitch(int index, bool turnOn)
+    public async Task<ErrorResponse?> LightSwitch(int index, bool on)
     {
         try
         {
             if (index <= 0) throw new ArgumentOutOfRangeException(nameof(index));
             var response = await HttpClient.PutAsJsonAsync($"{_username}/lights/{index}/state", new
             {
-                On = turnOn,
+                on,
             });
             response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsOrNullAsync<ErrorResponse>(registry);
+        }
+        catch (HttpRequestException e)
+        {
+            logger.LogError(e, "Code {0}. Returning ErrorResponse.", e.StatusCode);
+            return new ErrorResponse(e);
+        }
+    }
+
+    public async Task<ErrorResponse?> SetColorTo(int index, int hue, int saturation, int brightness)
+    {
+        try
+        {
+            if (!hue.IsInRange(0, 65535)) throw new ArgumentOutOfRangeException(nameof(hue));
+            if (!saturation.IsInRange(0, 254)) throw new ArgumentOutOfRangeException(nameof(saturation));
+            if (!brightness.IsInRange(0, 254)) throw new ArgumentOutOfRangeException(nameof(brightness));
+
+            var response = await HttpClient.PutAsJsonAsync($"{_username}/lights/{index}/state", new
+            {
+                on = true, // Light is advised to be set on: https://developers.meethue.com/develop/get-started-2/#so-lets-get-started
+                sat = saturation,
+                bri = brightness,
+                hue,
+            });
+            response.EnsureSuccessStatusCode();
+
             return await response.Content.ReadAsOrNullAsync<ErrorResponse>(registry);
         }
         catch (HttpRequestException e)
