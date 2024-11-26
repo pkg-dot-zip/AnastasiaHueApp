@@ -18,26 +18,20 @@ public partial class MainViewModel(
     [ObservableProperty] private string _boxText = string.Empty;
     [ObservableProperty] private int _lightSelectedValueStepper = 1;
 
-    private string _username = string.Empty;
 
     [RelayCommand]
     private async Task RetrieveBridgeConfig()
     {
         var either = await hueHandler.AttemptLinkAsync();
 
-        if (either.IsType<UsernameResponse>(out var username))
-        {
-            BoxText = username!.Username;
-            _username = username.Username;
-        }
-
+        if (either.IsType<UsernameResponse>(out var username)) BoxText = username!.Username;
         if (either.IsType<ErrorResponse>(out var error)) await displayAlertHandler.DisplayAlert(error!);
     }
 
     [RelayCommand]
     private async Task RetrieveAllLights()
     {
-        var either = await hueHandler.GetLights(_username);
+        var either = await hueHandler.GetLights();
 
         if (either.IsType<List<HueLight>>(out var lights))
         {
@@ -53,7 +47,7 @@ public partial class MainViewModel(
     [RelayCommand]
     private async Task RetrieveLight()
     {
-        var either = await hueHandler.GetLight(_username, LightSelectedValueStepper);
+        var either = await hueHandler.GetLight(LightSelectedValueStepper);
 
         if (either.IsType<HueLight>(out var light))
         {
@@ -64,8 +58,8 @@ public partial class MainViewModel(
     }
 
     [RelayCommand]
-    private async Task TurnLightOn() => await hueHandler.LightSwitch(_username, LightSelectedValueStepper, true);
+    private async Task TurnLightOn() => await hueHandler.LightSwitch(LightSelectedValueStepper, true);
 
     [RelayCommand]
-    private async Task TurnLightOff() => await hueHandler.LightSwitch(_username, LightSelectedValueStepper, false);
+    private async Task TurnLightOff() => await hueHandler.LightSwitch(LightSelectedValueStepper, false);
 }

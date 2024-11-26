@@ -1,5 +1,4 @@
-﻿using System;
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
 using AnastasiaHueApp.Models;
 using AnastasiaHueApp.Models.Message;
 using AnastasiaHueApp.Util.Extensions;
@@ -15,7 +14,8 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry)
         BaseAddress = new Uri("http://localhost/api/"), // NOTE: If using port 80 no port needs to be specified.
     };
 
-    // TODO: Store username here so it's not needed in params.
+    private static string? _username = null;
+
     public async Task<Either<UsernameResponse, ErrorResponse>> AttemptLinkAsync()
     {
         try
@@ -25,7 +25,10 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry)
                 devicetype = "my_hue_app#iphone peter", // From: https://developers.meethue.com/develop/get-started-2/
             });
             response.EnsureSuccessStatusCode();
-            return await response.Content.ReadAsEitherAsync<UsernameResponse, ErrorResponse>(registry);
+            var either = await response.Content.ReadAsEitherAsync<UsernameResponse, ErrorResponse>(registry);
+
+            if (either.IsType<UsernameResponse>(out var username)) _username = username!.Username;
+            return either;
         }
         catch (HttpRequestException e)
         {
@@ -34,11 +37,11 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry)
         }
     }
 
-    public async Task<Either<List<HueLight>, ErrorResponse>> GetLights(string username)
+    public async Task<Either<List<HueLight>, ErrorResponse>> GetLights()
     {
         try
         {
-            var response = await HttpClient.GetAsync($"{username}/lights");
+            var response = await HttpClient.GetAsync($"{_username}/lights");
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadAsEitherAsync<List<HueLight>, ErrorResponse>(registry);
         }
@@ -49,12 +52,12 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry)
         }
     }
 
-    public async Task<Either<HueLight, ErrorResponse>> GetLight(string username, int index)
+    public async Task<Either<HueLight, ErrorResponse>> GetLight(int index)
     {
         try
         {
             if (index <= 0) throw new ArgumentOutOfRangeException(nameof(index));
-            var response = await HttpClient.GetAsync($"{username}/lights/{index}");
+            var response = await HttpClient.GetAsync($"{_username}/lights/{index}");
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadAsEitherAsync<HueLight, ErrorResponse>(registry);
         }
@@ -65,12 +68,12 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry)
         }
     }
 
-    public async Task<ErrorResponse?> LightSwitch(string username, int index, bool turnOn)
+    public async Task<ErrorResponse?> LightSwitch(int index, bool turnOn)
     {
         try
         {
             if (index <= 0) throw new ArgumentOutOfRangeException(nameof(index));
-            var response = await HttpClient.PutAsJsonAsync($"{username}/lights/{index}/state", new
+            var response = await HttpClient.PutAsJsonAsync($"{_username}/lights/{index}/state", new
             {
                 On = turnOn,
             });
