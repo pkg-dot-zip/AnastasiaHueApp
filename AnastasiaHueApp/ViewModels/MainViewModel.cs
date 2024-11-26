@@ -12,7 +12,7 @@ namespace AnastasiaHueApp.ViewModels;
 public partial class MainViewModel(
     ILogger<MainViewModel> logger,
     IDisplayAlertHandler displayAlertHandler,
-    HueHandler hueHandler)
+    IHueHandler hueHandler)
     : BaseViewModel
 {
     [ObservableProperty] private string _text = "TestText!";

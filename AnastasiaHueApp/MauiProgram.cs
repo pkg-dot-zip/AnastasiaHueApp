@@ -35,7 +35,7 @@ namespace AnastasiaHueApp
             builder.Services.AddSingleton<MainViewModel>();
             builder.Services.AddSingleton<IJsonRegistry, JsonRegistry>();
             builder.Services.AddSingleton<IDisplayAlertHandler, DisplayAlertHandler>();
-            builder.Services.AddSingleton<HueHandler>();
+            builder.Services.AddSingleton<IHueHandler, HueHandler>();
 
             return builder.Build();
         }

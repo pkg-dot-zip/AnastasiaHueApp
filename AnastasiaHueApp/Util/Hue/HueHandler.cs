@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AnastasiaHueApp.Util.Hue;
 
-public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry)
+public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry) : IHueHandler
 {
     private static readonly HttpClient HttpClient = new()
     {
