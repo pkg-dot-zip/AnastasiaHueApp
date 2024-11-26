@@ -2,7 +2,7 @@
 
 namespace AnastasiaHueApp.Util.Json;
 
-public class JsonRegistry
+public class JsonRegistry : IJsonRegistry
 {
     private readonly Dictionary<Type, Func<string, object>> _parsers = new();
 
