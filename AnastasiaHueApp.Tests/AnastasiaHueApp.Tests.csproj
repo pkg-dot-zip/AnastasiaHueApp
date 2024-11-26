@@ -2,10 +2,8 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>net9.0</TargetFrameworks>
-
-		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<UseMaui>true</UseMaui>
+		<ImplicitUsings>enable</ImplicitUsings>
 		<IsPackable>false</IsPackable>
 		<IsTestProject>true</IsTestProject>
 	</PropertyGroup>
