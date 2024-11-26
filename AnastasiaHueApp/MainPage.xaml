@@ -50,7 +50,7 @@
                     Command="{Binding TurnLightOnCommand}" />
 
                 <Button
-                    Text="Set Color To Red"
+                    Text="Red"
                     Command="{Binding SetLightToColorCommand}"
                     BackgroundColor="Red">
                     <Button.CommandParameter>
@@ -59,7 +59,7 @@
                 </Button>
 
                 <Button
-                    Text="Set Color To Green"
+                    Text="Green"
                     Command="{Binding SetLightToColorCommand}"
                     BackgroundColor="Green">
                     <Button.CommandParameter>
@@ -68,11 +68,47 @@
                 </Button>
 
                 <Button
-                    Text="Set Color To Blue"
+                    Text="Blue"
                     Command="{Binding SetLightToColorCommand}"
                     BackgroundColor="Blue">
                     <Button.CommandParameter>
                         <color:RgbColor R="0" G="0" B="255"/>
+                    </Button.CommandParameter>
+                </Button>
+
+                <Button
+                    Text="Violet"
+                    Command="{Binding SetLightToColorCommand}"
+                    BackgroundColor="BlueViolet">
+                    <Button.CommandParameter>
+                        <color:RgbColor R="138" G="43" B="226"/>
+                    </Button.CommandParameter>
+                </Button>
+
+                <Button
+                    Text="Brown"
+                    Command="{Binding SetLightToColorCommand}"
+                    BackgroundColor="Brown">
+                    <Button.CommandParameter>
+                        <color:RgbColor R="165" G="42" B="42"/>
+                    </Button.CommandParameter>
+                </Button>
+
+                <Button
+                    Text="Yellow"
+                    Command="{Binding SetLightToColorCommand}"
+                    BackgroundColor="Yellow">
+                    <Button.CommandParameter>
+                        <color:RgbColor R="255" G="255" B="0"/>
+                    </Button.CommandParameter>
+                </Button>
+
+                <Button
+                    Text="Pink"
+                    Command="{Binding SetLightToColorCommand}"
+                    BackgroundColor="Fuchsia">
+                    <Button.CommandParameter>
+                        <color:RgbColor R="255" G="0" B="255"/>
                     </Button.CommandParameter>
                 </Button>
             </HorizontalStackLayout>
