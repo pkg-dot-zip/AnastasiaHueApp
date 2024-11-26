@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Net.Http.Json;
 using AnastasiaHueApp.Models.Message;
+using AnastasiaHueApp.Util.Alerts;
 using AnastasiaHueApp.Util.Extensions;
 using AnastasiaHueApp.Util.Json;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -11,7 +12,8 @@ namespace AnastasiaHueApp.ViewModels;
 
 public partial class MainViewModel(
     ILogger<MainViewModel> logger,
-    IJsonRegistry registry)
+    IJsonRegistry registry,
+    IDisplayAlertHandler displayAlertHandler)
     : BaseViewModel
 {
     [ObservableProperty] private string _text = "TestText!";
@@ -41,7 +43,7 @@ public partial class MainViewModel(
 
             if (either.IsType<ErrorResponse>(out var error))
             {
-                BoxText = $"Error: {error!.Description}";
+                await displayAlertHandler.DisplayAlert("Error", error!.Description);
             }
         }
         catch (HttpRequestException e)

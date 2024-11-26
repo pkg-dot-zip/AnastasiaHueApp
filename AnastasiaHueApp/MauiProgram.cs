@@ -1,4 +1,5 @@
-﻿using AnastasiaHueApp.Util.Json;
+﻿using AnastasiaHueApp.Util.Alerts;
+using AnastasiaHueApp.Util.Json;
 using AnastasiaHueApp.ViewModels;
 using Microsoft.Extensions.Logging;
 using Serilog;
@@ -32,6 +33,7 @@ namespace AnastasiaHueApp
             builder.Services.AddSingleton<MainPage>();
             builder.Services.AddSingleton<MainViewModel>();
             builder.Services.AddSingleton<IJsonRegistry, JsonRegistry>();
+            builder.Services.AddSingleton<IDisplayAlertHandler, DisplayAlertHandler>();
 
             return builder.Build();
         }
