@@ -21,4 +21,8 @@
 		<ProjectReference Include="..\AnastasiaHueApp\AnastasiaHueApp.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Util\Extensions\" />
+	</ItemGroup>
+
 </Project>
