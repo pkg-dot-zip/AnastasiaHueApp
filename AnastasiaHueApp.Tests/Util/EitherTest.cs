@@ -3,6 +3,7 @@ using AnastasiaHueApp.Util;
 using FluentAssertions;
 using JetBrains.Annotations;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json.Linq;
 
 namespace AnastasiaHueApp.Tests.Util;
 
@@ -76,6 +77,21 @@ public class EitherTest
     {
         var action = () => new Either<TestClass1, TestClass2>();
         action.Should().NotThrow<ArgumentException>();
+    }
+
+    [TestMethod]
+    [DataRow("", "")]
+    public void Constructor_StringStringNeitherNull_ThrowsArgumentException(string value1, string value2)
+    {
+        var action = () => new Either<string, string>(value1, value2);
+        action.Should().Throw<ArgumentException>();
+    }
+
+    [TestMethod]
+    public void Constructor_TestClass1TestClass2NeitherNull_ThrowsArgumentException()
+    {
+        var action = () => new Either<TestClass1, TestClass2>(new TestClass1(), new TestClass2());
+        action.Should().Throw<ArgumentException>();
     }
 
     #endregion
