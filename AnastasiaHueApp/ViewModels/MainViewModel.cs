@@ -5,6 +5,7 @@ using AnastasiaHueApp.Util.Hue;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
+using Color = AnastasiaHueApp.Util.Color.Color;
 
 namespace AnastasiaHueApp.ViewModels;
 
@@ -64,11 +65,11 @@ public partial class MainViewModel(
     private async Task TurnLightOff() => await hueHandler.LightSwitch(LightSelectedValueStepper, false);
 
     [RelayCommand]
-    private async Task SetLightToRed() => await hueHandler.SetColorTo(LightSelectedValueStepper, 0, 100, 254);
+    private async Task SetLightToRed() => await hueHandler.SetColorTo(LightSelectedValueStepper, Color.FromRgb(255, 0, 0));
 
     [RelayCommand]
-    private async Task SetLightToGreen() => await hueHandler.SetColorTo(LightSelectedValueStepper, 20000, 100, 254);
+    private async Task SetLightToGreen() => await hueHandler.SetColorTo(LightSelectedValueStepper, Color.FromRgb(0, 255, 0));
 
     [RelayCommand]
-    private async Task SetLightToBlue() => await hueHandler.SetColorTo(LightSelectedValueStepper, 40000, 100, 254);
+    private async Task SetLightToBlue() => await hueHandler.SetColorTo(LightSelectedValueStepper, Color.FromRgb(0, 0, 255));
 }

@@ -87,20 +87,16 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry)
         }
     }
 
-    public async Task<ErrorResponse?> SetColorTo(int index, int hue, int saturation, int brightness)
+    public async Task<ErrorResponse?> SetColorTo(int index, Color.Color color)
     {
         try
         {
-            if (!hue.IsInRange(0, 65535)) throw new ArgumentOutOfRangeException(nameof(hue));
-            if (!saturation.IsInRange(0, 254)) throw new ArgumentOutOfRangeException(nameof(saturation));
-            if (!brightness.IsInRange(0, 254)) throw new ArgumentOutOfRangeException(nameof(brightness));
-
             var response = await HttpClient.PutAsJsonAsync($"{_username}/lights/{index}/state", new
             {
                 on = true, // Light is advised to be set on: https://developers.meethue.com/develop/get-started-2/#so-lets-get-started
-                sat = saturation,
-                bri = brightness,
-                hue,
+                sat = color.Saturation,
+                bri = color.Brightness,
+                hue = color.Hue,
             });
             response.EnsureSuccessStatusCode();
 
