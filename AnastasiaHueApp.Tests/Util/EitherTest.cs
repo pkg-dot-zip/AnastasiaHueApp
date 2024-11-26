@@ -83,7 +83,7 @@ public class EitherTest
     #region IsType
 
     [TestMethod]
-    public void IsType_TestClass1RetrievalFromEitherStringTestClass1_ReturnsTrue()
+    public void IsType_TestClass1RetrievalFromEitherStringTestClass1IsTestClass1_ReturnsTrue()
     {
         // Arrange.
         var either = new Either<TestClass1, string>(new TestClass1());
@@ -93,6 +93,32 @@ public class EitherTest
     
         // Assert.
         isTestClass1.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void IsType_TestClass2RetrievalFromEitherTestClass1TestClass2IsTestClass2_ReturnsTrue()
+    {
+        // Arrange.
+        var either = new Either<TestClass1, TestClass2>(new TestClass2());
+
+        // Act.
+        var isTestClass2 = either.IsType<TestClass2>(out var value);
+
+        // Assert.
+        isTestClass2.Should().BeTrue();
+    }
+
+    [TestMethod]
+    public void IsType_TestClass2RetrievalFromEitherTestClass1TestClass2IsTestClass1_ReturnsFalse()
+    {
+        // Arrange.
+        var either = new Either<TestClass1, TestClass2>(new TestClass1());
+
+        // Act.
+        var isTestClass2 = either.IsType<TestClass2>(out var value);
+
+        // Assert.
+        isTestClass2.Should().BeFalse();
     }
 
     #endregion
