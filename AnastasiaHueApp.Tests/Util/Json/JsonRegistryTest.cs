@@ -2,7 +2,9 @@
 using AnastasiaHueApp.Util.Json;
 using FluentAssertions;
 using JetBrains.Annotations;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace AnastasiaHueApp.Tests.Util.Json;
 
@@ -30,7 +32,7 @@ public class JsonRegistryTest
     public void Parse_Passport_MatchingValues()
     {
         // Arrange.
-        var registry = new JsonRegistry();
+        var registry = new JsonRegistry(Mock.Of<ILogger<JsonRegistry>>());
         registry.Register<Passport>(json =>
         {
             var doc = JsonDocument.Parse(json);
@@ -61,7 +63,7 @@ public class JsonRegistryTest
     public void Parse_Passport_InvalidString_ReturnsNull()
     {
         // Arrange.
-        var registry = new JsonRegistry();
+        var registry = new JsonRegistry(Mock.Of<ILogger<JsonRegistry>>());
         registry.Register<Passport>(json =>
         {
             var doc = JsonDocument.Parse(json);

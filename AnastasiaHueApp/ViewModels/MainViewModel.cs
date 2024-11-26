@@ -16,6 +16,8 @@ public partial class MainViewModel(
     [ObservableProperty] private string _text = "TestText!";
     [ObservableProperty] private string _boxText = string.Empty;
 
+    private string _username = string.Empty;
+
     [RelayCommand]
     private async Task RetrieveBridgeConfig()
     {
@@ -26,11 +28,34 @@ public partial class MainViewModel(
             if (either.IsType<UsernameResponse>(out var username))
             {
                 BoxText = username!.Username;
+                _username = username.Username;
             }
 
             if (either.IsType<ErrorResponse>(out var error))
             {
                 await displayAlertHandler.DisplayAlert("Error", error!.Description);
+            }
+        }
+        catch (HttpRequestException e)
+        {
+            logger.LogError(e, "Code {0}. Returning null.", e.StatusCode);
+            await displayAlertHandler.DisplayAlert("NETWORK ERROR", "Code {0}. Returning null.");
+        }
+    }
+
+    [RelayCommand]
+    private async Task RetrieveAllLights()
+    {
+        try
+        {
+            var either = await hueHandler.GetLights(_username);
+
+            if (either.IsType<LightsResponse>(out var lights))
+            {
+                foreach (var light in lights!.Lights)
+                {
+                    logger.LogInformation($"{light.Name} - {light.State.Brightness}");
+                }
             }
         }
         catch (HttpRequestException e)
