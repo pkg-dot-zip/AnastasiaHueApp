@@ -16,9 +16,14 @@ public class JsonRegistry
         if (json == string.Empty) throw new ArgumentException(nameof(json));
         if (_parsers.TryGetValue(typeof(T), out var parser))
         {
-            // TODO: If unsuccessful, return null.
-
-            return (T)parser(json);
+            try
+            {
+                return (T)parser(json);
+            }
+            catch (KeyNotFoundException e)
+            {
+                return default; // This occurs when this is not of this type of object!
+            }
         }
 
         throw new InvalidOperationException($"No parser registered for type {nameof(T)} ({typeof(T)})");

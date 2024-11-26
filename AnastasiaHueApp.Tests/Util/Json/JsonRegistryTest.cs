@@ -57,4 +57,34 @@ public class JsonRegistryTest
         passport.Nationality.Should().Be("American");
         passport.Age.Should().Be(34);
     }
+
+    [TestMethod]
+    public void Parse_Passport_InvalidString_ReturnsNull()
+    {
+        // Arrange.
+        var registry = new JsonRegistry();
+        registry.Register<Passport>(json =>
+        {
+            var doc = JsonDocument.Parse(json);
+            return new Passport
+            {
+                FullName = doc.RootElement.GetProperty("FullName").GetString()!,
+                Nationality = doc.RootElement.GetProperty("Nationality").GetString()!,
+                Age = doc.RootElement.GetProperty("Age").GetInt32(),
+            };
+        });
+
+        // Act.
+        string jsonString = """
+                                {
+                                  "FavouriteFood": "Pizza",
+                                  "BestFootballer": "Cristiano Ronaldo",
+                                  "FavouriteChildhoodGame": "Minecraft"
+                                }
+                                """;
+        var passport = registry.Parse<Passport>(jsonString);
+
+        // Assert.
+        passport.Should().BeNull("the json string was incorrect, thus it is not of this type of object");
+    }
 }
