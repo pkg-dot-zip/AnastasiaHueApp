@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using AnastasiaHueApp.Models;
 using AnastasiaHueApp.Models.Message;
@@ -30,18 +31,24 @@ public class JsonRegistry : IJsonRegistry
     public T? Parse<T>([StringSyntax(StringSyntaxAttribute.Json)] string json)
     {
         if (json == string.Empty) throw new ArgumentException(nameof(json));
+
+        _logger.LogInformation("Got json: {0}", json);
+
         if (_parsers.TryGetValue(typeof(T), out var parser))
         {
             try
             {
+                _logger.LogInformation("Confirmed to be of type {0}", typeof(T));
                 return (T)parser(json);
             }
             catch (KeyNotFoundException e)
             {
+                _logger.LogInformation("Is NOT of type {0}", typeof(T));
                 return default; // This occurs when this is not of this type of object, since a definition is missing!
             }
             catch (InvalidOperationException e)
             {
+                _logger.LogInformation("Is NOT of type {0}", typeof(T));
                 return default; // Can happen when having an array / object mismatch.
             }
         }

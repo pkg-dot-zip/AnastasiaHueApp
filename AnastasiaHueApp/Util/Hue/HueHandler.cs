@@ -11,7 +11,7 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry) : IH
 {
     private static readonly HttpClient HttpClient = new()
     {
-        BaseAddress = new Uri("http://localhost/api/"), // NOTE: If using port 80 no port needs to be specified.
+        BaseAddress = new Uri("http://192.168.1.179/api/"), // NOTE: If using port 80 no port needs to be specified.
     };
 
     private static string? _username = null;
