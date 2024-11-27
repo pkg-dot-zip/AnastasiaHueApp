@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using AnastasiaHueApp.Util.Json;
 using System.Runtime.CompilerServices;
     

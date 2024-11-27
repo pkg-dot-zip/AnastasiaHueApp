@@ -1,4 +1,4 @@
-﻿using System.Dynamic;
+using System.Dynamic;
 using System.Net.Http.Json;
 using AnastasiaHueApp.Models;
 using AnastasiaHueApp.Models.Message;
@@ -61,7 +61,17 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry) : IH
             if (index <= 0) throw new ArgumentOutOfRangeException(nameof(index));
             var response = await HttpClient.GetAsync($"{_username}/lights/{index}");
             response.EnsureSuccessStatusCode();
-            return await response.Content.ReadAsEitherAsync<HueLight, ErrorResponse>(registry);
+            
+            // Here we set the light id / index, since that is not returned in the json. :(
+            var either = await response.Content.ReadAsEitherAsync<HueLight, ErrorResponse>(registry);
+            
+            if (either.IsType<HueLight>(out var light))
+            {
+                light!.Id = index;
+                return new Either<HueLight, ErrorResponse>(light);
+            }
+
+            return either;
         }
         catch (HttpRequestException e)
         {

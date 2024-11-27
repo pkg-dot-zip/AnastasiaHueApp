@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using AnastasiaHueApp.Models;
 using AnastasiaHueApp.Models.Message;
@@ -79,6 +79,7 @@ public class JsonRegistry : IJsonRegistry
         });
 
         // HueLight. NOTE: This one is partially written by AI 🤖, since I couldn't be bothered writing all the json parsing myself.
+        // NOTE: No index is passed here. You'd have to set that later manually.
         Register<HueLight>(json =>
         {
             var doc = JsonDocument.Parse(json);
@@ -90,15 +91,16 @@ public class JsonRegistry : IJsonRegistry
         {
             var doc = JsonDocument.Parse(json);
             return doc.RootElement.EnumerateObject()
-                .Select(prop => GetHueLight(prop.Value)).ToList();
+                .Select(prop => GetHueLight(prop.Value, int.Parse(prop.Name))).ToList();
         });
     }
 
     // Helper method since multiple parsers need to create instances of HueLight.
-    private HueLight GetHueLight(JsonElement element)
+    private HueLight GetHueLight(JsonElement element, int? id = null)
     {
         return new HueLight
         {
+            Id = id ?? int.MinValue,
             ModelId = element.GetProperty("modelid").GetString()!,
             Name = element.GetProperty("name").GetString()!,
             SwVersion = element.GetProperty("swversion").GetString()!,

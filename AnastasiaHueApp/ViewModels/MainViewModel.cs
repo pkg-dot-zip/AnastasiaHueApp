@@ -39,7 +39,7 @@ public partial class MainViewModel(
         {
             foreach (var light in lights!)
             {
-                logger.LogInformation($"{light.Name} - {light.State.Brightness}");
+                logger.LogInformation($"({light.Id}) | {light.Name} - {light.State.Brightness}");
             }
         }
 
@@ -53,7 +53,7 @@ public partial class MainViewModel(
 
         if (either.IsType<HueLight>(out var light))
         {
-            logger.LogInformation($"{light!.Name} - {light.State.Brightness}");
+            logger.LogInformation($"({light!.Id}) | {light.Name} - {light.State.Brightness}");
         }
 
         if (either.IsType<ErrorResponse>(out var error)) await displayAlertHandler.DisplayAlert(error!);
