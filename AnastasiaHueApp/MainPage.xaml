@@ -113,8 +113,8 @@
                 </Button>
 
                 <Button
-                    Text="LSelect Alert"
-                    Command="{Binding LSelectAlertCommand}"/>
+                    Text="Blink (10 sec)"
+                    Command="{Binding MakeLightBlinkFor10SecCommand}"/>
             </HorizontalStackLayout>
         </VerticalStackLayout>
     </ScrollView>

@@ -70,5 +70,5 @@ public partial class MainViewModel(
         await hueHandler.SetColorTo(LightSelectedValueStepper, rgb.ToColor());
 
     [RelayCommand]
-    private async Task LSelectAlert() => await hueHandler.AlertLSelect(LightSelectedValueStepper);
+    private async Task MakeLightBlinkFor10Sec() => await hueHandler.MakeLightBlink(LightSelectedValueStepper);
 }

@@ -109,7 +109,7 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry) : IH
         }
     }
 
-    public async Task<ErrorResponse?> AlertLSelect(int index)
+    public async Task<ErrorResponse?> MakeLightBlink(int index)
     {
         try
         {
