@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using AnastasiaHueApp.Util.Json;
 using System.Runtime.CompilerServices;
-
+    
 namespace AnastasiaHueApp.Util.Extensions;
 
 /// <summary>

@@ -111,6 +111,10 @@
                         <color:RgbColor R="255" G="0" B="255"/>
                     </Button.CommandParameter>
                 </Button>
+
+                <Button
+                    Text="LSelect Alert"
+                    Command="{Binding LSelectAlertCommand}"/>
             </HorizontalStackLayout>
         </VerticalStackLayout>
     </ScrollView>

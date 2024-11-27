@@ -108,4 +108,23 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry) : IH
             return new ErrorResponse(e);
         }
     }
+
+    public async Task<ErrorResponse?> AlertLSelect(int index)
+    {
+        try
+        {
+            var response = await HttpClient.PutAsJsonAsync($"{_username}/lights/{index}/state", new
+            {
+                alert = "lselect",
+            });
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadAsOrNullAsync<ErrorResponse>(registry);
+        }
+        catch (HttpRequestException e)
+        {
+            logger.LogError(e, "Code {0}. Returning ErrorResponse.", e.StatusCode);
+            return new ErrorResponse(e);
+        }
+    }
 }
