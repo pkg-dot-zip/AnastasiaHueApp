@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+﻿using System.Dynamic;
+using System.Net.Http.Json;
 using AnastasiaHueApp.Models;
 using AnastasiaHueApp.Models.Message;
 using AnastasiaHueApp.Util.Extensions;
@@ -11,8 +12,8 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry) : IH
 {
     private static readonly HttpClient HttpClient = new()
     {
-        // BaseAddress = new Uri("http://localhost/api/"), // NOTE: If using port 80 no port needs to be specified.
-        BaseAddress = new Uri("http://192.168.1.179/api/"), // NOTE: If using port 80 no port needs to be specified.
+        BaseAddress = new Uri("http://localhost/api/"), // NOTE: If using port 80 no port needs to be specified.
+        // BaseAddress = new Uri("http://192.168.1.179/api/"), // NOTE: If using port 80 no port needs to be specified.
     };
 
     private static string? _username = null;
@@ -71,72 +72,51 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry) : IH
 
     public async Task<ErrorResponse?> LightSwitch(int index, bool on)
     {
-        try
-        {
-            if (index <= 0) throw new ArgumentOutOfRangeException(nameof(index));
-            var response = await HttpClient.PutAsJsonAsync($"{_username}/lights/{index}/state", new
-            {
-                on,
-            });
-            response.EnsureSuccessStatusCode();
-            return await response.Content.ReadAsOrNullAsync<ErrorResponse>(registry);
-        }
-        catch (HttpRequestException e)
-        {
-            logger.LogError(e, "Code {0}. Returning ErrorResponse.", e.StatusCode);
-            return new ErrorResponse(e);
-        }
+        if (index <= 0) throw new ArgumentOutOfRangeException(nameof(index));
+        return await SetLightState(index, new HueLightState() {On = on});
     }
 
     public async Task<ErrorResponse?> SetColorTo(int index, Color.Color color)
     {
-        try
+        return await SetLightState(index, new HueLightState()
         {
-            var response = await HttpClient.PutAsJsonAsync($"{_username}/lights/{index}/state", new
-            {
-                on = true, // Light is advised to be set on: https://developers.meethue.com/develop/get-started-2/#so-lets-get-started
-                sat = color.Saturation,
-                bri = color.Brightness,
-                hue = color.Hue,
-            });
-            response.EnsureSuccessStatusCode();
-
-            return await response.Content.ReadAsOrNullAsync<ErrorResponse>(registry);
-        }
-        catch (HttpRequestException e)
-        {
-            logger.LogError(e, "Code {0}. Returning ErrorResponse.", e.StatusCode);
-            return new ErrorResponse(e);
-        }
+            On = true, // Light is advised to be set on: https://developers.meethue.com/develop/get-started-2/#so-lets-get-started
+            Saturation = color.Saturation,
+            Brightness = color.Brightness,
+            Hue = color.Hue,
+        });
     }
 
     public async Task<ErrorResponse?> MakeLightBlink(int index)
     {
-        try
-        {
-            var response = await HttpClient.PutAsJsonAsync($"{_username}/lights/{index}/state", new
-            {
-                alert = "lselect",
-            });
-            response.EnsureSuccessStatusCode();
-
-            return await response.Content.ReadAsOrNullAsync<ErrorResponse>(registry);
-        }
-        catch (HttpRequestException e)
-        {
-            logger.LogError(e, "Code {0}. Returning ErrorResponse.", e.StatusCode);
-            return new ErrorResponse(e);
-        }
+        return await SetLightState(index, new HueLightState {Alert = "lselect"});
     }
 
     public async Task<ErrorResponse?> MakeLightColorLoop(int index)
     {
+        return await SetLightState(index, new HueLightState {Effect = "colorloop"});
+    }
+
+    public async Task<ErrorResponse?> SetLightState(int index, HueLightState state)
+    {
         try
         {
-            var response = await HttpClient.PutAsJsonAsync($"{_username}/lights/{index}/state", new
-            {
-                effect = "colorloop",
-            });
+            // Crazy hack to allow us to check whether a property of state is null before putting it into a dynamic object.
+            dynamic payload = new ExpandoObject();
+            var payloadDict = (IDictionary<string, object>) payload;
+
+            if (state.Alert is not null) payloadDict["alert"] = state.Alert;
+            if (state.Brightness is not null) payloadDict["bri"] = state.Brightness;
+            if (state.ColorMode is not null) payloadDict["colormode"] = state.ColorMode;
+            if (state.Ct is not null) payloadDict["ct"] = state.Ct;
+            if (state.Effect is not null) payloadDict["effect"] = state.Effect;
+            if (state.Hue is not null) payloadDict["hue"] = state.Hue;
+            if (state.On is not null) payloadDict["on"] = state.On;
+            if (state.Reachable is not null) payloadDict["reachable"] = state.Reachable;
+            if (state.Saturation is not null) payloadDict["sat"] = state.Saturation;
+            if (state.XyPoint is not null) payloadDict["xy"] = state.XyPoint;
+
+            var response = await HttpClient.PutAsJsonAsync($"{_username}/lights/{index}/state", payloadDict);
             response.EnsureSuccessStatusCode();
 
             return await response.Content.ReadAsOrNullAsync<ErrorResponse>(registry);
