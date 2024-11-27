@@ -111,6 +111,14 @@
                         <color:RgbColor R="255" G="0" B="255"/>
                     </Button.CommandParameter>
                 </Button>
+
+                <Button
+                    Text="Blink (10 sec)"
+                    Command="{Binding MakeLightBlinkFor10SecCommand}"/>
+                
+                <Button
+                    Text="Color Loop"
+                    Command="{Binding MakeLightColorLoopCommand}"/>
             </HorizontalStackLayout>
         </VerticalStackLayout>
     </ScrollView>

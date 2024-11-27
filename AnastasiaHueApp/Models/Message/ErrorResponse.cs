@@ -5,6 +5,7 @@
 /// - Attempting to link to the Hue lights without pressing the physical linking button. <br/>
 /// - Attempting to retrieve information about a light that is not there (api/lights/4 when there are only 3 lights). <br/>
 /// - Upon receiving a network error (those are fabricated by us and not returned by the api). <br/>
+/// - Upon setting a parameter that is not supported, such as an error with the description: "parameter, effect, not available". <br/>
 /// </summary>
 public class ErrorResponse
 {

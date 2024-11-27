@@ -3,7 +3,6 @@ using System.Text.Json;
 using AnastasiaHueApp.Models;
 using AnastasiaHueApp.Models.Message;
 using Microsoft.Extensions.Logging;
-using Microsoft.Maui.Controls;
 
 namespace AnastasiaHueApp.Util.Json;
 
@@ -30,6 +29,9 @@ public class JsonRegistry : IJsonRegistry
     public T? Parse<T>([StringSyntax(StringSyntaxAttribute.Json)] string json)
     {
         if (json == string.Empty) throw new ArgumentException(nameof(json));
+
+        _logger.LogInformation("Got json: {0}", json);
+
         if (_parsers.TryGetValue(typeof(T), out var parser))
         {
             try
@@ -38,10 +40,12 @@ public class JsonRegistry : IJsonRegistry
             }
             catch (KeyNotFoundException e)
             {
+                _logger.LogInformation("Is NOT of type {0}", typeof(T));
                 return default; // This occurs when this is not of this type of object, since a definition is missing!
             }
             catch (InvalidOperationException e)
             {
+                _logger.LogInformation("Is NOT of type {0}", typeof(T));
                 return default; // Can happen when having an array / object mismatch.
             }
         }
