@@ -1,9 +1,6 @@
 ﻿using System.Diagnostics;
 using AnastasiaHueApp.Util.Json;
 using System.Runtime.CompilerServices;
-using Microsoft.Extensions.Logging;
-using Serilog;
-using ILogger = Serilog.ILogger;
 
 namespace AnastasiaHueApp.Util.Extensions;
 

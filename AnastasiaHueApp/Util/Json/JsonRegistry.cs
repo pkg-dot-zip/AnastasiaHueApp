@@ -1,10 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
 using System.Text.Json;
 using AnastasiaHueApp.Models;
 using AnastasiaHueApp.Models.Message;
 using Microsoft.Extensions.Logging;
-using Microsoft.Maui.Controls;
 
 namespace AnastasiaHueApp.Util.Json;
 
@@ -38,7 +36,6 @@ public class JsonRegistry : IJsonRegistry
         {
             try
             {
-                _logger.LogInformation("Confirmed to be of type {0}", typeof(T));
                 return (T)parser(json);
             }
             catch (KeyNotFoundException e)
