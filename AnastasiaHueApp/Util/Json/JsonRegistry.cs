@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using AnastasiaHueApp.Models;
 using AnastasiaHueApp.Models.Message;
+using AnastasiaHueApp.Util.Extensions;
 using Microsoft.Extensions.Logging;
 
 namespace AnastasiaHueApp.Util.Json;
@@ -108,8 +109,8 @@ public class JsonRegistry : IJsonRegistry
             {
                 On = element.GetProperty("state").GetProperty("on").GetBoolean(),
                 Reachable = element.GetProperty("state").GetProperty("reachable").GetBoolean(),
-                Alert = element.GetProperty("state").GetProperty("alert").GetString()!,
-                Effect = element.GetProperty("state").GetProperty("effect").GetString()!,
+                Alert = element.GetProperty("state").GetProperty("alert").GetEnum<HueAlert>(),
+                Effect = element.GetProperty("state").GetProperty("effect").GetEnum<HueEffect>(),
                 XyPoint = new Point
                 {
                     X = element.GetProperty("state").GetProperty("xy")[0].GetDouble(),
@@ -118,7 +119,7 @@ public class JsonRegistry : IJsonRegistry
                 Hue = element.GetProperty("state").GetProperty("hue").GetInt32(),
                 Saturation = element.GetProperty("state").GetProperty("sat").GetInt32(),
                 Brightness = element.GetProperty("state").GetProperty("bri").GetInt32(),
-                ColorMode = element.GetProperty("state").GetProperty("colormode").GetString()!,
+                ColorMode = element.GetProperty("state").GetProperty("colormode").GetEnum<HueColorMode>(),
                 Ct = element.GetProperty("state").GetProperty("ct").GetInt32()
             },
             Type = element.GetProperty("type").GetString()!,

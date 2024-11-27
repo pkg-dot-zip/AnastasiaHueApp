@@ -99,12 +99,12 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry) : IH
 
     public async Task<ErrorResponse?> MakeLightBlink(int index)
     {
-        return await SetLightState(index, new HueLightState {Alert = "lselect"});
+        return await SetLightState(index, new HueLightState {Alert = HueAlert.LSelect});
     }
 
     public async Task<ErrorResponse?> MakeLightColorLoop(int index)
     {
-        return await SetLightState(index, new HueLightState {Effect = "colorloop"});
+        return await SetLightState(index, new HueLightState {Effect = HueEffect.ColorLoop});
     }
 
     public async Task<ErrorResponse?> SetLightState(int index, HueLightState state)
