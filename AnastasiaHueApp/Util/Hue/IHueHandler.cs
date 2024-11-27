@@ -11,4 +11,5 @@ public interface IHueHandler
     public Task<ErrorResponse?> LightSwitch(int index, bool on);
     public Task<ErrorResponse?> SetColorTo(int index, Color.Color color);
     public Task<ErrorResponse?> MakeLightBlink(int index);
+    public Task<ErrorResponse?> MakeLightColorLoop(int index);
 }

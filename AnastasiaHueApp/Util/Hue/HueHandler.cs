@@ -11,6 +11,7 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry) : IH
 {
     private static readonly HttpClient HttpClient = new()
     {
+        // BaseAddress = new Uri("http://localhost/api/"), // NOTE: If using port 80 no port needs to be specified.
         BaseAddress = new Uri("http://192.168.1.179/api/"), // NOTE: If using port 80 no port needs to be specified.
     };
 
@@ -116,6 +117,25 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry) : IH
             var response = await HttpClient.PutAsJsonAsync($"{_username}/lights/{index}/state", new
             {
                 alert = "lselect",
+            });
+            response.EnsureSuccessStatusCode();
+
+            return await response.Content.ReadAsOrNullAsync<ErrorResponse>(registry);
+        }
+        catch (HttpRequestException e)
+        {
+            logger.LogError(e, "Code {0}. Returning ErrorResponse.", e.StatusCode);
+            return new ErrorResponse(e);
+        }
+    }
+
+    public async Task<ErrorResponse?> MakeLightColorLoop(int index)
+    {
+        try
+        {
+            var response = await HttpClient.PutAsJsonAsync($"{_username}/lights/{index}/state", new
+            {
+                effect = "colorloop",
             });
             response.EnsureSuccessStatusCode();
 

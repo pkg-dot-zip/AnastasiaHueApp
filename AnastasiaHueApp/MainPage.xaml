@@ -115,6 +115,10 @@
                 <Button
                     Text="Blink (10 sec)"
                     Command="{Binding MakeLightBlinkFor10SecCommand}"/>
+                
+                <Button
+                    Text="Color Loop"
+                    Command="{Binding MakeLightColorLoopCommand}"/>
             </HorizontalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
