@@ -41,6 +41,8 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry) : IH
 
     public async Task<Either<List<HueLight>, ErrorResponse>> GetLights()
     {
+        if (!IsAllowedToMakeCall(out var error)) return new Either<List<HueLight>, ErrorResponse>(error!);
+
         try
         {
             var response = await HttpClient.GetAsync($"{_username}/lights");
@@ -56,6 +58,8 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry) : IH
 
     public async Task<Either<HueLight, ErrorResponse>> GetLight(int index)
     {
+        if (!IsAllowedToMakeCall(out var error)) return new Either<HueLight, ErrorResponse>(error!);
+
         try
         {
             if (index <= 0) throw new ArgumentOutOfRangeException(nameof(index));
@@ -109,6 +113,8 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry) : IH
 
     public async Task<ErrorResponse?> SetLightState(int index, HueLightState state)
     {
+        if (!IsAllowedToMakeCall(out var error)) return error;
+
         try
         {
             // Crazy hack to allow us to check whether a property of state is null before putting it into a dynamic object.
@@ -136,5 +142,22 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry) : IH
             logger.LogError(e, "Code {0}. Returning ErrorResponse.", e.StatusCode);
             return new ErrorResponse(e);
         }
+    }
+
+    private bool IsAllowedToMakeCall(out ErrorResponse? error)
+    {
+        if (_username is null || _username == string.Empty)
+        {
+            error = new ErrorResponse()
+            {
+                Description = "Hue Lights are not linked. Please link before making calls.",
+                Address = string.Empty,
+                Type = "Fabricated"
+            };
+            return false;
+        }
+
+        error = null;
+        return true;
     }
 }
