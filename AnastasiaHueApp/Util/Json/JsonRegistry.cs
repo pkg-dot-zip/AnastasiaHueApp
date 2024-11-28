@@ -62,7 +62,17 @@ public class JsonRegistry : IJsonRegistry
         Register<ErrorResponse>(json =>
         {
             var doc = JsonDocument.Parse(json);
-            var error = doc.RootElement[0].GetProperty("error");
+
+            // Finds the first error.
+            var errorElement = doc.RootElement
+                .EnumerateArray()
+                .FirstOrDefault(element => element.TryGetProperty("error", out _));
+
+            // Throw if not found. IMPORTANT! Look at Parse<T>() to see why.
+            if (errorElement.ValueKind == JsonValueKind.Undefined)
+                throw new InvalidOperationException("No error response found in the JSON array.");
+
+            var error = errorElement.GetProperty("error");
             return new ErrorResponse
             {
                 Address = error.GetProperty("address").GetString()!,
