@@ -32,6 +32,7 @@ namespace AnastasiaHueApp
                     .CreateLogger());
 
             builder.Services.AddSingleton<MainPage>();
+            builder.Services.AddSingleton<LightsPage>();
             builder.Services.AddSingleton<MainViewModel>();
             builder.Services.AddSingleton<IJsonRegistry, JsonRegistry>();
             builder.Services.AddSingleton<IDisplayAlertHandler, DisplayAlertHandler>();
