@@ -115,12 +115,11 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry) : IH
             dynamic payload = new ExpandoObject();
             var payloadDict = (IDictionary<string, object>) payload;
 
-            // TODO: Make sure enums get string of enum value name.
-            if (state.Alert is not null) payloadDict["alert"] = state.Alert;
+            if (state.Alert is not null) payloadDict["alert"] = state.Alert.GetName();
             if (state.Brightness is not null) payloadDict["bri"] = state.Brightness;
-            if (state.ColorMode is not null) payloadDict["colormode"] = state.ColorMode;
+            if (state.ColorMode is not null) payloadDict["colormode"] = state.ColorMode.GetName();
             if (state.Ct is not null) payloadDict["ct"] = state.Ct;
-            if (state.Effect is not null) payloadDict["effect"] = state.Effect;
+            if (state.Effect is not null) payloadDict["effect"] = state.Effect.GetName();
             if (state.Hue is not null) payloadDict["hue"] = state.Hue;
             if (state.On is not null) payloadDict["on"] = state.On;
             if (state.Reachable is not null) payloadDict["reachable"] = state.Reachable;
