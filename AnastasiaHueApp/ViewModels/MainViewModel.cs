@@ -1,5 +1,6 @@
 ﻿using AnastasiaHueApp.Models;
 using AnastasiaHueApp.Models.Message;
+using AnastasiaHueApp.Util;
 using AnastasiaHueApp.Util.Alerts;
 using AnastasiaHueApp.Util.Color;
 using AnastasiaHueApp.Util.Hue;
@@ -25,7 +26,7 @@ public partial class MainViewModel(
         var either = await hueHandler.AttemptLinkAsync();
 
         if (either.IsType<UsernameResponse>(out var username)) BoxText = username!.Username;
-        if (either.IsType<ErrorResponse>(out var error)) await displayAlertHandler.DisplayAlert(error!);
+        await ShowAlertOnError(either!);
     }
 
     [RelayCommand]
@@ -41,7 +42,7 @@ public partial class MainViewModel(
             }
         }
 
-        if (either.IsType<ErrorResponse>(out var error)) await displayAlertHandler.DisplayAlert(error!);
+        await ShowAlertOnError(either!);
     }
 
     [RelayCommand]
@@ -54,22 +55,32 @@ public partial class MainViewModel(
             logger.LogInformation($"({light!.Id}) | {light.Name} - {light.State.Brightness}");
         }
 
-        if (either.IsType<ErrorResponse>(out var error)) await displayAlertHandler.DisplayAlert(error!);
+        await ShowAlertOnError(either!);
     }
 
     [RelayCommand]
-    private async Task TurnLightOn() => await hueHandler.LightSwitch(LightSelectedValueStepper, true);
+    private async Task TurnLightOn() => await ShowAlertOnError(await hueHandler.LightSwitch(LightSelectedValueStepper, true));
 
     [RelayCommand]
-    private async Task TurnLightOff() => await hueHandler.LightSwitch(LightSelectedValueStepper, false);
+    private async Task TurnLightOff() => await ShowAlertOnError(await hueHandler.LightSwitch(LightSelectedValueStepper, false));
 
     [RelayCommand]
     private async Task SetLightToColor(RgbColor rgb) =>
-        await hueHandler.SetColorTo(LightSelectedValueStepper, rgb.ToColor());
+        await ShowAlertOnError(await hueHandler.SetColorTo(LightSelectedValueStepper, rgb.ToColor()));
 
     [RelayCommand]
-    private async Task MakeLightBlinkFor10Sec() => await hueHandler.MakeLightBlink(LightSelectedValueStepper);
+    private async Task MakeLightBlinkFor10Sec() => await ShowAlertOnError(await hueHandler.MakeLightBlink(LightSelectedValueStepper));
 
     [RelayCommand]
-    private async Task MakeLightColorLoop() => await hueHandler.MakeLightColorLoop(LightSelectedValueStepper);
+    private async Task MakeLightColorLoop() => await ShowAlertOnError(await hueHandler.MakeLightColorLoop(LightSelectedValueStepper));
+
+    private async Task ShowAlertOnError<T>(Either<T, ErrorResponse?> either)
+    {
+        if (either.IsType<ErrorResponse>(out var error)) await ShowAlertOnError(error); 
+    }
+
+    private async Task ShowAlertOnError(ErrorResponse? error)
+    {
+        if (error is not null) await displayAlertHandler.DisplayAlert(error);
+    }
 }
