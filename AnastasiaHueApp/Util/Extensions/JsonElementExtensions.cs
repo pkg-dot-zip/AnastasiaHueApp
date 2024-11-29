@@ -7,6 +7,9 @@ namespace AnastasiaHueApp.Util.Extensions;
 /// </summary>
 public static class JsonElementExtensions
 {
+
+    // TODO: What to do if there are two enums with the same characters but different casing?! Define behaviour in docs and unit tests!
+
     /// <summary>
     /// Retrieves an <see langword="enum"/> value of type <typeparamref name="T"/> directly from a <see cref="JsonElement"/>.
     /// </summary>
