@@ -63,21 +63,26 @@ public class JsonRegistry : IJsonRegistry
         {
             var doc = JsonDocument.Parse(json);
 
-            // Finds the first error.
-            var errorElement = doc.RootElement
-                .EnumerateArray()
-                .FirstOrDefault(element => element.TryGetProperty("error", out _));
+            // Find the first array element with an error-response.
+            JsonElement? firstError = null;
 
-            // Throw if not found. IMPORTANT! Look at Parse<T>() to see why.
-            if (errorElement.ValueKind == JsonValueKind.Undefined)
-                throw new InvalidOperationException("No error response found in the JSON array.");
+            foreach (var element in doc.RootElement.EnumerateArray())
+            {
+                if (element.TryGetProperty("error", out var errorElement))
+                {
+                    firstError = errorElement;
+                    break; // Stop after finding the first error. This means other errors will be discarded!
+                }
+            }
 
-            var error = errorElement.GetProperty("error");
+            // NOTE: VERY IMPORTANT! If nothing found we need to throw. Check Parse implementation.
+            if (firstError is null) throw new InvalidOperationException("No error response found in the JSON array.");
+
             return new ErrorResponse
             {
-                Address = error.GetProperty("address").GetString()!,
-                Description = error.GetProperty("description").GetString()!,
-                Type = error.GetProperty("type").GetString()!,
+                Address = firstError.Value.GetProperty("address").GetString()!,
+                Description = firstError.Value.GetProperty("description").GetString()!,
+                Type = firstError.Value.GetProperty("type").ToString()!,
             };
         });
 
