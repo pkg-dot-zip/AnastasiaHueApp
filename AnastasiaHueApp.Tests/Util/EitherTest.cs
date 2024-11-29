@@ -52,30 +52,34 @@ public class EitherTest
     }
 
     [TestMethod]
-    public void Constructor_StringIntTypesDoNotEqual_DoesNotThrowArgumentException()
+    [DataRow(int.MinValue)]
+    [DataRow(int.MaxValue)]
+    public void Constructor_StringIntTypesDoNotEqualAndOneIsNotNull_DoesNotThrowArgumentException(int x)
     {
-        var action = () => new Either<string, int>();
+        var action = () => new Either<string, int>(x);
         action.Should().NotThrow<ArgumentException>();
     }
 
     [TestMethod]
-    public void Constructor_StringTestClass1TypesDoNotEqual_DoesNotThrowArgumentException()
+    [DataRow("")]
+    public void Constructor_StringTestClass1TypesDoNotEqualAndOneIsNotNull_DoesNotThrowArgumentException(string x)
     {
-        var action = () => new Either<string, TestClass1>();
+        var action = () => new Either<string, TestClass1>(x);
         action.Should().NotThrow<ArgumentException>();
     }
 
     [TestMethod]
-    public void Constructor_StringTestClass2TypesDoNotEqual_DoesNotThrowArgumentException()
+    [DataRow("")]
+    public void Constructor_StringTestClass2TypesDoNotEqualAndOneIsNotNull_DoesNotThrowArgumentException(string x)
     {
-        var action = () => new Either<string, TestClass2>();
+        var action = () => new Either<string, TestClass2>(x);
         action.Should().NotThrow<ArgumentException>();
     }
 
     [TestMethod]
-    public void Constructor_TestClass1TestClass2TypesDoNotEqual_DoesNotThrowArgumentException()
+    public void Constructor_TestClass1TestClass2TypesDoNotEqualAndOneIsNotNull_ThrowArgumentException()
     {
-        var action = () => new Either<TestClass1, TestClass2>();
+        var action = () => new Either<TestClass1, TestClass2>(new TestClass1());
         action.Should().NotThrow<ArgumentException>();
     }
 
@@ -91,6 +95,21 @@ public class EitherTest
     public void Constructor_TestClass1TestClass2NeitherNull_ThrowsArgumentException()
     {
         var action = () => new Either<TestClass1, TestClass2>(new TestClass1(), new TestClass2());
+        action.Should().Throw<ArgumentException>();
+    }
+
+    [TestMethod]
+    [DataRow(null, null)]
+    public void Constructor_StringAndIntBothNull_ThrowsArgumentException(string? str, int? n)
+    {
+        var action = () => new Either<string?, int?>(str, n);
+        action.Should().Throw<ArgumentException>();
+    }
+
+    [TestMethod]
+    public void Constructor_TestClass1TestClass2BothNull_ThrowsArgumentException()
+    {
+        var action = () => new Either<TestClass1, TestClass2>(null, null);
         action.Should().Throw<ArgumentException>();
     }
 
