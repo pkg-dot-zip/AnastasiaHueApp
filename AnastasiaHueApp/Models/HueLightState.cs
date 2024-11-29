@@ -13,7 +13,8 @@ public class HueLightState
     /// <summary>
     /// Indicates if a light can be reached by the bridge.
     /// </summary>
-    public bool? Reachable { get; set; } = null; // TODO: Figure out when this happens and don't let user interact if unreachable.
+    public bool? Reachable { get; set; } =
+        null; // TODO: Figure out when this happens and don't let user interact if unreachable.
 
     /// <inheritdoc cref="HueAlert"/>
     public HueAlert? Alert { get; set; } = null;
@@ -42,7 +43,8 @@ public class HueLightState
     /// Brightness of the light. This is a scale from the minimum brightness the light is capable of, 1, to the maximum capable brightness, 254.
     /// Ranges from <b>1 to 254</b>.
     /// </summary>
-    public int? Brightness { get; set; } = null; // TODO: Check if 0 is an allowed value, since in all our checks we check from 0 to 254 instead of 1 to 254.
+    public int? Brightness { get; set; } =
+        null; // TODO: Check if 0 is an allowed value, since in all our checks we check from 0 to 254 instead of 1 to 254.
 
     /// <inheritdoc cref="HueColorMode"/>
     public HueColorMode? ColorMode { get; set; } = null;
@@ -52,4 +54,37 @@ public class HueLightState
     /// Ranges from <b>153 to 500</b>.
     /// </summary>
     public int? Ct { get; set; } = null;
+
+    #region Equals
+
+    protected bool Equals(HueLightState other)
+    {
+        return On == other.On && Reachable == other.Reachable && Alert == other.Alert && Effect == other.Effect && Nullable.Equals(XyPoint, other.XyPoint) && Hue == other.Hue && Saturation == other.Saturation && Brightness == other.Brightness && ColorMode == other.ColorMode && Ct == other.Ct;
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is null) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != GetType()) return false;
+        return Equals((HueLightState)obj);
+    }
+
+    public override int GetHashCode()
+    {
+        var hashCode = new HashCode();
+        hashCode.Add(On);
+        hashCode.Add(Reachable);
+        hashCode.Add(Alert);
+        hashCode.Add(Effect);
+        hashCode.Add(XyPoint);
+        hashCode.Add(Hue);
+        hashCode.Add(Saturation);
+        hashCode.Add(Brightness);
+        hashCode.Add(ColorMode);
+        hashCode.Add(Ct);
+        return hashCode.ToHashCode();
+    }
+
+    #endregion
 }

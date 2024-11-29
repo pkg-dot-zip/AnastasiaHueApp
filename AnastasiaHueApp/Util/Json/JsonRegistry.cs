@@ -89,15 +89,14 @@ public class JsonRegistry : IJsonRegistry
             return new UsernameResponse { Username = username! };
         });
 
-        // HueLight. NOTE: This one is partially written by AI 🤖, since I couldn't be bothered writing all the json parsing myself.
-        // NOTE: No index is passed here. You'd have to set that later manually.
+        // NOTE: No index is passed here. You'd have to set that later MANUALLY.
         Register<HueLight>(json =>
         {
             var doc = JsonDocument.Parse(json);
             return GetHueLight(doc.RootElement);
         });
 
-        // List<HueLight>. NOTE: This one is partially written by AI 🤖, since I couldn't be bothered writing all the json parsing myself.
+        // List<HueLight>. 
         Register<List<HueLight>>(json =>
         {
             var doc = JsonDocument.Parse(json);
@@ -107,6 +106,7 @@ public class JsonRegistry : IJsonRegistry
     }
 
     // Helper method since multiple parsers need to create instances of HueLight.
+    // NOTE: This one is partially written by AI 🤖, since I couldn't be bothered writing all the json parsing myself.
     private HueLight GetHueLight(JsonElement element, int? id = null)
     {
         return new HueLight
