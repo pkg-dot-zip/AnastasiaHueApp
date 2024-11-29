@@ -2,12 +2,10 @@
 using AnastasiaHueApp.Models.Message;
 using AnastasiaHueApp.Util.Alerts;
 using AnastasiaHueApp.Util.Color;
-using AnastasiaHueApp.Util.Extensions;
 using AnastasiaHueApp.Util.Hue;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
-using Color = AnastasiaHueApp.Util.Color.Color;
 
 namespace AnastasiaHueApp.ViewModels;
 

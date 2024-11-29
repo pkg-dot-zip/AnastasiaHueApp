@@ -14,15 +14,15 @@ public static class HttpContentExtensions
     public static async Task<string> ReadAsJsonString(this HttpContent content) => await content.ReadAsStringAsync();
 
     /// <summary>
-    ///
+    /// Will parse <paramref name="content"/> into <typeparamref name="T"/>, or will return null.
     /// <br/>
     /// If, instead of one value or <see langword="null"></see>, you'd want two return types, use <see cref="ReadAsEitherAsync{T1,T2}"/>.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="content"></param>
-    /// <param name="registry"></param>
+    /// <typeparam name="T"><see cref="Type"/> to attempt parsing for.</typeparam>
+    /// <param name="content">Content to parse. Will have to contain a json response parsable by <paramref name="registry"/>.</param>
+    /// <param name="registry"><see cref="IJsonRegistry"/> to use for parsing <typeparamref name="T"/>.</param>
     /// <param name="caller">Method or property name of the caller of this method.</param>
-    /// <returns></returns>
+    /// <returns><typeparamref name="T"/> or <see langword="null"/>.</returns>
     public static async Task<T?> ReadAsOrNullAsync<T>(this HttpContent content, IJsonRegistry registry, [CallerMemberName] string caller = "")
     {
         Debug.Write($"{nameof(ReadAsOrNullAsync)} called by {caller}");
@@ -36,12 +36,12 @@ public static class HttpContentExtensions
     /// <br/>
     /// If you only need one value or <see langword="null"></see> use <see cref="ReadAsOrNullAsync{T}"/>.
     /// </summary>
-    /// <typeparam name="T1"></typeparam>
-    /// <typeparam name="T2"></typeparam>
-    /// <param name="content"></param>
-    /// <param name="registry"></param>
+    /// <typeparam name="T1"><see cref="Type"/> to attempt parsing for.</typeparam>
+    /// <typeparam name="T2"><see cref="Type"/> to attempt parsing for.</typeparam>
+    /// <param name="content">Content to parse. Will have to contain a json response parsable by <paramref name="registry"/>.</param>
+    /// <param name="registry"><see cref="IJsonRegistry"/> to use for parsing <typeparamref name="T1"/> & <typeparamref name="T2"/>.</param>
     /// <param name="caller">Method or property name of the caller of this method.</param>
-    /// <returns></returns>
+    /// <returns>An instance of <see cref="Either{T1,T2}"/> holding <typeparamref name="T1"/> or <typeparamref name="T2"/>.</returns>
     public static async Task<Either<T1, T2>> ReadAsEitherAsync<T1, T2>(this HttpContent content, IJsonRegistry registry, [CallerMemberName] string caller = "")
     {
         Debug.Write($"{nameof(ReadAsEitherAsync)} called by {caller}");

@@ -6,5 +6,8 @@
 /// </summary>
 public class UsernameResponse
 {
+    /// <summary>
+    /// Username required to make api calls.
+    /// </summary>
     public required string Username { get; init; }
 }

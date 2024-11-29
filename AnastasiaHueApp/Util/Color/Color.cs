@@ -8,8 +8,22 @@ namespace AnastasiaHueApp.Util.Color;
 /// </summary>
 public class Color
 {
+    /// <summary>
+    /// Hue directly given to the Hue Light. <br/>
+    /// Ranges from <b>0 to 65535</b>.
+    /// </summary>
     public int Hue { get; private set; }
+
+    /// <summary>
+    /// Saturation directly given to the Hue Light. <br/>
+    /// Ranges from <b>0 to 254</b>.
+    /// </summary>
     public int Saturation { get; private set; }
+
+    /// <summary>
+    /// Brightness directly given to the Hue Light. <br/>
+    /// Ranges from <b>0 to 254</b>.
+    /// </summary>
     public int Brightness { get; private set; }
 
     private Color(int hue, int saturation, int brightness)
@@ -26,9 +40,9 @@ public class Color
     /// <summary>
     /// Allows initialization of <see cref="Color"/> from the <a href="https://developers.meethue.com/develop/get-started-2/#so-lets-get-started">Philips Hue HSB model</a>.
     /// </summary>
-    /// <param name="hue">Must be between 0-65535.</param>
-    /// <param name="saturation">Must be between 0-254.</param>
-    /// <param name="brightness">Must be between 0-254.</param>
+    /// <param name="hue">Must be between <b>0-65535</b>.</param>
+    /// <param name="saturation">Must be between <b>0-254</b>.</param>
+    /// <param name="brightness">Must be between <b>0-254</b>.</param>
     /// <returns>A new instance of <see cref="Color"/>.</returns>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
     public static Color FromHueHsb(int hue, int saturation, int brightness)
@@ -39,12 +53,13 @@ public class Color
         return new Color(hue, saturation, brightness);
     }
 
+    // NOTE: This method is partially written by AI. 🤖 RGB ranges from 0-255.
     /// <summary>
     /// Allows initialization of <see cref="Color"/> from the <a href="https://en.wikipedia.org/wiki/RGB_color_model">RGB model</a>.
     /// </summary>
-    /// <param name="red">Must be between 0-255.</param>
-    /// <param name="green">Must be between 0-255.</param>
-    /// <param name="blue">Must be between 0-255.</param>
+    /// <param name="red">Must be between <b>0-255</b>.</param>
+    /// <param name="green">Must be between <b>0-255</b>.</param>
+    /// <param name="blue">Must be between <b>0-255</b>.</param>
     /// <returns>A new instance of <see cref="Color"/>.</returns>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
     public static Color FromRgb(int red, int green, int blue)
@@ -52,7 +67,47 @@ public class Color
         if (!red.IsInRange(0, 255)) throw new ArgumentOutOfRangeException(nameof(red));
         if (!green.IsInRange(0, 255)) throw new ArgumentOutOfRangeException(nameof(green));
         if (!blue.IsInRange(0, 255)) throw new ArgumentOutOfRangeException(nameof(blue));
-        return ColorHandler.RGBToHueHSB(red, green, blue);
+
+
+        const float tolerance = 1.0f;
+
+        // Normalize RGB values to range 0-1.
+        double rNorm = red / 255.0;
+        double gNorm = green / 255.0;
+        double bNorm = blue / 255.0;
+
+        // Find min and max values of R, G, B.
+        double max = Math.Max(rNorm, Math.Max(gNorm, bNorm));
+        double min = Math.Min(rNorm, Math.Min(gNorm, bNorm));
+        double delta = max - min;
+
+        // Calculate Hue.
+        double h = 0;
+        if (delta > 0)
+        {
+            if (Math.Abs(max - rNorm) < tolerance)
+            {
+                h = (gNorm - bNorm) / delta;
+            }
+            else if (Math.Abs(max - gNorm) < tolerance)
+            {
+                h = 2 + (bNorm - rNorm) / delta;
+            }
+            else if (Math.Abs(max - bNorm) < tolerance)
+            {
+                h = 4 + (rNorm - gNorm) / delta;
+            }
+        }
+
+        h *= 60;
+        if (h < 0) h += 360;
+
+        int hue = (int)(h / 360 * 65535);       // Convert Hue to range 0-65535.
+        double s = max == 0 ? 0 : delta / max;  // Calculate Saturation.
+        int saturation = (int)(s * 254);        // Convert Saturation to range 0-254.
+        double v = max;                         // Calculate Brightness.
+        int brightness = (int)(v * 254);        // Convert Brightness to range 0-254.
+        return FromHueHsb(hue, saturation, brightness);
     }
 
     // NOTE: This method is partially written by AI. 🤖

@@ -18,6 +18,7 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry) : IH
 
     private static string? _username = null;
 
+    /// <inheritdoc />
     public async Task<Either<UsernameResponse, ErrorResponse>> AttemptLinkAsync()
     {
         try
@@ -39,6 +40,7 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry) : IH
         }
     }
 
+    /// <inheritdoc />
     public async Task<Either<List<HueLight>, ErrorResponse>> GetLights()
     {
         if (!IsAllowedToMakeCall(out var error)) return new Either<List<HueLight>, ErrorResponse>(error!);
@@ -56,6 +58,7 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry) : IH
         }
     }
 
+    /// <inheritdoc />
     public async Task<Either<HueLight, ErrorResponse>> GetLight(int index)
     {
         if (!IsAllowedToMakeCall(out var error)) return new Either<HueLight, ErrorResponse>(error!);
@@ -84,12 +87,14 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry) : IH
         }
     }
 
+    /// <inheritdoc />
     public async Task<ErrorResponse?> LightSwitch(int index, bool on)
     {
         if (index <= 0) throw new ArgumentOutOfRangeException(nameof(index));
         return await SetLightState(index, new HueLightState() {On = on});
     }
 
+    /// <inheritdoc />
     public async Task<ErrorResponse?> SetColorTo(int index, Color.Color color)
     {
         return await SetLightState(index, new HueLightState()
@@ -101,17 +106,20 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry) : IH
         });
     }
 
+    /// <inheritdoc />
     public async Task<ErrorResponse?> MakeLightBlink(int index)
     {
         return await SetLightState(index, new HueLightState {Alert = HueAlert.LSelect});
     }
 
+    /// <inheritdoc />
     public async Task<ErrorResponse?> MakeLightColorLoop(int index)
     {
         return await SetLightState(index, new HueLightState {Effect = HueEffect.ColorLoop});
     }
 
-    public async Task<ErrorResponse?> SetLightState(int index, HueLightState state)
+
+    private async Task<ErrorResponse?> SetLightState(int index, HueLightState state)
     {
         if (!IsAllowedToMakeCall(out var error)) return error;
 
@@ -146,9 +154,9 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry) : IH
 
     private bool IsAllowedToMakeCall(out ErrorResponse? error)
     {
-        if (_username is null || _username == string.Empty)
+        if (_username is null or "")
         {
-            error = new ErrorResponse()
+            error = new ErrorResponse
             {
                 Description = "Hue Lights are not linked. Please link before making calls.",
                 Address = string.Empty,
