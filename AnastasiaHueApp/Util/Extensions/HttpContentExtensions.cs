@@ -13,6 +13,16 @@ public static class HttpContentExtensions
     // TODO: Verify json here. If not of Json format throw exception.
     public static async Task<string> ReadAsJsonString(this HttpContent content) => await content.ReadAsStringAsync();
 
+    /// <summary>
+    ///
+    /// <br/>
+    /// If, instead of one value or <see langword="null"></see>, you'd want two return types, use <see cref="ReadAsEitherAsync{T1,T2}"/>.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="content"></param>
+    /// <param name="registry"></param>
+    /// <param name="caller">Method or property name of the caller of this method.</param>
+    /// <returns></returns>
     public static async Task<T?> ReadAsOrNullAsync<T>(this HttpContent content, IJsonRegistry registry, [CallerMemberName] string caller = "")
     {
         Debug.Write($"{nameof(ReadAsOrNullAsync)} called by {caller}");
@@ -20,6 +30,18 @@ public static class HttpContentExtensions
         return registry.Parse<T>(json);
     }
 
+    /// <summary>
+    /// Will parse <paramref name="content"/> into <typeparamref name="T1"/> or <typeparamref name="T2"/>, wrapped in an <see cref="Either{T1,T2}"/> object.
+    /// Note that success of this operation is dependent on your <paramref name="registry"/> implementation.
+    /// <br/>
+    /// If you only need one value or <see langword="null"></see> use <see cref="ReadAsOrNullAsync{T}"/>.
+    /// </summary>
+    /// <typeparam name="T1"></typeparam>
+    /// <typeparam name="T2"></typeparam>
+    /// <param name="content"></param>
+    /// <param name="registry"></param>
+    /// <param name="caller">Method or property name of the caller of this method.</param>
+    /// <returns></returns>
     public static async Task<Either<T1, T2>> ReadAsEitherAsync<T1, T2>(this HttpContent content, IJsonRegistry registry, [CallerMemberName] string caller = "")
     {
         Debug.Write($"{nameof(ReadAsEitherAsync)} called by {caller}");
