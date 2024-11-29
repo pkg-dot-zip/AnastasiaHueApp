@@ -23,9 +23,9 @@ public class Either<T1, T2>
         _value1 = value1;
         _value2 = value2;
 
-        // if (value1 is null && value2 is null)
-        //     throw new ArgumentNullException(
-        //         $"Can not create an instance of {nameof(Either<object, object>)} because both {nameof(value1)} and {nameof(value2)} are null. This is an {nameof(Either<object, object>)} class, not a 'neither' class!");
+        if (value1 is null && value2 is null)
+            throw new ArgumentNullException(
+                $"Can not create an instance of {nameof(Either<object, object>)} because both {nameof(value1)} and {nameof(value2)} are null. This is an {nameof(Either<object, object>)} class, not a 'neither' class!");
 
         if (value1 is not null && value2 is not null)
             throw new ArgumentException(
