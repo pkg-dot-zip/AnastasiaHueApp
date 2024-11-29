@@ -28,7 +28,7 @@ namespace AnastasiaHueApp
             builder.Services.AddSerilog(
                 new LoggerConfiguration()
                     .WriteTo.Debug()
-                    .WriteTo.File(Path.Combine(FileSystem.Current.AppDataDirectory, "log.txt"), rollingInterval: RollingInterval.Day)
+                    .WriteTo.File(Path.Combine(FileSystem.Current.AppDataDirectory, "anastasiaLog.txt"), rollingInterval: RollingInterval.Day)
                     .CreateLogger());
 
             builder.Services.AddSingleton<MainPage>();
