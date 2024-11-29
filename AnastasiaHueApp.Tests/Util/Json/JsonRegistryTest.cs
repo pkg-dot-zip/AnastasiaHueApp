@@ -112,6 +112,62 @@ public class JsonRegistryTest
                  }
              ]
              """, 101)]
+    [DataRow("""
+             [
+               {
+                 "success": {
+                   "/lights/1/state/sat": 0
+                 }
+               },
+               {
+                 "success": {
+                   "/lights/1/state/bri": 10
+                 }
+               },
+               {
+                 "error": {
+                   "address": "/lights/1/state/hue",
+                   "description": "invalid value, -1 , for parameter, hue",
+                   "type": 7
+                 }
+               },
+               {
+                 "success": {
+                   "/lights/1/state/on": true
+                 }
+               }
+             ]
+             """, 7)]
+    [DataRow("""
+             [
+               {
+                 "error": {
+                   "address": "/lights/1/state/sat",
+                   "description": "invalid value, -1 , for parameter, sat",
+                   "type": 7
+                 }
+               },
+               {
+                 "error": {
+                   "address": "/lights/1/state/bri",
+                   "description": "invalid value, -1 , for parameter, bri",
+                   "type": 7
+                 }
+               },
+               {
+                 "error": {
+                   "address": "/lights/1/state/hue",
+                   "description": "invalid value, -1 , for parameter, hue",
+                   "type": 7
+                 }
+               },
+               {
+                 "success": {
+                   "/lights/1/state/on": true
+                 }
+               }
+             ]
+             """, 7)]
     public void Parse_ErrorMessage_CanParse_NotNullAndTypeEquals([StringSyntax(StringSyntaxAttribute.Json)] string json,
         int errorType)
     {
