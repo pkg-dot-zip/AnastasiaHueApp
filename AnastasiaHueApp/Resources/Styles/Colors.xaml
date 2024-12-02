@@ -28,6 +28,14 @@
     <Color x:Key="Gray900">#212121</Color>
     <Color x:Key="Gray950">#141414</Color>
 
+    <!-- START - My own colors (FROM https://coolors.co/palette/e63946-f1faee-a8dadc-457b9d-1d3557) -->
+    <Color x:Key="BerkeleyBlue">#1D3557</Color>
+    <Color x:Key="Cerulean">#457B9D</Color>
+    <Color x:Key="NonPhotoBlue">#A8DADC</Color>
+    <Color x:Key="Honeydew">#F1FAEE</Color>
+    <Color x:Key="PantoneRed">#E63946</Color>
+    <!-- END - My own colors -->
+
     <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource Primary}"/>
     <SolidColorBrush x:Key="SecondaryBrush" Color="{StaticResource Secondary}"/>
     <SolidColorBrush x:Key="TertiaryBrush" Color="{StaticResource Tertiary}"/>
