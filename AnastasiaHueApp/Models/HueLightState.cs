@@ -1,4 +1,6 @@
-﻿namespace AnastasiaHueApp.Models;
+﻿using Color = AnastasiaHueApp.Util.Color.Color;
+
+namespace AnastasiaHueApp.Models;
 
 // See https://developers.meethue.com/develop/hue-api/lights-api/
 public class HueLightState
@@ -54,6 +56,9 @@ public class HueLightState
     /// Ranges from <b>153 to 500</b>.
     /// </summary>
     public int? Ct { get; set; } = null;
+
+
+    public Color Color => Color.FromHueHsb(Hue, Saturation, Brightness);
 
     #region Equals
 

@@ -37,6 +37,65 @@ public class Color
         Brightness = brightness;
     }
 
+    // NOTE: This method is partially written by AI. 🤖
+    public Microsoft.Maui.Graphics.Color ToMauiColor()
+    {
+        // Normalize HSB values.
+        float h = Hue / 65535f * 360f;
+        float s = Saturation / 254f;
+        float b = Brightness / 254f;
+
+        // Convert HSB to RGB.
+        float c = b * s; // Chroma.
+        float x = c * (1 - Math.Abs((h / 60) % 2 - 1));
+        float m = b - c;
+
+        float r = 0, g = 0, bl = 0;
+
+        switch (h)
+        {
+            case >= 0 and < 60:
+                r = c;
+                g = x;
+                bl = 0;
+                break;
+            case >= 60 and < 120:
+                r = x;
+                g = c;
+                bl = 0;
+                break;
+            case >= 120 and < 180:
+                r = 0;
+                g = c;
+                bl = x;
+                break;
+            case >= 180 and < 240:
+                r = 0;
+                g = x;
+                bl = c;
+                break;
+            case >= 240 and < 300:
+                r = x;
+                g = 0;
+                bl = c;
+                break;
+            case >= 300 and <= 360:
+                r = c;
+                g = 0;
+                bl = x;
+                break;
+        }
+
+        // Adjust RGB values by adding m.
+        r += m;
+        g += m;
+        bl += m;
+
+        // Convert to Maui Color.
+        return Microsoft.Maui.Graphics.Color.FromRgb((int)(r * 255), (int)(g * 255), (int)(bl * 255));
+    }
+
+
     /// <summary>
     /// Allows initialization of <see cref="Color"/> from the <a href="https://developers.meethue.com/develop/get-started-2/#so-lets-get-started">Philips Hue HSB model</a>.
     /// </summary>
@@ -52,6 +111,9 @@ public class Color
         if (!brightness.IsInRange(0, 254)) throw new ArgumentOutOfRangeException(nameof(brightness));
         return new Color(hue, saturation, brightness);
     }
+
+    public static Color FromHueHsb(int? hue, int? saturation, int? brightness) =>
+        FromHueHsb((int)hue!, (int)saturation!, (int)brightness!);
 
     // NOTE: This method is partially written by AI. 🤖 RGB ranges from 0-255.
     /// <summary>
@@ -102,11 +164,11 @@ public class Color
         h *= 60;
         if (h < 0) h += 360;
 
-        int hue = (int)(h / 360 * 65535);       // Convert Hue to range 0-65535.
-        double s = max == 0 ? 0 : delta / max;  // Calculate Saturation.
-        int saturation = (int)(s * 254);        // Convert Saturation to range 0-254.
-        double v = max;                         // Calculate Brightness.
-        int brightness = (int)(v * 254);        // Convert Brightness to range 0-254.
+        int hue = (int)(h / 360 * 65535); // Convert Hue to range 0-65535.
+        double s = max == 0 ? 0 : delta / max; // Calculate Saturation.
+        int saturation = (int)(s * 254); // Convert Saturation to range 0-254.
+        double v = max; // Calculate Brightness.
+        int brightness = (int)(v * 254); // Convert Brightness to range 0-254.
         return FromHueHsb(hue, saturation, brightness);
     }
 

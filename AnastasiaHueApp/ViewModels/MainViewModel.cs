@@ -22,8 +22,17 @@ public partial class MainViewModel(
     [ObservableProperty] private string _boxText = string.Empty;
     [ObservableProperty] private int _lightSelectedValueStepper = 1;
 
-    [ObservableProperty] private ObservableCollection<HueLight> _lights = new();
-    [ObservableProperty] private int _selectedLightIndex;
+    [ObservableProperty][NotifyPropertyChangedFor(nameof(SelectedColor))] 
+    private ObservableCollection<HueLight> _lights = new();
+
+    [ObservableProperty] [NotifyPropertyChangedFor(nameof(SelectedColor))]
+    private int _selectedLightIndex;
+
+    public Brush SelectedColor
+    {
+        get => new SolidColorBrush(Lights[SelectedLightIndex].State.Color.ToMauiColor());
+        set => OnPropertyChanged();
+    }
 
     [RelayCommand]
     private async Task RetrieveBridgeConfig()
@@ -67,24 +76,28 @@ public partial class MainViewModel(
     }
 
     [RelayCommand]
-    private async Task TurnLightOn() => await ShowAlertOnError(await hueHandler.LightSwitch(LightSelectedValueStepper, true));
+    private async Task TurnLightOn() =>
+        await ShowAlertOnError(await hueHandler.LightSwitch(LightSelectedValueStepper, true));
 
     [RelayCommand]
-    private async Task TurnLightOff() => await ShowAlertOnError(await hueHandler.LightSwitch(LightSelectedValueStepper, false));
+    private async Task TurnLightOff() =>
+        await ShowAlertOnError(await hueHandler.LightSwitch(LightSelectedValueStepper, false));
 
     [RelayCommand]
     private async Task SetLightToColor(RgbColor rgb) =>
         await ShowAlertOnError(await hueHandler.SetColorTo(LightSelectedValueStepper, rgb.ToColor()));
 
     [RelayCommand]
-    private async Task MakeLightBlinkFor10Sec() => await ShowAlertOnError(await hueHandler.MakeLightBlink(LightSelectedValueStepper));
+    private async Task MakeLightBlinkFor10Sec() =>
+        await ShowAlertOnError(await hueHandler.MakeLightBlink(LightSelectedValueStepper));
 
     [RelayCommand]
-    private async Task MakeLightColorLoop() => await ShowAlertOnError(await hueHandler.MakeLightColorLoop(LightSelectedValueStepper));
+    private async Task MakeLightColorLoop() =>
+        await ShowAlertOnError(await hueHandler.MakeLightColorLoop(LightSelectedValueStepper));
 
     private async Task ShowAlertOnError<T>(Either<T, ErrorResponse?> either)
     {
-        if (either.IsType<ErrorResponse>(out var error)) await ShowAlertOnError(error); 
+        if (either.IsType<ErrorResponse>(out var error)) await ShowAlertOnError(error);
     }
 
     private async Task ShowAlertOnError(ErrorResponse? error)
@@ -111,6 +124,8 @@ public partial class MainViewModel(
     private async Task ChangeLightColor()
     {
         var light = Lights[SelectedLightIndex];
-        await ShowAlertOnError(await hueHandler.SetColorTo(light.Id, Color.FromHueHsb((int)light.State.Hue!, (int)light.State.Saturation!, (int)light.State.Brightness!)));
+        SelectedColor = new SolidColorBrush(light.State.Color.ToMauiColor());
+        await ShowAlertOnError(await hueHandler.SetColorTo(light.Id,
+            Color.FromHueHsb((int)light.State.Hue!, (int)light.State.Saturation!, (int)light.State.Brightness!)));
     }
 }

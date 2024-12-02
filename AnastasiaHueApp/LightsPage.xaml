@@ -29,29 +29,32 @@
                         CornerRadius="10"
                         BackgroundColor="DarkGreen">
 
-                        <VerticalStackLayout x:DataType="models:HueLight">
-                            <Label Text="{Binding Id}" />
-                            <Label Text="{Binding Name}"/>
-                            <Label Text="{Binding ModelId}"/>
-                            <Label Text="{Binding Type}"/>
-                            
-                            <Switch IsToggled="{Binding State.On}">
-                                <Switch.Behaviors>
-                                    <toolkit:EventToCommandBehavior 
-                                        EventName="Toggled" 
-                                        Command="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.SwitchLightCommand}" />
-                                </Switch.Behaviors>
-                            </Switch>
+                        <ScrollView>
+                            <VerticalStackLayout x:DataType="models:HueLight">
+                                <Label Text="{Binding Id}" />
+                                <Label Text="{Binding Name}"/>
+                                <Label Text="{Binding ModelId}"/>
+                                <Label Text="{Binding Type}"/>
 
-                            <Button Text="Blink" Command="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.MakeLightBlinkFor10SecCommand}" />
-                            <Button Text="ColorLoop" Command="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.MakeLightColorLoopCommand}" />
+                                <Switch IsToggled="{Binding State.On}">
+                                    <Switch.Behaviors>
+                                        <toolkit:EventToCommandBehavior 
+                                            EventName="Toggled" 
+                                            Command="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.SwitchLightCommand}" />
+                                    </Switch.Behaviors>
+                                </Switch>
+
+                                <Button Text="Blink" Command="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.MakeLightBlinkFor10SecCommand}" />
+                                <Button Text="ColorLoop" Command="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.MakeLightColorLoopCommand}" />
 
 
-                            <Slider Minimum="0" Maximum="65535" Value="{Binding State.Hue}" DragCompletedCommand="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.ChangeLightColorCommand }"/>
-                            <Slider Minimum="0" Maximum="254" Value="{Binding State.Saturation}" DragCompletedCommand="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.ChangeLightColorCommand }"/>
-                            <Slider Minimum="0" Maximum="254" Value="{Binding State.Brightness}" DragCompletedCommand="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.ChangeLightColorCommand }"/>
+                                <Rectangle WidthRequest="100" HeightRequest="100" Fill="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.SelectedColor}"/>
+                                <Slider Minimum="0" Maximum="65535" Value="{Binding State.Hue}" DragCompletedCommand="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.ChangeLightColorCommand }"/>
+                                <Slider Minimum="0" Maximum="254" Value="{Binding State.Saturation}" DragCompletedCommand="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.ChangeLightColorCommand }"/>
+                                <Slider Minimum="0" Maximum="254" Value="{Binding State.Brightness}" DragCompletedCommand="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.ChangeLightColorCommand }"/>
 
-                        </VerticalStackLayout>
+                            </VerticalStackLayout>
+                        </ScrollView>
 
                     </Frame>
 

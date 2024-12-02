@@ -1,4 +1,6 @@
-﻿namespace AnastasiaHueApp.Models;
+﻿using Color = AnastasiaHueApp.Util.Color.Color;
+
+namespace AnastasiaHueApp.Models;
 
 public class HueLight
 {
@@ -41,6 +43,7 @@ public class HueLight
     public required string UniqueId { get; init; }
 
     #region Equals
+
     protected bool Equals(HueLight other)
     {
         return Id == other.Id && ModelId == other.ModelId && Name == other.Name && SwVersion == other.SwVersion &&
