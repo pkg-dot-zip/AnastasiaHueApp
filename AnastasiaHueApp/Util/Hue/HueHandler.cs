@@ -28,7 +28,7 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry, IPre
     };
 
     /// <inheritdoc />
-    public async Task<bool> IsOldConnectionValid()
+    public async Task<(bool, string?)> IsOldConnectionValid()
     {
         // TODO: What happens if no username was set before this?!
 
@@ -42,17 +42,17 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry, IPre
             if (either.IsType<ErrorResponse>(out var error))
             {
                 if (error!.Type != "1") throw new InvalidOperationException(); // If not unauthorized user then something really went wrong. :(
-                return false;
+                return (false, null);
             }
 
-            if (either.IsType<List<HueLight>>(out _)) return true;
+            if (either.IsType<List<HueLight>>(out _)) return (true, username);
         }
         catch (HttpRequestException e)
         {
-            return false;
+            return (false, null);
         }
 
-        return false;
+        return (false, null);
     }
 
     /// <inheritdoc />

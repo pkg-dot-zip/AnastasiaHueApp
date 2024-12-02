@@ -19,9 +19,11 @@ namespace AnastasiaHueApp
                 if (_forcedNavigationAlready) return;
 
                 // If we still have a valid username, we retrieve the lights and immediately load the correct lights + navigate to the LightsPage.
-                if (await hueHandler.IsOldConnectionValid())
+                var (isValid, username) = await hueHandler.IsOldConnectionValid();
+                if (isValid)
                 {
-                    logger.LogInformation("Old Connection was valid.");
+                    logger.LogInformation("Old Connection was valid with username {0}.", username);
+                    viewModel.BoxText = username!;
                     viewModel.RefreshLightsCommand.Execute(null);
                     logger.LogInformation("Navigating to the Lights page.");
                     await Shell.Current.GoToAsync("///LightsPage");
