@@ -38,10 +38,12 @@ namespace AnastasiaHueApp
 
             // Pages.
             builder.Services.AddSingleton<MainPage>();
+            builder.Services.AddSingleton<DevPage>();
             builder.Services.AddSingleton<LightsPage>();
 
             // ViewModels.
             builder.Services.AddSingleton<MainViewModel>();
+            builder.Services.AddSingleton<DevViewModel>();
 
             // Util.
             builder.Services.AddSingleton<IJsonRegistry, JsonRegistry>();
