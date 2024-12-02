@@ -14,6 +14,11 @@
     <cards:CarouselView
         ItemsSource="{Binding Lights}"
         SelectedIndex="{Binding SelectedLightIndex}">
+
+        <cards:CarouselView.GestureRecognizers>
+            <SwipeGestureRecognizer Direction="Down" Command="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.RefreshLightsCommand}"/>
+        </cards:CarouselView.GestureRecognizers>
+
         <cards:CarouselView.ItemTemplate>
             <DataTemplate>
                 <ContentView x:DataType="models:HueLight">
