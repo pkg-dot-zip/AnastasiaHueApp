@@ -21,7 +21,6 @@
                     <Frame 
                         VerticalOptions="Center"
                         HorizontalOptions="Center"
-                        HeightRequest="300"
                         WidthRequest="300"
                         Padding="0" 
                         HasShadow="false"
@@ -48,10 +47,10 @@
                                 <Button Text="ColorLoop" Command="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.MakeLightColorLoopCommand}" />
 
 
-                                <Rectangle WidthRequest="100" HeightRequest="100" Fill="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.SelectedColor}"/>
-                                <Slider Minimum="0" Maximum="65535" Value="{Binding State.Hue}" DragCompletedCommand="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.ChangeLightColorCommand }"/>
-                                <Slider Minimum="0" Maximum="254" Value="{Binding State.Saturation}" DragCompletedCommand="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.ChangeLightColorCommand }"/>
-                                <Slider Minimum="0" Maximum="254" Value="{Binding State.Brightness}" DragCompletedCommand="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.ChangeLightColorCommand }"/>
+                                <Rectangle WidthRequest="100" HeightRequest="100" Fill="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.SelectedColorBrush}"/>
+                                <Slider Minimum="0" Maximum="65535" ThumbColor="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.SelectedColor}" Value="{Binding State.Hue}" DragCompletedCommand="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.ChangeLightColorCommand }"/>
+                                <Slider MinimumTrackColor="White" MaximumTrackColor="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.SelectedColor}" Minimum="0" Maximum="254" Value="{Binding State.Saturation}" DragCompletedCommand="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.ChangeLightColorCommand }"/>
+                                <Slider MinimumTrackColor="Black" MaximumTrackColor="White" Minimum="0" Maximum="254" Value="{Binding State.Brightness}" DragCompletedCommand="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.ChangeLightColorCommand }"/>
 
                             </VerticalStackLayout>
                         </ScrollView>

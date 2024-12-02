@@ -22,16 +22,26 @@ public partial class MainViewModel(
     [ObservableProperty] private string _boxText = string.Empty;
     [ObservableProperty] private int _lightSelectedValueStepper = 1;
 
-    [ObservableProperty][NotifyPropertyChangedFor(nameof(SelectedColor))] 
-    private ObservableCollection<HueLight> _lights = new();
+    [ObservableProperty] [NotifyPropertyChangedFor(nameof(SelectedColorBrush), nameof(SelectedColor))]
+    private ObservableCollection<HueLight> _lights = [];
 
-    [ObservableProperty] [NotifyPropertyChangedFor(nameof(SelectedColor))]
+    [ObservableProperty] [NotifyPropertyChangedFor(nameof(SelectedColorBrush), nameof(SelectedColor))]
     private int _selectedLightIndex;
 
-    public Brush SelectedColor
+    public Brush SelectedColorBrush
     {
-        get => new SolidColorBrush(Lights[SelectedLightIndex].State.Color.ToMauiColor());
+        get => new SolidColorBrush(SelectedColor);
         set => OnPropertyChanged();
+    }
+
+    public Microsoft.Maui.Graphics.Color SelectedColor
+    {
+        get => Lights[SelectedLightIndex].State.Color.ToMauiColor();
+        set
+        {
+            OnPropertyChanged(nameof(SelectedColorBrush));
+            OnPropertyChanged();
+        }
     }
 
     [RelayCommand]
@@ -124,8 +134,7 @@ public partial class MainViewModel(
     private async Task ChangeLightColor()
     {
         var light = Lights[SelectedLightIndex];
-        SelectedColor = new SolidColorBrush(light.State.Color.ToMauiColor());
-        await ShowAlertOnError(await hueHandler.SetColorTo(light.Id,
-            Color.FromHueHsb((int)light.State.Hue!, (int)light.State.Saturation!, (int)light.State.Brightness!)));
+        SelectedColor = light.State.Color.ToMauiColor();
+        await ShowAlertOnError(await hueHandler.SetColorTo(light.Id, light.State.Color));
     }
 }
