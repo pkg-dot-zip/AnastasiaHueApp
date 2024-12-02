@@ -14,9 +14,21 @@
 
     <ContentPage.Resources>
         <Style x:Key="SliderStyle" TargetType="Slider">
-            <Setter Property="DragCompletedCommand" Value="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.ChangeLightColorCommand }"/>
+            <Setter Property="DragCompletedCommand"
+                    Value="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.ChangeLightColorCommand }" />
             <Setter Property="Minimum" Value="0" />
             <Setter Property="Margin" Value="8" />
+        </Style>
+
+        <Style x:Key="FrameStyle" TargetType="Frame">
+            <Setter Property="VerticalOptions" Value="Center" />
+            <Setter Property="HorizontalOptions" Value="Center" />
+            <Setter Property="WidthRequest" Value="300" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="HasShadow" Value="False" />
+            <Setter Property="IsClippedToBounds" Value="true" />
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="BackgroundColor" Value="DarkGreen" />
         </Style>
     </ContentPage.Resources>
 
@@ -26,59 +38,57 @@
         SelectedIndex="{Binding SelectedLightIndex}">
         <cards:CarouselView.ItemTemplate>
             <DataTemplate>
-                <ContentView>
-                    <Frame
-                        VerticalOptions="Center"
-                        HorizontalOptions="Center"
-                        WidthRequest="300"
-                        Padding="0"
-                        HasShadow="false"
-                        IsClippedToBounds="true"
-                        CornerRadius="10"
-                        BackgroundColor="DarkGreen">
+                <ContentView x:DataType="models:HueLight">
+                    <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
 
-                        <ScrollView>
-                            <VerticalStackLayout x:DataType="models:HueLight">
-                                <Label Text="{Binding Id}" />
-                                <Label Text="{Binding Name}" />
-                                <Label Text="{Binding ModelId}" />
-                                <Label Text="{Binding Type}" />
+                        <Label Text="{Binding Id}" HorizontalOptions="Center" HorizontalTextAlignment="Center" />
+                        <Label Text="{Binding Name}" HorizontalOptions="Center" HorizontalTextAlignment="Center" />
 
-                                <Switch IsToggled="{Binding State.On}">
-                                    <Switch.Behaviors>
-                                        <toolkit:EventToCommandBehavior
-                                            EventName="Toggled"
-                                            Command="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.SwitchLightCommand}" />
-                                    </Switch.Behaviors>
-                                </Switch>
-
-                                <Button Text="Blink"
-                                        Command="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.MakeLightBlinkFor10SecCommand}" />
-                                <Button Text="ColorLoop"
-                                        Command="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.MakeLightColorLoopCommand}" />
+                        <Frame Style="{StaticResource FrameStyle}">
 
 
-                                <Rectangle WidthRequest="100" HeightRequest="100"
-                                           Fill="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.SelectedColorBrush}" />
-                                <Slider
-                                    Maximum="65535"
-                                    ThumbColor="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.SelectedColor}"
-                                    Value="{Binding State.Hue}"
-                                    Style="{StaticResource SliderStyle}" />
-                                <Slider MinimumTrackColor="White"
-                                        MaximumTrackColor="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.SelectedColor}"
-                                        Maximum="254"
-                                        Value="{Binding State.Saturation}"
+                            <ScrollView>
+                                <VerticalStackLayout>
+                                    <Label Text="{Binding ModelId}" />
+                                    <Label Text="{Binding Type}" />
+
+                                    <Switch IsToggled="{Binding State.On}">
+                                        <Switch.Behaviors>
+                                            <toolkit:EventToCommandBehavior
+                                                EventName="Toggled"
+                                                Command="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.SwitchLightCommand}" />
+                                        </Switch.Behaviors>
+                                    </Switch>
+
+                                    <Button Text="Blink"
+                                            Command="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.MakeLightBlinkFor10SecCommand}" />
+                                    <Button Text="ColorLoop"
+                                            Command="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.MakeLightColorLoopCommand}" />
+
+
+                                    <Rectangle WidthRequest="100" HeightRequest="100"
+                                               Fill="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.SelectedColorBrush}" />
+                                    <Slider
+                                        Maximum="65535"
+                                        ThumbColor="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.SelectedColor}"
+                                        Value="{Binding State.Hue}"
                                         Style="{StaticResource SliderStyle}" />
-                                <Slider MinimumTrackColor="Black" MaximumTrackColor="White" Minimum="0" Maximum="254"
-                                        Value="{Binding State.Brightness}"
-                                        Style="{StaticResource SliderStyle}" />
+                                    <Slider MinimumTrackColor="White"
+                                            MaximumTrackColor="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.SelectedColor}"
+                                            Maximum="254"
+                                            Value="{Binding State.Saturation}"
+                                            Style="{StaticResource SliderStyle}" />
+                                    <Slider MinimumTrackColor="Black" MaximumTrackColor="White" Minimum="0"
+                                            Maximum="254"
+                                            Value="{Binding State.Brightness}"
+                                            Style="{StaticResource SliderStyle}" />
 
-                            </VerticalStackLayout>
-                        </ScrollView>
+                                </VerticalStackLayout>
+                            </ScrollView>
 
-                    </Frame>
 
+                        </Frame>
+                    </VerticalStackLayout>
                 </ContentView>
             </DataTemplate>
         </cards:CarouselView.ItemTemplate>
