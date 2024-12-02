@@ -28,7 +28,6 @@
             <Setter Property="HasShadow" Value="False" />
             <Setter Property="IsClippedToBounds" Value="true" />
             <Setter Property="CornerRadius" Value="10" />
-            <Setter Property="BackgroundColor" Value="DarkGreen" />
         </Style>
     </ContentPage.Resources>
 
@@ -45,7 +44,14 @@
                         <Label Text="{Binding Name}" HorizontalOptions="Center" HorizontalTextAlignment="Center" />
 
                         <Frame Style="{StaticResource FrameStyle}">
-
+                            <Frame.Background>
+                                <LinearGradientBrush>
+                                    <GradientStop Color="#457b9d"
+                                                  Offset="0.1" />
+                                    <GradientStop Color="#1D3557"
+                                                  Offset="1.0" />
+                                </LinearGradientBrush>
+                            </Frame.Background>
 
                             <ScrollView>
                                 <VerticalStackLayout>
