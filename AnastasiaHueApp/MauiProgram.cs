@@ -3,6 +3,7 @@ using AnastasiaHueApp.Util.Hue;
 using AnastasiaHueApp.Util.Json;
 using AnastasiaHueApp.ViewModels;
 using Microsoft.Extensions.Logging;
+using PanCardView;
 using Serilog;
 
 namespace AnastasiaHueApp
@@ -14,6 +15,7 @@ namespace AnastasiaHueApp
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseCardsView() // From the CardsView.Maui package. See https://github.com/AndreiMisiukevich/CardView.MAUI
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -31,9 +33,14 @@ namespace AnastasiaHueApp
                     .WriteTo.File(Path.Combine(FileSystem.Current.AppDataDirectory, "anastasiaLog.txt"), rollingInterval: RollingInterval.Day)
                     .CreateLogger());
 
+            // Pages.
             builder.Services.AddSingleton<MainPage>();
             builder.Services.AddSingleton<LightsPage>();
+
+            // ViewModels.
             builder.Services.AddSingleton<MainViewModel>();
+
+            // Util.
             builder.Services.AddSingleton<IJsonRegistry, JsonRegistry>();
             builder.Services.AddSingleton<IDisplayAlertHandler, DisplayAlertHandler>();
             builder.Services.AddSingleton<IHueHandler, HueHandler>();

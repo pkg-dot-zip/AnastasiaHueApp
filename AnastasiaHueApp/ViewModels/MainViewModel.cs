@@ -1,8 +1,10 @@
-﻿using AnastasiaHueApp.Models;
+﻿using System.Collections.ObjectModel;
+using AnastasiaHueApp.Models;
 using AnastasiaHueApp.Models.Message;
 using AnastasiaHueApp.Util;
 using AnastasiaHueApp.Util.Alerts;
 using AnastasiaHueApp.Util.Color;
+using AnastasiaHueApp.Util.Extensions;
 using AnastasiaHueApp.Util.Hue;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -19,6 +21,8 @@ public partial class MainViewModel(
     [ObservableProperty] private string _boxText = string.Empty;
     [ObservableProperty] private int _lightSelectedValueStepper = 1;
 
+    [ObservableProperty] private ObservableCollection<HueLight> _lights = new();
+    [ObservableProperty] private int _selectedLightIndex;
 
     [RelayCommand]
     private async Task RetrieveBridgeConfig()
@@ -40,6 +44,9 @@ public partial class MainViewModel(
             {
                 logger.LogInformation($"({light.Id}) | {light.Name} - {light.State.Brightness}");
             }
+
+            Lights.Clear();
+            Lights.AddAll(lights);
         }
 
         await ShowAlertOnError(either!);

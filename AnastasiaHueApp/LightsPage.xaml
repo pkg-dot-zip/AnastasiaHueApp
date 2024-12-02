@@ -5,10 +5,44 @@
              x:Class="AnastasiaHueApp.LightsPage"
              xmlns:viewModels="clr-namespace:AnastasiaHueApp.ViewModels"
              xmlns:color="clr-namespace:AnastasiaHueApp.Util.Color"
+             xmlns:cards="clr-namespace:PanCardView;assembly=PanCardView"
+             xmlns:controls="clr-namespace:PanCardView.Controls;assembly=PanCardView"
+             xmlns:models="clr-namespace:AnastasiaHueApp.Models"
              x:DataType="viewModels:MainViewModel">
 
-    <VerticalStackLayout>
-        <Label Text="TEST LIGHT PAGE"/>
-    </VerticalStackLayout>
+    <cards:CarouselView 
+        ItemsSource="{Binding Lights}"
+        SelectedIndex="{Binding SelectedLightIndex}">
+        <cards:CarouselView.ItemTemplate>
+            <DataTemplate>
+                <ContentView>
+                    <Frame 
+                        VerticalOptions="Center"
+                        HorizontalOptions="Center"
+                        HeightRequest="300"
+                        WidthRequest="300"
+                        Padding="0" 
+                        HasShadow="false"
+                        IsClippedToBounds="true"
+                        CornerRadius="10"
+                        BackgroundColor="DarkGreen">
+
+                        <VerticalStackLayout x:DataType="models:HueLight">
+                            <Label Text="{Binding Id}" />
+                            <Label Text="{Binding Name}"/>
+                            <Label Text="{Binding ModelId}"/>
+                            <Label Text="{Binding Type}"/>
+                        </VerticalStackLayout>
+
+                    </Frame>
+
+                </ContentView>
+            </DataTemplate>
+        </cards:CarouselView.ItemTemplate>
+
+        <controls:LeftArrowControl/>
+        <controls:RightArrowControl/>
+        <controls:IndicatorsControl/>
+    </cards:CarouselView>
 
 </ContentPage>
