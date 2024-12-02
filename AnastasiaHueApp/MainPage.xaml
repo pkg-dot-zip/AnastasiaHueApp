@@ -8,21 +8,20 @@
 
     <ScrollView>
         <VerticalStackLayout
-        Padding="30,0"
-        Spacing="25">
+            Padding="30,0"
+            Spacing="25">
             <Image
-            Source="dotnet_bot.png"
-            HeightRequest="185"
-            Aspect="AspectFit"
-            SemanticProperties.Description="dot net bot in a hovercraft number nine" />
+                Source="dotnet_bot.png"
+                HeightRequest="185"
+                Aspect="AspectFit"
+                SemanticProperties.Description="dot net bot in a hovercraft number nine" />
 
-            <Editor
-            Text="{Binding BoxText}" />
+            <Editor Text="{Binding BoxText}" />
 
             <Button
-            Text="Attempt Link"
-            Command="{Binding RetrieveBridgeConfigCommand}" />
+                Text="Attempt Link"
+                Command="{Binding RetrieveBridgeConfigCommand}"
+                Style="{StaticResource ButtonStyle}"/>
         </VerticalStackLayout>
     </ScrollView>
-
 </ContentPage>

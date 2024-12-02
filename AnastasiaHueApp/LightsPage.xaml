@@ -11,33 +11,6 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:DataType="viewModels:MainViewModel"
              x:Name="LightsPageName">
-
-    <ContentPage.Resources>
-        <Style x:Key="SliderStyle" TargetType="Slider">
-            <Setter Property="DragCompletedCommand"
-                    Value="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.ChangeLightColorCommand }" />
-            <Setter Property="Minimum" Value="0" />
-            <Setter Property="Margin" Value="8" />
-        </Style>
-
-        <Style x:Key="FrameStyle" TargetType="Frame">
-            <Setter Property="VerticalOptions" Value="Center" />
-            <Setter Property="HorizontalOptions" Value="Center" />
-            <Setter Property="WidthRequest" Value="300" />
-            <Setter Property="Padding" Value="8" />
-            <Setter Property="HasShadow" Value="False" />
-            <Setter Property="IsClippedToBounds" Value="true" />
-            <Setter Property="CornerRadius" Value="10" />
-        </Style>
-        
-        <Style x:Key="ButtonStyle" TargetType="Button">
-            <Setter Property="TextColor" Value="{StaticResource Honeydew}"/>
-            <Setter Property="BackgroundColor" Value="{StaticResource BerkeleyBlue}"/>
-        </Style>
-
-    </ContentPage.Resources>
-
-
     <cards:CarouselView
         ItemsSource="{Binding Lights}"
         SelectedIndex="{Binding SelectedLightIndex}">
@@ -64,7 +37,7 @@
                                     <Label Text="{Binding ModelId}" />
                                     <Label Text="{Binding Type}" />
 
-                                    <Switch IsToggled="{Binding State.On}">
+                                    <Switch IsToggled="{Binding State.On}" Style="{StaticResource SwitchStyle}">
                                         <Switch.Behaviors>
                                             <toolkit:EventToCommandBehavior
                                                 EventName="Toggled"
@@ -87,16 +60,19 @@
                                         Maximum="65535"
                                         ThumbColor="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.SelectedColor}"
                                         Value="{Binding State.Hue}"
-                                        Style="{StaticResource SliderStyle}" />
+                                        Style="{StaticResource SliderStyle}"
+                                        DragCompletedCommand="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.ChangeLightColorCommand }"/>
                                     <Slider MinimumTrackColor="White"
                                             MaximumTrackColor="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.SelectedColor}"
                                             Maximum="254"
                                             Value="{Binding State.Saturation}"
-                                            Style="{StaticResource SliderStyle}" />
+                                            Style="{StaticResource SliderStyle}"
+                                            DragCompletedCommand="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.ChangeLightColorCommand }"/>
                                     <Slider MinimumTrackColor="Black" MaximumTrackColor="White" Minimum="0"
                                             Maximum="254"
                                             Value="{Binding State.Brightness}"
-                                            Style="{StaticResource SliderStyle}" />
+                                            Style="{StaticResource SliderStyle}"
+                                            DragCompletedCommand="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.ChangeLightColorCommand }"/>
 
                                 </VerticalStackLayout>
                             </ScrollView>

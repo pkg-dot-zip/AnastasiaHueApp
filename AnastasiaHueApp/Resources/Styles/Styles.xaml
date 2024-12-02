@@ -448,4 +448,34 @@
         <Setter Property="SelectedTabColor" Value="{AppThemeBinding Light={StaticResource Gray950}, Dark={StaticResource Gray200}}" />
     </Style>
 
+    <!-- Styles made by me :) -->
+
+    <Style x:Key="SliderStyle" TargetType="Slider">
+        <Setter Property="Minimum" Value="0" />
+        <Setter Property="Margin" Value="8" />
+    </Style>
+
+    <Style x:Key="FrameStyle" TargetType="Frame">
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="WidthRequest" Value="300" />
+        <Setter Property="Padding" Value="8" />
+        <Setter Property="HasShadow" Value="False" />
+        <Setter Property="IsClippedToBounds" Value="true" />
+        <Setter Property="CornerRadius" Value="10" />
+    </Style>
+
+    <Style x:Key="ButtonStyle" TargetType="Button">
+        <Setter Property="TextColor" Value="{StaticResource Honeydew}"/>
+        <Setter Property="BackgroundColor" Value="{StaticResource BerkeleyBlue}"/>
+        <Setter Property="Margin" Value="8"/>
+        <Setter Property="FontSize" Value="24"/>
+    </Style>
+
+    <Style x:Key="SwitchStyle" TargetType="Switch">
+        <Setter Property="VerticalOptions" Value="Center"/>
+        <Setter Property="HorizontalOptions" Value="Center"/>
+        <Setter Property="ThumbColor" Value="{StaticResource PantoneRed}"/>
+    </Style>
+
 </ResourceDictionary>
