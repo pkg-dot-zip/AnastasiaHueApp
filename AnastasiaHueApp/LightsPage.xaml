@@ -89,6 +89,8 @@
             </DataTemplate>
         </cards:CarouselView.ItemTemplate>
 
+        <ActivityIndicator IsRunning="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.IsRefreshing}" Style="{StaticResource IndicatorStyle}"/>
+
         <controls:LeftArrowControl />
         <controls:RightArrowControl />
         <controls:IndicatorsControl />

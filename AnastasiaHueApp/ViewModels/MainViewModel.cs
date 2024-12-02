@@ -26,6 +26,8 @@ public partial class MainViewModel(
     [ObservableProperty] [NotifyPropertyChangedFor(nameof(SelectedColorBrush), nameof(SelectedColor))]
     private int _selectedLightIndex;
 
+    [ObservableProperty] private bool _isRefreshing;
+
     public Brush SelectedColorBrush
     {
         get => new SolidColorBrush(SelectedColor);
@@ -74,6 +76,7 @@ public partial class MainViewModel(
     [RelayCommand]
     private async Task RefreshLights()
     {
+        IsRefreshing = true;
         logger.LogInformation("Attempting refresh.");
 
         // First we try to collect the new lights.
@@ -95,5 +98,8 @@ public partial class MainViewModel(
             await ShowAlertOnError(error);
             await displayAlertHandler.DisplayAlert("Failed to refresh lights", "Try again later!");
         }
+
+        await Task.Delay(2000); // We load too fast, so we don't see the animation unless we wait.
+        IsRefreshing = false;
     }
 }
