@@ -12,17 +12,26 @@
              x:DataType="viewModels:MainViewModel"
              x:Name="LightsPageName">
 
-    <cards:CarouselView 
+    <ContentPage.Resources>
+        <Style x:Key="SliderStyle" TargetType="Slider">
+            <Setter Property="DragCompletedCommand" Value="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.ChangeLightColorCommand }"/>
+            <Setter Property="Minimum" Value="0" />
+            <Setter Property="Margin" Value="8" />
+        </Style>
+    </ContentPage.Resources>
+
+
+    <cards:CarouselView
         ItemsSource="{Binding Lights}"
         SelectedIndex="{Binding SelectedLightIndex}">
         <cards:CarouselView.ItemTemplate>
             <DataTemplate>
                 <ContentView>
-                    <Frame 
+                    <Frame
                         VerticalOptions="Center"
                         HorizontalOptions="Center"
                         WidthRequest="300"
-                        Padding="0" 
+                        Padding="0"
                         HasShadow="false"
                         IsClippedToBounds="true"
                         CornerRadius="10"
@@ -31,26 +40,39 @@
                         <ScrollView>
                             <VerticalStackLayout x:DataType="models:HueLight">
                                 <Label Text="{Binding Id}" />
-                                <Label Text="{Binding Name}"/>
-                                <Label Text="{Binding ModelId}"/>
-                                <Label Text="{Binding Type}"/>
+                                <Label Text="{Binding Name}" />
+                                <Label Text="{Binding ModelId}" />
+                                <Label Text="{Binding Type}" />
 
                                 <Switch IsToggled="{Binding State.On}">
                                     <Switch.Behaviors>
-                                        <toolkit:EventToCommandBehavior 
-                                            EventName="Toggled" 
+                                        <toolkit:EventToCommandBehavior
+                                            EventName="Toggled"
                                             Command="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.SwitchLightCommand}" />
                                     </Switch.Behaviors>
                                 </Switch>
 
-                                <Button Text="Blink" Command="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.MakeLightBlinkFor10SecCommand}" />
-                                <Button Text="ColorLoop" Command="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.MakeLightColorLoopCommand}" />
+                                <Button Text="Blink"
+                                        Command="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.MakeLightBlinkFor10SecCommand}" />
+                                <Button Text="ColorLoop"
+                                        Command="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.MakeLightColorLoopCommand}" />
 
 
-                                <Rectangle WidthRequest="100" HeightRequest="100" Fill="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.SelectedColorBrush}"/>
-                                <Slider Minimum="0" Maximum="65535" ThumbColor="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.SelectedColor}" Value="{Binding State.Hue}" DragCompletedCommand="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.ChangeLightColorCommand }"/>
-                                <Slider MinimumTrackColor="White" MaximumTrackColor="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.SelectedColor}" Minimum="0" Maximum="254" Value="{Binding State.Saturation}" DragCompletedCommand="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.ChangeLightColorCommand }"/>
-                                <Slider MinimumTrackColor="Black" MaximumTrackColor="White" Minimum="0" Maximum="254" Value="{Binding State.Brightness}" DragCompletedCommand="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.ChangeLightColorCommand }"/>
+                                <Rectangle WidthRequest="100" HeightRequest="100"
+                                           Fill="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.SelectedColorBrush}" />
+                                <Slider
+                                    Maximum="65535"
+                                    ThumbColor="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.SelectedColor}"
+                                    Value="{Binding State.Hue}"
+                                    Style="{StaticResource SliderStyle}" />
+                                <Slider MinimumTrackColor="White"
+                                        MaximumTrackColor="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.SelectedColor}"
+                                        Maximum="254"
+                                        Value="{Binding State.Saturation}"
+                                        Style="{StaticResource SliderStyle}" />
+                                <Slider MinimumTrackColor="Black" MaximumTrackColor="White" Minimum="0" Maximum="254"
+                                        Value="{Binding State.Brightness}"
+                                        Style="{StaticResource SliderStyle}" />
 
                             </VerticalStackLayout>
                         </ScrollView>
@@ -61,9 +83,9 @@
             </DataTemplate>
         </cards:CarouselView.ItemTemplate>
 
-        <controls:LeftArrowControl/>
-        <controls:RightArrowControl/>
-        <controls:IndicatorsControl/>
+        <controls:LeftArrowControl />
+        <controls:RightArrowControl />
+        <controls:IndicatorsControl />
     </cards:CarouselView>
 
 </ContentPage>
