@@ -12,9 +12,15 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry) : IH
 {
     private static readonly HttpClient HttpClient = new()
     {
-        // BaseAddress = new Uri("http://localhost/api/"), // NOTE: If using port 80 no port needs to be specified.
-        BaseAddress = new Uri("http://10.0.2.2/api/"), // NOTE: If using port 80 no port needs to be specified.
-        // BaseAddress = new Uri("http://192.168.1.179/api/"), // NOTE: If using port 80 no port needs to be specified.
+#if ANDROID
+        BaseAddress = new Uri("http://10.0.2.2/api/"), // NOTE: Emulator. If using port 80 no port needs to be specified.
+        //BaseAddress = new Uri("http://192.168.1.179/api/"), // NOTE: Hardware. If using port 80 no port needs to be specified
+#elif WINDOWS
+        BaseAddress = new Uri("http://localhost/api/"), // NOTE: Emulator. If using port 80 no port needs to be specified.
+        //BaseAddress = new Uri("http://192.168.1.179/api/"), // NOTE: Hardware. If using port 80 no port needs to be specified.
+#else
+
+#endif
     };
 
     private static string? _username = null;
@@ -69,10 +75,10 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry) : IH
             if (index <= 0) throw new ArgumentOutOfRangeException(nameof(index));
             var response = await HttpClient.GetAsync($"{_username}/lights/{index}");
             response.EnsureSuccessStatusCode();
-            
+
             // Here we set the light id / index, since that is not returned in the json. :(
             var either = await response.Content.ReadAsEitherAsync<HueLight, ErrorResponse>(registry);
-            
+
             if (either.IsType<HueLight>(out var light))
             {
                 light!.Id = index;
@@ -92,7 +98,7 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry) : IH
     public async Task<ErrorResponse?> LightSwitch(int index, bool on)
     {
         if (index <= 0) throw new ArgumentOutOfRangeException(nameof(index));
-        return await SetLightState(index, new HueLightState() {On = on});
+        return await SetLightState(index, new HueLightState() { On = on });
     }
 
     /// <inheritdoc />
@@ -110,13 +116,13 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry) : IH
     /// <inheritdoc />
     public async Task<ErrorResponse?> MakeLightBlink(int index)
     {
-        return await SetLightState(index, new HueLightState {Alert = HueAlert.LSelect});
+        return await SetLightState(index, new HueLightState { Alert = HueAlert.LSelect });
     }
 
     /// <inheritdoc />
     public async Task<ErrorResponse?> MakeLightColorLoop(int index)
     {
-        return await SetLightState(index, new HueLightState {Effect = HueEffect.ColorLoop});
+        return await SetLightState(index, new HueLightState { Effect = HueEffect.ColorLoop });
     }
 
 
@@ -128,7 +134,7 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry) : IH
         {
             // Crazy hack to allow us to check whether a property of state is null before putting it into a dynamic object.
             dynamic payload = new ExpandoObject();
-            var payloadDict = (IDictionary<string, object>) payload;
+            var payloadDict = (IDictionary<string, object>)payload;
 
             if (state.Alert is not null) payloadDict["alert"] = state.Alert.GetName();
             if (state.Brightness is not null) payloadDict["bri"] = state.Brightness;

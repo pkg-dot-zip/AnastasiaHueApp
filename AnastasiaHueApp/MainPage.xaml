@@ -9,117 +9,119 @@
 
     <ScrollView>
         <VerticalStackLayout
-            Padding="30,0"
-            Spacing="25">
+        Padding="30,0"
+        Spacing="25">
             <Image
-                Source="dotnet_bot.png"
-                HeightRequest="185"
-                Aspect="AspectFit"
-                SemanticProperties.Description="dot net bot in a hovercraft number nine" />
+            Source="dotnet_bot.png"
+            HeightRequest="185"
+            Aspect="AspectFit"
+            SemanticProperties.Description="dot net bot in a hovercraft number nine" />
 
             <Editor
-                Text="{Binding BoxText}" />
+            Text="{Binding BoxText}" />
 
             <Button
-                Text="Attempt Link"
-                Command="{Binding RetrieveBridgeConfigCommand}" />
+            Text="Attempt Link"
+            Command="{Binding RetrieveBridgeConfigCommand}" />
 
             <Button
-                Text="Retrieve Lights"
-                Command="{Binding RetrieveAllLightsCommand}" />
+            Text="Retrieve Lights"
+            Command="{Binding RetrieveAllLightsCommand}" />
 
-            <HorizontalStackLayout>
-                <Stepper 
+            <ScrollView>
+                <VerticalStackLayout>
+                    <Stepper
                     Value="{Binding LightSelectedValueStepper}"
                     Minimum="1"
                     Maximum="50"
-                    Increment="1"
-                    />
+                    Increment="1" />
 
-                <Button
+                    <Button
                     Text="{Binding LightSelectedValueStepper,
-                    StringFormat='Retrieve Light {0}'}"
+StringFormat='Retrieve Light {0}'}"
                     Command="{Binding RetrieveLightCommand}" />
 
-                <Button
+                    <Button
                     Text="Turn Off"
                     Command="{Binding TurnLightOffCommand}" />
 
-                <Button
+                    <Button
                     Text="Turn On"
                     Command="{Binding TurnLightOnCommand}" />
 
-                <Button
+                    <Button
                     Text="Red"
                     Command="{Binding SetLightToColorCommand}"
                     BackgroundColor="Red">
-                    <Button.CommandParameter>
-                        <color:RgbColor R="255" G="0" B="0"/>
-                    </Button.CommandParameter>
-                </Button>
+                        <Button.CommandParameter>
+                            <color:RgbColor R="255" G="0" B="0" />
+                        </Button.CommandParameter>
+                    </Button>
 
-                <Button
+                    <Button
                     Text="Green"
                     Command="{Binding SetLightToColorCommand}"
                     BackgroundColor="Green">
-                    <Button.CommandParameter>
-                        <color:RgbColor R="0" G="255" B="0"/>
-                    </Button.CommandParameter>
-                </Button>
+                        <Button.CommandParameter>
+                            <color:RgbColor R="0" G="255" B="0" />
+                        </Button.CommandParameter>
+                    </Button>
 
-                <Button
+                    <Button
                     Text="Blue"
                     Command="{Binding SetLightToColorCommand}"
                     BackgroundColor="Blue">
-                    <Button.CommandParameter>
-                        <color:RgbColor R="0" G="0" B="255"/>
-                    </Button.CommandParameter>
-                </Button>
+                        <Button.CommandParameter>
+                            <color:RgbColor R="0" G="0" B="255" />
+                        </Button.CommandParameter>
+                    </Button>
 
-                <Button
+                    <Button
                     Text="Violet"
                     Command="{Binding SetLightToColorCommand}"
                     BackgroundColor="BlueViolet">
-                    <Button.CommandParameter>
-                        <color:RgbColor R="138" G="43" B="226"/>
-                    </Button.CommandParameter>
-                </Button>
+                        <Button.CommandParameter>
+                            <color:RgbColor R="138" G="43" B="226" />
+                        </Button.CommandParameter>
+                    </Button>
 
-                <Button
+                    <Button
                     Text="Brown"
                     Command="{Binding SetLightToColorCommand}"
                     BackgroundColor="Brown">
-                    <Button.CommandParameter>
-                        <color:RgbColor R="165" G="42" B="42"/>
-                    </Button.CommandParameter>
-                </Button>
+                        <Button.CommandParameter>
+                            <color:RgbColor R="165" G="42" B="42" />
+                        </Button.CommandParameter>
+                    </Button>
 
-                <Button
+                    <Button
                     Text="Yellow"
                     Command="{Binding SetLightToColorCommand}"
                     BackgroundColor="Yellow">
-                    <Button.CommandParameter>
-                        <color:RgbColor R="255" G="255" B="0"/>
-                    </Button.CommandParameter>
-                </Button>
+                        <Button.CommandParameter>
+                            <color:RgbColor R="255" G="255" B="0" />
+                        </Button.CommandParameter>
+                    </Button>
 
-                <Button
+                    <Button
                     Text="Pink"
                     Command="{Binding SetLightToColorCommand}"
                     BackgroundColor="Fuchsia">
-                    <Button.CommandParameter>
-                        <color:RgbColor R="255" G="0" B="255"/>
-                    </Button.CommandParameter>
-                </Button>
+                        <Button.CommandParameter>
+                            <color:RgbColor R="255" G="0" B="255" />
+                        </Button.CommandParameter>
+                    </Button>
 
-                <Button
+                    <Button
                     Text="Blink (10 sec)"
-                    Command="{Binding MakeLightBlinkFor10SecCommand}"/>
-                
-                <Button
+                    Command="{Binding MakeLightBlinkFor10SecCommand}" />
+
+                    <Button
                     Text="Color Loop"
-                    Command="{Binding MakeLightColorLoopCommand}"/>
-            </HorizontalStackLayout>
+                    Command="{Binding MakeLightColorLoopCommand}" />
+                </VerticalStackLayout>
+
+            </ScrollView>
         </VerticalStackLayout>
     </ScrollView>
 
