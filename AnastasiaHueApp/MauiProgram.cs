@@ -2,6 +2,7 @@
 using AnastasiaHueApp.Util.Hue;
 using AnastasiaHueApp.Util.Json;
 using AnastasiaHueApp.ViewModels;
+using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 using PanCardView;
 using Serilog;
@@ -16,6 +17,7 @@ namespace AnastasiaHueApp
             builder
                 .UseMauiApp<App>()
                 .UseCardsView() // From the CardsView.Maui package. See https://github.com/AndreiMisiukevich/CardView.MAUI
+                .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");

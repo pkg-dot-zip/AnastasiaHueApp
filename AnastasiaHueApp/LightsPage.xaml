@@ -8,7 +8,9 @@
              xmlns:cards="clr-namespace:PanCardView;assembly=PanCardView"
              xmlns:controls="clr-namespace:PanCardView.Controls;assembly=PanCardView"
              xmlns:models="clr-namespace:AnastasiaHueApp.Models"
-             x:DataType="viewModels:MainViewModel">
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:DataType="viewModels:MainViewModel"
+             x:Name="LightsPageName">
 
     <cards:CarouselView 
         ItemsSource="{Binding Lights}"
@@ -32,6 +34,13 @@
                             <Label Text="{Binding Name}"/>
                             <Label Text="{Binding ModelId}"/>
                             <Label Text="{Binding Type}"/>
+                            <Switch IsToggled="{Binding State.On}">
+                                <Switch.Behaviors>
+                                    <toolkit:EventToCommandBehavior 
+                                        EventName="Toggled" 
+                                        Command="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.SwitchLightCommand}" />
+                                </Switch.Behaviors>
+                            </Switch>
                         </VerticalStackLayout>
 
                     </Frame>

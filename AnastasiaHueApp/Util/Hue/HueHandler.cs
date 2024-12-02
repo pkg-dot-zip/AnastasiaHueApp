@@ -125,8 +125,8 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry) : IH
         return await SetLightState(index, new HueLightState { Effect = HueEffect.ColorLoop });
     }
 
-
-    private async Task<ErrorResponse?> SetLightState(int index, HueLightState state)
+    /// <inheritdoc />
+    public async Task<ErrorResponse?> SetLightState(int index, HueLightState state)
     {
         if (!IsAllowedToMakeCall(out var error)) return error;
 
@@ -138,14 +138,14 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry) : IH
 
             if (state.Alert is not null) payloadDict["alert"] = state.Alert.GetName();
             if (state.Brightness is not null) payloadDict["bri"] = state.Brightness;
-            if (state.ColorMode is not null) payloadDict["colormode"] = state.ColorMode.GetName();
-            if (state.Ct is not null) payloadDict["ct"] = state.Ct;
+            // if (state.ColorMode is not null) payloadDict["colormode"] = state.ColorMode.GetName(); // NOTE: We will never change the colorMode, hence we don't put it in the payload. 
+            // if (state.Ct is not null) payloadDict["ct"] = state.Ct;  // NOTE: We will never change the color temperature, hence we don't put it in the payload. 
             if (state.Effect is not null) payloadDict["effect"] = state.Effect.GetName();
             if (state.Hue is not null) payloadDict["hue"] = state.Hue;
             if (state.On is not null) payloadDict["on"] = state.On;
             if (state.Reachable is not null) payloadDict["reachable"] = state.Reachable;
             if (state.Saturation is not null) payloadDict["sat"] = state.Saturation;
-            if (state.XyPoint is not null) payloadDict["xy"] = state.XyPoint;
+            // if (state.XyPoint is not null) payloadDict["xy"] = state.XyPoint; // NOTE: We don't set XyPoint since we will never use it.
 
             var response = await HttpClient.PutAsJsonAsync($"{_username}/lights/{index}/state", payloadDict);
             response.EnsureSuccessStatusCode();

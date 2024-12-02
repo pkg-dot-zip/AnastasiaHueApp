@@ -61,4 +61,13 @@ public interface IHueHandler
     /// <param name="index">ID of the <see cref="HueLight"/>.</param>
     /// <returns>An <see cref="ErrorResponse"/> or <see langword="null"/>.</returns>
     public Task<ErrorResponse?> MakeLightColorLoop(int index);
+
+    // TODO: Write doc.
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="index"></param>
+    /// <param name="state"></param>
+    /// <returns></returns>
+    public Task<ErrorResponse?> SetLightState(int index, HueLightState state);
 }

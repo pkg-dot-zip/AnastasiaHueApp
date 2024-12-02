@@ -90,4 +90,19 @@ public partial class MainViewModel(
     {
         if (error is not null) await displayAlertHandler.DisplayAlert(error);
     }
+
+    // [RelayCommand]
+    // private async Task SetLightState()
+    // {
+    //     var response = await hueHandler.SetLightState(Lights[SelectedLightIndex].Id, Lights[SelectedLightIndex].State);
+    //     await ShowAlertOnError(response);
+    // }
+
+    [RelayCommand]
+    private async Task SwitchLight()
+    {
+        var selectedLight = Lights[SelectedLightIndex];
+        await ShowAlertOnError(await hueHandler.LightSwitch(selectedLight.Id,
+            (bool)selectedLight.State.On!));
+    }
 }
