@@ -9,7 +9,6 @@ using AnastasiaHueApp.Util.Hue;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
-using Color = AnastasiaHueApp.Util.Color.Color;
 
 namespace AnastasiaHueApp.ViewModels;
 

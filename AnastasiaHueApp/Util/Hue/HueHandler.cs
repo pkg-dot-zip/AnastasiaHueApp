@@ -9,20 +9,51 @@ using Microsoft.Extensions.Logging;
 
 namespace AnastasiaHueApp.Util.Hue;
 
-public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry, IPreferencesHandler preferencesHandler) : IHueHandler
+public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry, IPreferencesHandler preferencesHandler)
+    : IHueHandler
 {
     private static readonly HttpClient HttpClient = new()
     {
 #if ANDROID
-        BaseAddress = new Uri("http://10.0.2.2/api/"), // NOTE: Emulator. If using port 80 no port needs to be specified.
+        BaseAddress =
+ new Uri("http://10.0.2.2/api/"), // NOTE: Emulator. If using port 80 no port needs to be specified.
         //BaseAddress = new Uri("http://192.168.1.179/api/"), // NOTE: Hardware. If using port 80 no port needs to be specified
 #elif WINDOWS
-        BaseAddress = new Uri("http://localhost/api/"), // NOTE: Emulator. If using port 80 no port needs to be specified.
+        BaseAddress =
+ new Uri("http://localhost/api/"), // NOTE: Emulator. If using port 80 no port needs to be specified.
         //BaseAddress = new Uri("http://192.168.1.179/api/"), // NOTE: Hardware. If using port 80 no port needs to be specified.
 #else
 
 #endif
     };
+
+    /// <inheritdoc />
+    public async Task<bool> IsOldConnectionValid()
+    {
+        // TODO: What happens if no username was set before this?!
+
+        try
+        {
+            // Make a lightsCall with stored username.
+            var username = preferencesHandler.RetrieveUsername();
+            var response = await HttpClient.GetAsync($"{username}/lights");
+            var either = await response.Content.ReadAsEitherAsync<List<HueLight>, ErrorResponse>(registry);
+
+            if (either.IsType<ErrorResponse>(out var error))
+            {
+                if (error!.Type != "1") throw new InvalidOperationException(); // If not unauthorized user then something really went wrong. :(
+                return false;
+            }
+
+            if (either.IsType<List<HueLight>>(out _)) return true;
+        }
+        catch (HttpRequestException e)
+        {
+            return false;
+        }
+
+        return false;
+    }
 
     /// <inheritdoc />
     public async Task<Either<UsernameResponse, ErrorResponse>> AttemptLinkAsync()
@@ -146,7 +177,9 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry, IPre
             if (state.Saturation is not null) payloadDict["sat"] = state.Saturation;
             // if (state.XyPoint is not null) payloadDict["xy"] = state.XyPoint; // NOTE: We don't set XyPoint since we will never use it.
 
-            var response = await HttpClient.PutAsJsonAsync($"{preferencesHandler.RetrieveUsername()}/lights/{index}/state", payloadDict);
+            var response =
+                await HttpClient.PutAsJsonAsync($"{preferencesHandler.RetrieveUsername()}/lights/{index}/state",
+                    payloadDict);
             response.EnsureSuccessStatusCode();
 
             return await response.Content.ReadAsOrNullAsync<ErrorResponse>(registry);

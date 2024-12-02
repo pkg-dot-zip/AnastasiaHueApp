@@ -11,6 +11,13 @@ public interface IHueHandler
     // TODO: Rename all parameters with 'index' to 'id' to reflect meaning. 
 
     /// <summary>
+    /// Checks whether the old connection to the bridge (also known as the 'username') is still valid.
+    /// <c>True</c> means the username can be reused.
+    /// </summary>
+    /// <returns></returns>
+    public Task<bool> IsOldConnectionValid();
+
+    /// <summary>
     /// Tries to retrieve the username from a <see cref="UsernameResponse"/> to make other calls. Should be called before any other call is made. <br/>
     /// Note: if the physical button is not pressed an <see cref="ErrorResponse"/> should be returned!
     /// </summary>
