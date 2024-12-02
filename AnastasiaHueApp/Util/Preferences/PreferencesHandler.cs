@@ -6,8 +6,10 @@ public class PreferencesHandler(ILogger<PreferencesHandler> logger, IPreferences
 {
     private const string UsernameKey = "bridge_username";
 
+    /// <inheritdoc />
     public string? RetrieveUsername() => RetrievePreference(UsernameKey);
 
+    /// <inheritdoc />
     public void SetUsername(string username) => SetPreference(UsernameKey, username);
 
     private string? RetrievePreference(string key)
