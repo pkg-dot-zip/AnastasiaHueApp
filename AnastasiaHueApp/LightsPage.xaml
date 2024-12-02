@@ -11,6 +11,32 @@
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:DataType="viewModels:MainViewModel"
              x:Name="LightsPageName">
+
+    <ContentPage.Resources>
+        <Style x:Key="MyFrameStyle" TargetType="Frame" BasedOn="{StaticResource FrameStyle}">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush>
+                        <GradientStop Color="{StaticResource Cerulean}" Offset="0.1" />
+                        <GradientStop Color="{StaticResource BerkeleyBlue}" Offset="1.0" />
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <DataTrigger TargetType="Frame" Binding="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.IsRefreshing}" Value="True">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <LinearGradientBrush>
+                                <GradientStop Color="{StaticResource Cerulean}" Offset="0.1" />
+                                <GradientStop Color="{StaticResource PantoneRed}" Offset="1.0" />
+                            </LinearGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </ContentPage.Resources>
+
     <cards:CarouselView
         ItemsSource="{Binding Lights}"
         SelectedIndex="{Binding SelectedLightIndex}">
@@ -27,16 +53,7 @@
                         <Label Text="{Binding Id}" Style="{StaticResource TitleXL}" />
                         <Label Text="{Binding Name}" Style="{StaticResource TitleL}" />
 
-                        <Frame Style="{StaticResource FrameStyle}">
-                            <Frame.Background>
-                                <LinearGradientBrush>
-                                    <GradientStop Color="{StaticResource Cerulean}"
-                                                  Offset="0.1" />
-                                    <GradientStop Color="{StaticResource BerkeleyBlue}"
-                                                  Offset="1.0" />
-                                </LinearGradientBrush>
-                            </Frame.Background>
-
+                        <Frame Style="{StaticResource MyFrameStyle}">
                             <ScrollView>
                                 <VerticalStackLayout>
                                     <Label Text="{Binding ModelId}" Style="{StaticResource RegularText}" />
