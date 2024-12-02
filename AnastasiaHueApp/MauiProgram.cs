@@ -1,6 +1,7 @@
 ﻿using AnastasiaHueApp.Util.Alerts;
 using AnastasiaHueApp.Util.Hue;
 using AnastasiaHueApp.Util.Json;
+using AnastasiaHueApp.Util.Preferences;
 using AnastasiaHueApp.ViewModels;
 using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
@@ -46,6 +47,8 @@ namespace AnastasiaHueApp
             builder.Services.AddSingleton<IJsonRegistry, JsonRegistry>();
             builder.Services.AddSingleton<IDisplayAlertHandler, DisplayAlertHandler>();
             builder.Services.AddSingleton<IHueHandler, HueHandler>();
+            builder.Services.AddSingleton<IPreferences>(Preferences.Default);
+            builder.Services.AddSingleton<IPreferencesHandler, PreferencesHandler>();
 
             return builder.Build();
         }

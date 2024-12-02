@@ -4,11 +4,12 @@ using AnastasiaHueApp.Models;
 using AnastasiaHueApp.Models.Message;
 using AnastasiaHueApp.Util.Extensions;
 using AnastasiaHueApp.Util.Json;
+using AnastasiaHueApp.Util.Preferences;
 using Microsoft.Extensions.Logging;
 
 namespace AnastasiaHueApp.Util.Hue;
 
-public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry) : IHueHandler
+public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry, IPreferencesHandler preferencesHandler) : IHueHandler
 {
     private static readonly HttpClient HttpClient = new()
     {
@@ -23,8 +24,6 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry) : IH
 #endif
     };
 
-    private static string? _username = null;
-
     /// <inheritdoc />
     public async Task<Either<UsernameResponse, ErrorResponse>> AttemptLinkAsync()
     {
@@ -37,7 +36,7 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry) : IH
             response.EnsureSuccessStatusCode();
             var either = await response.Content.ReadAsEitherAsync<UsernameResponse, ErrorResponse>(registry);
 
-            if (either.IsType<UsernameResponse>(out var username)) _username = username!.Username;
+            if (either.IsType<UsernameResponse>(out var username)) preferencesHandler.SetUsername(username!.Username);
             return either;
         }
         catch (HttpRequestException e)
@@ -54,7 +53,7 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry) : IH
 
         try
         {
-            var response = await HttpClient.GetAsync($"{_username}/lights");
+            var response = await HttpClient.GetAsync($"{preferencesHandler.RetrieveUsername()}/lights");
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadAsEitherAsync<List<HueLight>, ErrorResponse>(registry);
         }
@@ -73,7 +72,7 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry) : IH
         try
         {
             if (index <= 0) throw new ArgumentOutOfRangeException(nameof(index));
-            var response = await HttpClient.GetAsync($"{_username}/lights/{index}");
+            var response = await HttpClient.GetAsync($"{preferencesHandler.RetrieveUsername()}/lights/{index}");
             response.EnsureSuccessStatusCode();
 
             // Here we set the light id / index, since that is not returned in the json. :(
@@ -147,7 +146,7 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry) : IH
             if (state.Saturation is not null) payloadDict["sat"] = state.Saturation;
             // if (state.XyPoint is not null) payloadDict["xy"] = state.XyPoint; // NOTE: We don't set XyPoint since we will never use it.
 
-            var response = await HttpClient.PutAsJsonAsync($"{_username}/lights/{index}/state", payloadDict);
+            var response = await HttpClient.PutAsJsonAsync($"{preferencesHandler.RetrieveUsername()}/lights/{index}/state", payloadDict);
             response.EnsureSuccessStatusCode();
 
             return await response.Content.ReadAsOrNullAsync<ErrorResponse>(registry);
@@ -161,7 +160,7 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry) : IH
 
     private bool IsAllowedToMakeCall(out ErrorResponse? error)
     {
-        if (_username is null or "")
+        if (preferencesHandler.RetrieveUsername() is null or "")
         {
             error = new ErrorResponse
             {
