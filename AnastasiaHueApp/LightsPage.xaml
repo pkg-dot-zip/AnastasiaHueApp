@@ -29,6 +29,12 @@
             <Setter Property="IsClippedToBounds" Value="true" />
             <Setter Property="CornerRadius" Value="10" />
         </Style>
+        
+        <Style x:Key="ButtonStyle" TargetType="Button">
+            <Setter Property="TextColor" Value="#F1FAEE"/>
+            <Setter Property="BackgroundColor" Value="#1D3557"/>
+        </Style>
+
     </ContentPage.Resources>
 
 
@@ -67,13 +73,16 @@
                                     </Switch>
 
                                     <Button Text="Blink"
-                                            Command="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.MakeLightBlinkFor10SecCommand}" />
+                                            Command="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.MakeLightBlinkFor10SecCommand}"
+                                            Style="{StaticResource ButtonStyle}"/>
                                     <Button Text="ColorLoop"
-                                            Command="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.MakeLightColorLoopCommand}" />
+                                            Command="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.MakeLightColorLoopCommand}" 
+                                            Style="{StaticResource ButtonStyle}"/>
 
 
-                                    <Rectangle WidthRequest="100" HeightRequest="100"
-                                               Fill="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.SelectedColorBrush}" />
+                                    <Rectangle WidthRequest="100" HeightRequest="100" Stroke="#F1FAEE" StrokeThickness="3" RadiusX="50" RadiusY="50"
+                                               Fill="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.SelectedColorBrush}"/>
+
                                     <Slider
                                         Maximum="65535"
                                         ThumbColor="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.SelectedColor}"
