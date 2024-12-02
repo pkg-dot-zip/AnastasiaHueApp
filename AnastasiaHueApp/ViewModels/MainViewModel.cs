@@ -137,4 +137,30 @@ public partial class MainViewModel(
         SelectedColor = light.State.Color.ToMauiColor();
         await ShowAlertOnError(await hueHandler.SetColorTo(light.Id, light.State.Color));
     }
+
+    [RelayCommand]
+    private async Task RefreshLights()
+    {
+        logger.LogInformation("Attempting refresh.");
+
+        // First we try to collect the new lights.
+        var either = await hueHandler.GetLights();
+
+        // Then, if successful, we remove existing lights, add the new ones and set the selectedIndex to 0.
+        if (either.IsType<List<HueLight>>(out var lights))
+        {
+            logger.LogInformation("Successful refresh.");
+            Lights.Clear();
+            Lights.AddAll(lights!);
+            SelectedLightIndex = 0;
+        }
+
+        // If not successful, we show the error why, then display an error that we failed to refresh. Meaning two alerts will be displayed in succession.
+        if (either.IsType<ErrorResponse>(out var error))
+        {
+            logger.LogInformation("Failed refresh.");
+            await ShowAlertOnError(error);
+            await displayAlertHandler.DisplayAlert("Failed to refresh lights", "Try again later!");
+        }
+    }
 }
