@@ -23,6 +23,12 @@ namespace AnastasiaHueApp
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                    fonts.AddFont("JupiteroidItalic.ttf", "JupiteroidItalic");
+                    fonts.AddFont("JupiteroidLight.ttf", "JupiteroidLight");
+                    fonts.AddFont("JupiteroidLightItalic.ttf", "JupiteroidLightItalic");
+                    fonts.AddFont("JupiteroidRegular.ttf", "Jupiteroid");
+                    fonts.AddFont("JupiteroidBold.ttf", "JupiteroidBold");
+                    fonts.AddFont("JupiteroidBoldItalic.ttf", "JupiteroidBoldItalic");
                 });
 
 #if DEBUG

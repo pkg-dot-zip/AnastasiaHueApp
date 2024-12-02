@@ -19,8 +19,8 @@
                 <ContentView x:DataType="models:HueLight">
                     <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
 
-                        <Label Text="{Binding Id}" HorizontalOptions="Center" HorizontalTextAlignment="Center" />
-                        <Label Text="{Binding Name}" HorizontalOptions="Center" HorizontalTextAlignment="Center" />
+                        <Label Text="{Binding Id}" Style="{StaticResource TitleXL}" />
+                        <Label Text="{Binding Name}" Style="{StaticResource TitleL}" />
 
                         <Frame Style="{StaticResource FrameStyle}">
                             <Frame.Background>
@@ -34,8 +34,8 @@
 
                             <ScrollView>
                                 <VerticalStackLayout>
-                                    <Label Text="{Binding ModelId}" />
-                                    <Label Text="{Binding Type}" />
+                                    <Label Text="{Binding ModelId}" Style="{StaticResource RegularText}" />
+                                    <Label Text="{Binding Type}" Style="{StaticResource RegularText}" />
 
                                     <Switch IsToggled="{Binding State.On}" Style="{StaticResource SwitchStyle}">
                                         <Switch.Behaviors>
