@@ -16,7 +16,7 @@
                 Aspect="AspectFit"
                 SemanticProperties.Description="dot net bot in a hovercraft number nine" />
 
-            <Editor Text="{Binding BoxText}" />
+            <Editor Text="{Binding BoxText}" FontFamily="{StaticResource MyFont}" />
 
             <Button
                 Text="Attempt Link"
