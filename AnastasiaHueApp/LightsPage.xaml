@@ -46,6 +46,11 @@
                             <Button Text="Blink" Command="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.MakeLightBlinkFor10SecCommand}" />
                             <Button Text="ColorLoop" Command="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.MakeLightColorLoopCommand}" />
 
+
+                            <Slider Minimum="0" Maximum="65535" Value="{Binding State.Hue}" DragCompletedCommand="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.ChangeLightColorCommand }"/>
+                            <Slider Minimum="0" Maximum="254" Value="{Binding State.Saturation}" DragCompletedCommand="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.ChangeLightColorCommand }"/>
+                            <Slider Minimum="0" Maximum="254" Value="{Binding State.Brightness}" DragCompletedCommand="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.ChangeLightColorCommand }"/>
+
                         </VerticalStackLayout>
 
                     </Frame>

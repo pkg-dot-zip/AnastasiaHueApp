@@ -9,6 +9,7 @@ using AnastasiaHueApp.Util.Hue;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
+using Color = AnastasiaHueApp.Util.Color.Color;
 
 namespace AnastasiaHueApp.ViewModels;
 
@@ -101,8 +102,15 @@ public partial class MainViewModel(
     [RelayCommand]
     private async Task SwitchLight()
     {
-        var selectedLight = Lights[SelectedLightIndex];
-        await ShowAlertOnError(await hueHandler.LightSwitch(selectedLight.Id,
-            (bool)selectedLight.State.On!));
+        var light = Lights[SelectedLightIndex];
+        await ShowAlertOnError(await hueHandler.LightSwitch(light.Id,
+            (bool)light.State.On!));
+    }
+
+    [RelayCommand]
+    private async Task ChangeLightColor()
+    {
+        var light = Lights[SelectedLightIndex];
+        await ShowAlertOnError(await hueHandler.SetColorTo(light.Id, Color.FromHueHsb((int)light.State.Hue!, (int)light.State.Saturation!, (int)light.State.Brightness!)));
     }
 }
