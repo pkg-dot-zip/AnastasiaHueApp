@@ -53,7 +53,14 @@ public partial class MainViewModel(
     {
         var either = await hueHandler.AttemptLinkAsync();
 
-        if (either.IsType<UsernameResponse>(out var username)) BoxText = username!.Username;
+        if (either.IsType<UsernameResponse>(out var username))
+        {
+            BoxText = username!.Username;
+
+            // If successful, immediately retrieve lights and navigate to lights page.
+            await RefreshLights();
+            await Shell.Current.GoToAsync("///LightsPage");
+        }
         await ShowAlertOnError(either!);
     }
 
