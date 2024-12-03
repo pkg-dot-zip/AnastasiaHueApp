@@ -4,6 +4,7 @@ using AnastasiaHueApp.Models.Message;
 using AnastasiaHueApp.Util.Alerts;
 using AnastasiaHueApp.Util.Extensions;
 using AnastasiaHueApp.Util.Hue;
+using AnastasiaHueApp.Util.Shell;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
@@ -13,7 +14,8 @@ namespace AnastasiaHueApp.ViewModels;
 public partial class MainViewModel(
     ILogger<MainViewModel> logger,
     IDisplayAlertHandler displayAlertHandler,
-    IHueHandler hueHandler)
+    IHueHandler hueHandler,
+    IShellContainer shellContainer)
 #pragma warning disable CS9107 // Parameter is captured into the state of the enclosing type and its value is also passed to the base constructor. The value might be captured by the base class as well.
     : BaseViewModel(displayAlertHandler)
 #pragma warning restore CS9107 // Parameter is captured into the state of the enclosing type and its value is also passed to the base constructor. The value might be captured by the base class as well.
@@ -59,7 +61,7 @@ public partial class MainViewModel(
 
             // If successful, immediately retrieve lights and navigate to lights page.
             await RefreshLights();
-            await Shell.Current.GoToAsync("///LightsPage");
+            await shellContainer.CurrentShell.GoToAsync("///LightsPage");
         }
         await ShowAlertOnError(either!);
     }

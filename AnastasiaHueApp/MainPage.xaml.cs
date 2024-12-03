@@ -1,4 +1,5 @@
 ﻿using AnastasiaHueApp.Util.Hue;
+using AnastasiaHueApp.Util.Shell;
 using AnastasiaHueApp.ViewModels;
 using Microsoft.Extensions.Logging;
 
@@ -8,7 +9,7 @@ namespace AnastasiaHueApp
     {
         private static bool _forcedNavigationAlready = false;
 
-        public MainPage(MainViewModel viewModel, ILogger<LightsPage> logger, IHueHandler hueHandler)
+        public MainPage(MainViewModel viewModel, ILogger<LightsPage> logger, IHueHandler hueHandler, IShellContainer shellContainer)
         {
             InitializeComponent();
             BindingContext = viewModel;
@@ -26,7 +27,7 @@ namespace AnastasiaHueApp
                     viewModel.BoxText = username!;
                     viewModel.RefreshLightsCommand.Execute(null);
                     logger.LogInformation("Navigating to the Lights page.");
-                    await Shell.Current.GoToAsync("///LightsPage");
+                    await shellContainer.CurrentShell.GoToAsync("///LightsPage");
                 }
                 else
                 {

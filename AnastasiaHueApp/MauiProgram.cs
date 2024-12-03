@@ -2,6 +2,7 @@
 using AnastasiaHueApp.Util.Hue;
 using AnastasiaHueApp.Util.Json;
 using AnastasiaHueApp.Util.Preferences;
+using AnastasiaHueApp.Util.Shell;
 using AnastasiaHueApp.ViewModels;
 using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
@@ -36,6 +37,7 @@ namespace AnastasiaHueApp
 #endif
 
             // Logger. See: https://www.youtube.com/watch?v=QzsQFCD5Al8. SingletonSean is my goat 🐐
+            // TODO: Found out if files (and if so, where?!) are created on Android.
             builder.Services.AddSerilog(
                 new LoggerConfiguration()
                     .WriteTo.Debug()
@@ -58,6 +60,7 @@ namespace AnastasiaHueApp
             builder.Services.AddSingleton<IHttpClientContainer, HueHttpClientContainer>();
             builder.Services.AddSingleton<IPreferences>(Preferences.Default);
             builder.Services.AddSingleton<IPreferencesHandler, PreferencesHandler>();
+            builder.Services.AddSingleton<IShellContainer, ShellContainer>();
 
             return builder.Build();
         }
