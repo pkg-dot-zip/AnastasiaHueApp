@@ -74,6 +74,20 @@ public partial class MainViewModel(
     }
 
     [RelayCommand]
+    private async Task MakeLightBlinkFor10Sec()
+    {
+        var light = Lights[SelectedLightIndex];
+        await ShowAlertOnError(await hueHandler.MakeLightBlink(light.Id));
+    }
+
+    [RelayCommand]
+    private async Task MakeLightColorLoop()
+    {
+        var light = Lights[SelectedLightIndex];
+        await ShowAlertOnError(await hueHandler.MakeLightColorLoop(light.Id));
+    }
+
+    [RelayCommand]
     private async Task RefreshLights()
     {
         IsRefreshing = true;
