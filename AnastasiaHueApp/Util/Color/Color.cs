@@ -200,4 +200,22 @@ public class Color
 
         return FromRgb(r, g, b);
     }
+
+    public override string ToString() => $"[{Hue}, {Brightness}, {Saturation}]";
+
+    #region Equals
+    protected bool Equals(Color other) =>
+        Hue == other.Hue && Saturation == other.Saturation && Brightness == other.Brightness;
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is null) return false;
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj.GetType() != GetType()) return false;
+        return Equals((Color)obj);
+    }
+
+    public override int GetHashCode() => HashCode.Combine(Hue, Saturation, Brightness);
+
+    #endregion
 }
