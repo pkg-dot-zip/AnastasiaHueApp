@@ -16,7 +16,7 @@ public class DisplayAlertHandler : IDisplayAlertHandler
     /// <inheritdoc cref="IDisplayAlertHandler.DisplayAlert(string?, string, string?, string, FlowDirection)"/>
     public async Task<bool> DisplayAlert(string? title, string message, string? accept, string cancel, FlowDirection flowDirection)
     {
-        // TODO: Handle null (see warning).
+        // TODO: Fix deprecated issue. NOTE: Won't change this since this is just a simple school assignment and not a long term project.
         return await Application.Current!.MainPage!.DisplayAlert(title, message, accept, cancel, flowDirection);
     }
 
