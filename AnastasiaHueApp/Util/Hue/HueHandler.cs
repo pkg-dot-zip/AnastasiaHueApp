@@ -9,7 +9,11 @@ using Microsoft.Extensions.Logging;
 
 namespace AnastasiaHueApp.Util.Hue;
 
-public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry, IStorageHandler storageHandler, IHttpClientContainer clientContainer)
+public class HueHandler(
+    ILogger<HueHandler> logger,
+    IJsonRegistry registry,
+    IStorageHandler storageHandler,
+    IHttpClientContainer clientContainer)
     : IHueHandler
 {
     private HttpClient HttpClient => clientContainer.HttpClient;
@@ -17,8 +21,6 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry, ISto
     /// <inheritdoc />
     public async Task<(bool, string?)> IsOldConnectionValid()
     {
-        // TODO: What happens if no username was set before this?!
-
         try
         {
             // Make a lightsCall with stored username.
@@ -28,13 +30,15 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry, ISto
 
             if (either.IsType<ErrorResponse>(out var error))
             {
-                if (error!.Type != "1") throw new InvalidOperationException(); // If not unauthorized user then something really went wrong. :(
+                if (error!.Type != "1")
+                    throw
+                        new InvalidOperationException(); // If not unauthorized user then something really went wrong. :(
                 return (false, null);
             }
 
             if (either.IsType<List<HueLight>>(out _)) return (true, username);
         }
-        catch (HttpRequestException e)
+        catch (Exception e)
         {
             return (false, null);
         }
@@ -83,22 +87,22 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry, ISto
     }
 
     /// <inheritdoc />
-    public async Task<Either<HueLight, ErrorResponse>> GetLight(int index)
+    public async Task<Either<HueLight, ErrorResponse>> GetLight(int id)
     {
         if (!IsAllowedToMakeCall(out var error)) return new Either<HueLight, ErrorResponse>(error!);
 
         try
         {
-            if (index <= 0) throw new ArgumentOutOfRangeException(nameof(index));
-            var response = await HttpClient.GetAsync($"{storageHandler.RetrieveUsername()}/lights/{index}");
+            if (id <= 0) throw new ArgumentOutOfRangeException(nameof(id));
+            var response = await HttpClient.GetAsync($"{storageHandler.RetrieveUsername()}/lights/{id}");
             response.EnsureSuccessStatusCode();
 
-            // Here we set the light id / index, since that is not returned in the json. :(
+            // Here we set the light id, since that is not returned in the json. :(
             var either = await response.Content.ReadAsEitherAsync<HueLight, ErrorResponse>(registry);
 
             if (either.IsType<HueLight>(out var light))
             {
-                light!.Id = index;
+                light!.Id = id;
                 return new Either<HueLight, ErrorResponse>(light);
             }
 
@@ -112,16 +116,16 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry, ISto
     }
 
     /// <inheritdoc />
-    public async Task<ErrorResponse?> LightSwitch(int index, bool on)
+    public async Task<ErrorResponse?> LightSwitch(int id, bool on)
     {
-        if (index <= 0) throw new ArgumentOutOfRangeException(nameof(index));
-        return await SetLightState(index, new HueLightState() { On = on });
+        if (id <= 0) throw new ArgumentOutOfRangeException(nameof(id));
+        return await SetLightState(id, new HueLightState() { On = on });
     }
 
     /// <inheritdoc />
-    public async Task<ErrorResponse?> SetColorTo(int index, Color.Color color)
+    public async Task<ErrorResponse?> SetColorTo(int id, Color.Color color)
     {
-        return await SetLightState(index, new HueLightState()
+        return await SetLightState(id, new HueLightState()
         {
             On = true, // Light is advised to be set on: https://developers.meethue.com/develop/get-started-2/#so-lets-get-started
             Saturation = color.Saturation,
@@ -131,24 +135,24 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry, ISto
     }
 
     /// <inheritdoc />
-    public async Task<ErrorResponse?> MakeLightBlink(int index)
+    public async Task<ErrorResponse?> MakeLightBlink(int id)
     {
-        return await SetLightState(index, new HueLightState { Alert = HueAlert.LSelect });
+        return await SetLightState(id, new HueLightState { Alert = HueAlert.LSelect });
     }
 
     /// <inheritdoc />
-    public async Task<ErrorResponse?> MakeLightColorLoop(int index)
+    public async Task<ErrorResponse?> MakeLightColorLoop(int id)
     {
-        return await SetLightState(index, new HueLightState { Effect = HueEffect.ColorLoop });
+        return await SetLightState(id, new HueLightState { Effect = HueEffect.ColorLoop });
     }
 
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="index">ID of the light to apply the state changes to.</param>
-    /// <param name="state">The state of which all non-<see langword="null"/> properties will be applied to the light with id <paramref name="index"/>.</param>
+    /// <param name="id">ID of the light to apply the state changes to.</param>
+    /// <param name="state">The state of which all non-<see langword="null"/> properties will be applied to the light with id <paramref name="id"/>.</param>
     /// <returns>An <see cref="ErrorResponse"/> or <see langword="null"/>.</returns>
-    private async Task<ErrorResponse?> SetLightState(int index, HueLightState state)
+    private async Task<ErrorResponse?> SetLightState(int id, HueLightState state)
     {
         if (!IsAllowedToMakeCall(out var error)) return error;
 
@@ -170,7 +174,7 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry, ISto
             // if (state.XyPoint is not null) payloadDict["xy"] = state.XyPoint; // NOTE: We don't set XyPoint since we will never use it.
 
             var response =
-                await HttpClient.PutAsJsonAsync($"{storageHandler.RetrieveUsername()}/lights/{index}/state",
+                await HttpClient.PutAsJsonAsync($"{storageHandler.RetrieveUsername()}/lights/{id}/state",
                     payloadDict);
             response.EnsureSuccessStatusCode();
 

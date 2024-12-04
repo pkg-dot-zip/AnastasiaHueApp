@@ -8,8 +8,6 @@ namespace AnastasiaHueApp.Util.Hue;
 /// </summary>
 public interface IHueHandler
 {
-    // TODO: Rename all parameters with 'index' to 'id' to reflect meaning. 
-
     /// <summary>
     /// Checks whether the old connection to the bridge (also known as the 'username') is still valid.
     /// <c>True</c> means the username can be reused. In that case the username will also be returned.
@@ -31,41 +29,41 @@ public interface IHueHandler
     public Task<Either<List<HueLight>, ErrorResponse>> GetLights();
 
     /// <summary>
-    /// Retrieves information about one specific light with id <paramref name="index"/> 
+    /// Retrieves information about one specific light with id <paramref name="id"/> 
     /// </summary>
-    /// <param name="index">ID of the <see cref="HueLight"/>.</param>
+    /// <param name="id">ID of the <see cref="HueLight"/>.</param>
     /// <returns>The light <see cref="HueLight"/> or an <see cref="ErrorResponse"/>.</returns>
-    public Task<Either<HueLight, ErrorResponse>> GetLight(int index);
+    public Task<Either<HueLight, ErrorResponse>> GetLight(int id);
 
     /// <summary>
-    /// Turns the light with id <paramref name="index"/> on or off. <br/>
+    /// Turns the light with id <paramref name="id"/> on or off. <br/>
     /// <b>On</b>=<see langword="true"/> <br/>
     /// <b>Off</b>=<see langword="false"/> <br/>
     /// </summary>
-    /// <param name="index">ID of the <see cref="HueLight"/>.</param>
+    /// <param name="id">ID of the <see cref="HueLight"/>.</param>
     /// <param name="on">Whether to turn the light on (<see langword="true"/>) or off (<see langword="false"/>).</param>
     /// <returns>An <see cref="ErrorResponse"/> or <see langword="null"/>.</returns>
-    public Task<ErrorResponse?> LightSwitch(int index, bool on);
+    public Task<ErrorResponse?> LightSwitch(int id, bool on);
 
     /// <summary>
-    /// Changes the hue, saturation and brightness of the light with id <paramref name="index"/> to the ones of <paramref name="color"/>.
+    /// Changes the hue, saturation and brightness of the light with id <paramref name="id"/> to the ones of <paramref name="color"/>.
     /// </summary>
-    /// <param name="index">ID of the <see cref="HueLight"/>.</param>
+    /// <param name="id">ID of the <see cref="HueLight"/>.</param>
     /// <param name="color">HS color to set the color to.</param>
     /// <returns>An <see cref="ErrorResponse"/> or <see langword="null"/>.</returns>
-    public Task<ErrorResponse?> SetColorTo(int index, Color.Color color);
+    public Task<ErrorResponse?> SetColorTo(int id, Color.Color color);
 
     /// <summary>
-    /// Makes the light with id <paramref name="index"/> blink for 15 seconds.
+    /// Makes the light with id <paramref name="id"/> blink for 15 seconds.
     /// </summary>
-    /// <param name="index">ID of the <see cref="HueLight"/>.</param>
+    /// <param name="id">ID of the <see cref="HueLight"/>.</param>
     /// <returns>An <see cref="ErrorResponse"/> or <see langword="null"/>.</returns>
-    public Task<ErrorResponse?> MakeLightBlink(int index);
+    public Task<ErrorResponse?> MakeLightBlink(int id);
 
     /// <summary>
-    /// The light with id <paramref name="index"/> will cycle through all hues using the current brightness and saturation settings
+    /// The light with id <paramref name="id"/> will cycle through all hues using the current brightness and saturation settings
     /// </summary>
-    /// <param name="index">ID of the <see cref="HueLight"/>.</param>
+    /// <param name="id">ID of the <see cref="HueLight"/>.</param>
     /// <returns>An <see cref="ErrorResponse"/> or <see langword="null"/>.</returns>
-    public Task<ErrorResponse?> MakeLightColorLoop(int index);
+    public Task<ErrorResponse?> MakeLightColorLoop(int id);
 }
