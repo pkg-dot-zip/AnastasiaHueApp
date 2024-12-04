@@ -88,16 +88,10 @@
 	  <Compile Update="LightsPage.xaml.cs">
 	    <DependentUpon>LightsPage.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="DevPage.xaml.cs">
-	    <DependentUpon>DevPage.xaml</DependentUpon>
-	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
 	  <MauiXaml Update="LightsPage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="DevPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
