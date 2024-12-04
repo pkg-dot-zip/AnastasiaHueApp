@@ -37,7 +37,10 @@ public class Color
         Brightness = brightness;
     }
 
-    // NOTE: This method is partially written by AI. 🤖
+    /// <summary>
+    /// Converts this color to a <see cref="Microsoft.Maui.Graphics.Color"/> usable by UI elements.
+    /// </summary>
+    /// <returns>A <see cref="Microsoft.Maui.Graphics.Color"/> usable by UI elements.</returns>
     public Microsoft.Maui.Graphics.Color ToMauiColor()
     {
         // Normalize HSB values.
@@ -112,6 +115,7 @@ public class Color
         return new Color(hue, saturation, brightness);
     }
 
+    /// <inheritdoc cref="FromHueHsb(int,int,int)"/>
     public static Color FromHueHsb(int? hue, int? saturation, int? brightness) =>
         FromHueHsb((int)hue!, (int)saturation!, (int)brightness!);
 

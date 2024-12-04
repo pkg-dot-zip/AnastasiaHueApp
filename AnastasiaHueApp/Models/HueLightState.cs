@@ -2,7 +2,9 @@
 
 namespace AnastasiaHueApp.Models;
 
-// See https://developers.meethue.com/develop/hue-api/lights-api/
+/// <summary>
+/// Model of <a href="https://developers.meethue.com/develop/hue-api/lights-api/">Light State</a>.
+/// </summary>
 public class HueLightState
 {
     /// <summary>

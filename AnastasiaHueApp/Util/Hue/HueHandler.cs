@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 
 namespace AnastasiaHueApp.Util.Hue;
 
-public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry, IPreferencesHandler preferencesHandler, IHttpClientContainer clientContainer)
+public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry, IStorageHandler storageHandler, IHttpClientContainer clientContainer)
     : IHueHandler
 {
     private HttpClient HttpClient => clientContainer.HttpClient;
@@ -22,7 +22,7 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry, IPre
         try
         {
             // Make a lightsCall with stored username.
-            var username = preferencesHandler.RetrieveUsername();
+            var username = storageHandler.RetrieveUsername();
             var response = await HttpClient.GetAsync($"{username}/lights");
             var either = await response.Content.ReadAsEitherAsync<List<HueLight>, ErrorResponse>(registry);
 
@@ -54,7 +54,7 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry, IPre
             response.EnsureSuccessStatusCode();
             var either = await response.Content.ReadAsEitherAsync<UsernameResponse, ErrorResponse>(registry);
 
-            if (either.IsType<UsernameResponse>(out var username)) preferencesHandler.SetUsername(username!.Username);
+            if (either.IsType<UsernameResponse>(out var username)) storageHandler.SetUsername(username!.Username);
             return either;
         }
         catch (HttpRequestException e)
@@ -71,7 +71,7 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry, IPre
 
         try
         {
-            var response = await HttpClient.GetAsync($"{preferencesHandler.RetrieveUsername()}/lights");
+            var response = await HttpClient.GetAsync($"{storageHandler.RetrieveUsername()}/lights");
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadAsEitherAsync<List<HueLight>, ErrorResponse>(registry);
         }
@@ -90,7 +90,7 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry, IPre
         try
         {
             if (index <= 0) throw new ArgumentOutOfRangeException(nameof(index));
-            var response = await HttpClient.GetAsync($"{preferencesHandler.RetrieveUsername()}/lights/{index}");
+            var response = await HttpClient.GetAsync($"{storageHandler.RetrieveUsername()}/lights/{index}");
             response.EnsureSuccessStatusCode();
 
             // Here we set the light id / index, since that is not returned in the json. :(
@@ -142,8 +142,13 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry, IPre
         return await SetLightState(index, new HueLightState { Effect = HueEffect.ColorLoop });
     }
 
-    /// <inheritdoc />
-    public async Task<ErrorResponse?> SetLightState(int index, HueLightState state)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="index">ID of the light to apply the state changes to.</param>
+    /// <param name="state">The state of which all non-<see langword="null"/> properties will be applied to the light with id <paramref name="index"/>.</param>
+    /// <returns>An <see cref="ErrorResponse"/> or <see langword="null"/>.</returns>
+    private async Task<ErrorResponse?> SetLightState(int index, HueLightState state)
     {
         if (!IsAllowedToMakeCall(out var error)) return error;
 
@@ -165,7 +170,7 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry, IPre
             // if (state.XyPoint is not null) payloadDict["xy"] = state.XyPoint; // NOTE: We don't set XyPoint since we will never use it.
 
             var response =
-                await HttpClient.PutAsJsonAsync($"{preferencesHandler.RetrieveUsername()}/lights/{index}/state",
+                await HttpClient.PutAsJsonAsync($"{storageHandler.RetrieveUsername()}/lights/{index}/state",
                     payloadDict);
             response.EnsureSuccessStatusCode();
 
@@ -180,7 +185,7 @@ public class HueHandler(ILogger<HueHandler> logger, IJsonRegistry registry, IPre
 
     private bool IsAllowedToMakeCall(out ErrorResponse? error)
     {
-        if (preferencesHandler.RetrieveUsername() is null or "")
+        if (storageHandler.RetrieveUsername() is null or "")
         {
             error = new ErrorResponse
             {

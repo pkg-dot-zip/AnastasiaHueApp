@@ -1,7 +1,7 @@
 ﻿namespace AnastasiaHueApp.Models;
 
 /// <summary>
-/// NOTE: This feature is deprecated. Scenes and animations were introduced for this. Do not use.
+/// NOTE: This feature is <b>deprecated</b>. Scenes and animations were introduced for this. Do not use.
 /// </summary>
 public class PointSymbol
 {

@@ -1,6 +1,6 @@
 ﻿namespace AnastasiaHueApp.Util.Preferences;
 
-public interface IPreferencesHandler
+public interface IStorageHandler
 {
     /// <summary>
     /// Retrieves the username for the Hue Bridge from the preferences if one was stored.

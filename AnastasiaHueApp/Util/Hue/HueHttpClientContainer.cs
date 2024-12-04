@@ -17,5 +17,6 @@ public class HueHttpClientContainer : IHttpClientContainer
 #endif
     };
 
+    /// <inheritdoc />
     public HttpClient HttpClient => ContainedClient;
 }

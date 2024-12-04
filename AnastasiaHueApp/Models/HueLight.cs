@@ -1,9 +1,10 @@
-﻿using Color = AnastasiaHueApp.Util.Color.Color;
-
-namespace AnastasiaHueApp.Models;
+﻿namespace AnastasiaHueApp.Models;
 
 public class HueLight
 {
+    /// <summary>
+    /// The identifier of the light. <b>Must be 1 or greater</b>.
+    /// </summary>
     public int Id { get; set; } =
         int.MinValue; // If set to minvalue many functions will throw, meaning we know we forgot to set this.
 

@@ -2,7 +2,7 @@
 
 namespace AnastasiaHueApp.Util.Preferences;
 
-public class PreferencesHandler(ILogger<PreferencesHandler> logger, IPreferences preferences) : IPreferencesHandler
+public class StorageHandler(ILogger<StorageHandler> logger, IPreferences preferences) : IStorageHandler
 {
     private const string UsernameKey = "bridge_username";
 
