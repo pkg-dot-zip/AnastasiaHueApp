@@ -1,4 +1,6 @@
-﻿namespace AnastasiaHueApp.Models;
+﻿using Newtonsoft.Json;
+
+namespace AnastasiaHueApp.Models;
 
 public class HueLight
 {
@@ -11,37 +13,44 @@ public class HueLight
     /// <summary>
     /// The hardware model of the light.
     /// </summary>
-    public required string ModelId { get; init; }
+    [JsonProperty("modelid")]
+    public string ModelId { get; set; }
 
     /// <summary>
     /// A unique, editable name given to the light.
     /// </summary>
-    public required string Name { get; init; }
+    [JsonProperty("name")]
+    public string Name { get; set; }
 
     /// <summary>
     /// An identifier for the software version running on the light.
     /// </summary>
-    public required string SwVersion { get; init; }
+    [JsonProperty("swversion")]
+    public string SwVersion { get; set; }
 
     /// <summary>
     /// Details the state of the light.
     /// </summary>
-    public required HueLightState State { get; init; }
+    [JsonProperty("state")]
+    public HueLightState State { get; set; }
 
     /// <summary>
     /// A fixed name describing the type of light e.g. <i>“Extended color light”</i>.
     /// </summary>
-    public required string Type { get; init; }
+    [JsonProperty("type")]
+    public string Type { get; set; }
 
     /// <summary>
     /// <b>Deprecated</b> by Philips in favour of scenes and animations. <b>Ignore</b>.
     /// </summary>
-    public required PointSymbol PointSymbol { get; init; }
+    [JsonProperty("pointsymbol")]
+    public PointSymbol PointSymbol { get; set; }
 
     /// <summary>
     /// Unique id of the device. The MAC address of the device with a unique endpoint id in the form: <b>AA:BB:CC:DD:EE:FF:00:11-XX</b>.
     /// </summary>
-    public required string UniqueId { get; init; }
+    [JsonProperty("uniqueid")]
+    public string UniqueId { get; set; }
 
     #region Equals
 

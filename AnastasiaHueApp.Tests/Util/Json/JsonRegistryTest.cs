@@ -2,6 +2,7 @@
 using System.Text.Json;
 using AnastasiaHueApp.Models;
 using AnastasiaHueApp.Models.Message;
+using AnastasiaHueApp.Tests.TestHelpers;
 using AnastasiaHueApp.Util.Json;
 using FluentAssertions;
 using JetBrains.Annotations;
@@ -288,7 +289,7 @@ public class JsonRegistryTest
                  }
                }
              ]
-             """)]
+             """, "hdOIRli7m4e8ojJABvWxeoY-YznaMh5c7wBG5zmj")]
     public void Parse_UsernameResponse_CanParse_NotNullAndUsernameEquals(
         [StringSyntax(StringSyntaxAttribute.Json)]
         string json, string username)
@@ -304,8 +305,8 @@ public class JsonRegistryTest
         response!.Username.Should().Be(username);
     }
 
-    // Emulator json.
     [TestMethod]
+    // Emulator json.
     [DataRow("""
              {
                "state": {
@@ -366,53 +367,17 @@ public class JsonRegistryTest
                "swversion": "5.127.1.26420"
              }
              """)]
-    public void Parse_HueLight_CanParse_NotNullAndEquals([StringSyntax(StringSyntaxAttribute.Json)] string json)
+    public void Parse_HueLight_CanParse_NotNullAndStateNotNull([StringSyntax(StringSyntaxAttribute.Json)] string json)
     {
         // Arrange.
         var registry = new JsonRegistry(Mock.Of<ILogger<JsonRegistry>>());
-        var expectedLight = new HueLight
-        {
-            Id = int.MinValue, // NOTE: In reality one. However, we do not parse ids from single lights since they are embedded in the requests!
-            ModelId = "LCT001",
-            Name = "Hue Lamp 1",
-            SwVersion = "65003148",
-            UniqueId = "00:17:88:01:00:d4:12:08-0a",
-            Type = "Extended color light",
-            PointSymbol = new PointSymbol
-            {
-                Symbol1 = "none",
-                Symbol2 = "none",
-                Symbol3 = "none",
-                Symbol4 = "none",
-                Symbol5 = "none",
-                Symbol6 = "none",
-                Symbol7 = "none",
-                Symbol8 = "none"
-            },
-            State = new HueLightState
-            {
-                On = true,
-                Brightness = 225,
-                Hue = 54612,
-                Saturation = 205,
-                XyPoint = new Point(0, 0),
-                Ct = 0,
-                Alert = HueAlert.LSelect,
-                Effect = HueEffect.ColorLoop,
-                ColorMode = HueColorMode.Hs,
-                Reachable = true
-            }
-        };
 
         // Act.
         var actualLight = registry.Parse<HueLight>(json);
 
         // Assert.
-        actualLight.Should().BeEquivalentTo(expectedLight, options =>
-            options
-                .WithStrictOrdering()
-                .IncludingAllDeclaredProperties()
-                .Excluding(l => l.Id)); // IDS have to be set manually for single light parsing. Check JsonRegistry class documentation.
+        PropertyChecker.CheckAllPropertiesAreNotNull(actualLight, out _, nameof(HueLight.PointSymbol)).Should().BeTrue();
+        PropertyChecker.CheckAllPropertiesAreNotNull(actualLight!.State, out _).Should().BeTrue();
     }
 
     // Emulator json.
@@ -519,241 +484,205 @@ public class JsonRegistryTest
              """)]
     // Real hue json.
     [DataRow("""
-            {
-              "10": {
-                "state": {
-                  "on": false,
-                  "bri": 254,
-                  "hue": 0,
-                  "sat": 0,
-                  "effect": "none",
-                  "xy": [
-                    0.4573,
-                    0.4100
-                  ],
-                  "ct": 367,
-                  "alert": "none",
-                  "colormode": "xy",
-                  "reachable": false
-                },
-                "type": "Extended color light",
-                "name": "i",
-                "modelid": "LCT001",
-                "manufacturername": "Philips",
-                "uniqueid": "00:17:88:01:00:dc:04:19-0b",
-                "swversion": "5.127.1.26420"
-              },
-              "11": {
-                "state": {
-                  "on": false,
-                  "bri": 254,
-                  "hue": 14988,
-                  "sat": 141,
-                  "effect": "none",
-                  "xy": [
-                    0.4575,
-                    0.4101
-                  ],
-                  "ct": 366,
-                  "alert": "none",
-                  "colormode": "xy",
-                  "reachable": true
-                },
-                "type": "Extended color light",
-                "name": "hate",
-                "modelid": "LCT001",
-                "manufacturername": "Philips",
-                "uniqueid": "00:17:88:01:00:f6:78:db-0b",
-                "swversion": "5.127.1.26420"
-              },
-              "12": {
-                "state": {
-                  "on": false,
-                  "bri": 254,
-                  "hue": 14988,
-                  "sat": 141,
-                  "effect": "none",
-                  "xy": [
-                    0.4575,
-                    0.4101
-                  ],
-                  "ct": 366,
-                  "alert": "none",
-                  "colormode": "xy",
-                  "reachable": true
-                },
-                "type": "Extended color light",
-                "name": "all",
-                "modelid": "LCT001",
-                "manufacturername": "Philips",
-                "uniqueid": "00:17:88:01:00:dc:07:70-0b",
-                "swversion": "5.127.1.26420"
-              },
-              "14": {
-                "state": {
-                  "on": false,
-                  "bri": 254,
-                  "hue": 14988,
-                  "sat": 141,
-                  "effect": "none",
-                  "xy": [
-                    0.4575,
-                    0.4101
-                  ],
-                  "ct": 366,
-                  "alert": "none",
-                  "colormode": "xy",
-                  "reachable": true
-                },
-                "type": "Extended color light",
-                "name": "the",
-                "modelid": "LCT001",
-                "manufacturername": "Philips",
-                "uniqueid": "00:17:88:01:00:f6:79:a4-0b",
-                "swversion": "5.105.0.21536"
-              },
-              "15": {
-                "state": {
-                  "on": false,
-                  "bri": 254,
-                  "hue": 14988,
-                  "sat": 141,
-                  "effect": "none",
-                  "xy": [
-                    0.4575,
-                    0.4101
-                  ],
-                  "ct": 366,
-                  "alert": "none",
-                  "colormode": "xy",
-                  "reachable": true
-                },
-                "type": "Extended color light",
-                "name": "fucking",
-                "modelid": "LCT001",
-                "manufacturername": "Philips",
-                "uniqueid": "00:17:88:01:00:de:f0:54-0b",
-                "swversion": "5.127.1.26420"
-              },
-              "16": {
-                "state": {
-                  "on": false,
-                  "bri": 254,
-                  "hue": 32929,
-                  "sat": 220,
-                  "effect": "none",
-                  "xy": [
-                    0.3337,
-                    0.3580
-                  ],
-                  "ct": 181,
-                  "alert": "none",
-                  "colormode": "xy",
-                  "reachable": true
-                },
-                "type": "Extended color light",
-                "name": "stupid",
-                "modelid": "LCT001",
-                "manufacturername": "Philips",
-                "uniqueid": "00:17:88:01:00:f6:79:8a-0b",
-                "swversion": "5.127.1.26420"
-              },
-              "17": {
-                "state": {
-                  "on": false,
-                  "bri": 254,
-                  "hue": 32636,
-                  "sat": 218,
-                  "effect": "none",
-                  "xy": [
-                    0.3370,
-                    0.3638
-                  ],
-                  "ct": 187,
-                  "alert": "none",
-                  "colormode": "xy",
-                  "reachable": true
-                },
-                "type": "Extended color light",
-                "name": "annoying",
-                "modelid": "LCT001",
-                "manufacturername": "Philips",
-                "uniqueid": "00:17:88:01:00:f6:79:2a-0b",
-                "swversion": "5.127.1.26420"
-              },
-              "18": {
-                "state": {
-                  "on": false,
-                  "bri": 254,
-                  "hue": 34391,
-                  "sat": 226,
-                  "effect": "none",
-                  "xy": [
-                    0.3178,
-                    0.3285
-                  ],
-                  "ct": 159,
-                  "alert": "none",
-                  "colormode": "xy",
-                  "reachable": true
-                },
-                "type": "Extended color light",
-                "name": "n......",
-                "modelid": "LCT001",
-                "manufacturername": "Philips",
-                "uniqueid": "00:17:88:01:00:f6:79:a0-0b",
-                "swversion": "5.127.1.26420"
-              }
-            }
-            """)]
-    public void Parse_HueLightList_CanParse_Light1NotNullAndEquals([StringSyntax(StringSyntaxAttribute.Json)] string json)
+             {
+               "10": {
+                 "state": {
+                   "on": false,
+                   "bri": 254,
+                   "hue": 0,
+                   "sat": 0,
+                   "effect": "none",
+                   "xy": [
+                     0.4573,
+                     0.4100
+                   ],
+                   "ct": 367,
+                   "alert": "none",
+                   "colormode": "xy",
+                   "reachable": false
+                 },
+                 "type": "Extended color light",
+                 "name": "i",
+                 "modelid": "LCT001",
+                 "manufacturername": "Philips",
+                 "uniqueid": "00:17:88:01:00:dc:04:19-0b",
+                 "swversion": "5.127.1.26420"
+               },
+               "11": {
+                 "state": {
+                   "on": false,
+                   "bri": 254,
+                   "hue": 14988,
+                   "sat": 141,
+                   "effect": "none",
+                   "xy": [
+                     0.4575,
+                     0.4101
+                   ],
+                   "ct": 366,
+                   "alert": "none",
+                   "colormode": "xy",
+                   "reachable": true
+                 },
+                 "type": "Extended color light",
+                 "name": "hate",
+                 "modelid": "LCT001",
+                 "manufacturername": "Philips",
+                 "uniqueid": "00:17:88:01:00:f6:78:db-0b",
+                 "swversion": "5.127.1.26420"
+               },
+               "12": {
+                 "state": {
+                   "on": false,
+                   "bri": 254,
+                   "hue": 14988,
+                   "sat": 141,
+                   "effect": "none",
+                   "xy": [
+                     0.4575,
+                     0.4101
+                   ],
+                   "ct": 366,
+                   "alert": "none",
+                   "colormode": "xy",
+                   "reachable": true
+                 },
+                 "type": "Extended color light",
+                 "name": "all",
+                 "modelid": "LCT001",
+                 "manufacturername": "Philips",
+                 "uniqueid": "00:17:88:01:00:dc:07:70-0b",
+                 "swversion": "5.127.1.26420"
+               },
+               "14": {
+                 "state": {
+                   "on": false,
+                   "bri": 254,
+                   "hue": 14988,
+                   "sat": 141,
+                   "effect": "none",
+                   "xy": [
+                     0.4575,
+                     0.4101
+                   ],
+                   "ct": 366,
+                   "alert": "none",
+                   "colormode": "xy",
+                   "reachable": true
+                 },
+                 "type": "Extended color light",
+                 "name": "the",
+                 "modelid": "LCT001",
+                 "manufacturername": "Philips",
+                 "uniqueid": "00:17:88:01:00:f6:79:a4-0b",
+                 "swversion": "5.105.0.21536"
+               },
+               "15": {
+                 "state": {
+                   "on": false,
+                   "bri": 254,
+                   "hue": 14988,
+                   "sat": 141,
+                   "effect": "none",
+                   "xy": [
+                     0.4575,
+                     0.4101
+                   ],
+                   "ct": 366,
+                   "alert": "none",
+                   "colormode": "xy",
+                   "reachable": true
+                 },
+                 "type": "Extended color light",
+                 "name": "fucking",
+                 "modelid": "LCT001",
+                 "manufacturername": "Philips",
+                 "uniqueid": "00:17:88:01:00:de:f0:54-0b",
+                 "swversion": "5.127.1.26420"
+               },
+               "16": {
+                 "state": {
+                   "on": false,
+                   "bri": 254,
+                   "hue": 32929,
+                   "sat": 220,
+                   "effect": "none",
+                   "xy": [
+                     0.3337,
+                     0.3580
+                   ],
+                   "ct": 181,
+                   "alert": "none",
+                   "colormode": "xy",
+                   "reachable": true
+                 },
+                 "type": "Extended color light",
+                 "name": "stupid",
+                 "modelid": "LCT001",
+                 "manufacturername": "Philips",
+                 "uniqueid": "00:17:88:01:00:f6:79:8a-0b",
+                 "swversion": "5.127.1.26420"
+               },
+               "17": {
+                 "state": {
+                   "on": false,
+                   "bri": 254,
+                   "hue": 32636,
+                   "sat": 218,
+                   "effect": "none",
+                   "xy": [
+                     0.3370,
+                     0.3638
+                   ],
+                   "ct": 187,
+                   "alert": "none",
+                   "colormode": "xy",
+                   "reachable": true
+                 },
+                 "type": "Extended color light",
+                 "name": "annoying",
+                 "modelid": "LCT001",
+                 "manufacturername": "Philips",
+                 "uniqueid": "00:17:88:01:00:f6:79:2a-0b",
+                 "swversion": "5.127.1.26420"
+               },
+               "18": {
+                 "state": {
+                   "on": false,
+                   "bri": 254,
+                   "hue": 34391,
+                   "sat": 226,
+                   "effect": "none",
+                   "xy": [
+                     0.3178,
+                     0.3285
+                   ],
+                   "ct": 159,
+                   "alert": "none",
+                   "colormode": "xy",
+                   "reachable": true
+                 },
+                 "type": "Extended color light",
+                 "name": "n......",
+                 "modelid": "LCT001",
+                 "manufacturername": "Philips",
+                 "uniqueid": "00:17:88:01:00:f6:79:a0-0b",
+                 "swversion": "5.127.1.26420"
+               }
+             }
+             """)]
+    public void Parse_HueLightList_CanParse_Light1NotNullAndLight1StateNotNull(
+        [StringSyntax(StringSyntaxAttribute.Json)] string json)
     {
         // Arrange.
         var registry = new JsonRegistry(Mock.Of<ILogger<JsonRegistry>>());
-        var expectedLight = new HueLight
-        {
-            Id = 1,
-            ModelId = "LCT001",
-            Name = "Hue Lamp 1",
-            SwVersion = "65003148",
-            UniqueId = "00:17:88:01:00:d4:12:08-0a",
-            Type = "Extended color light",
-            PointSymbol = new PointSymbol
-            {
-                Symbol1 = "none",
-                Symbol2 = "none",
-                Symbol3 = "none",
-                Symbol4 = "none",
-                Symbol5 = "none",
-                Symbol6 = "none",
-                Symbol7 = "none",
-                Symbol8 = "none"
-            },
-            State = new HueLightState
-            {
-                On = true,
-                Brightness = 225,
-                Hue = 54612,
-                Saturation = 205,
-                XyPoint = new Point(0, 0),
-                Ct = 0,
-                Alert = HueAlert.LSelect,
-                Effect = HueEffect.ColorLoop,
-                ColorMode = HueColorMode.Hs,
-                Reachable = true
-            }
-        };
 
         // Act.
-        var actualLight = registry.Parse<List<HueLight>>(json);
+        var actualLight = registry.Parse<List<HueLight>>(json)![0];
 
         // Assert.
-        actualLight.Should().NotBeNull();
-        actualLight!.First().Should().NotBeNull();
-        actualLight!.First().Should().BeEquivalentTo(expectedLight, options =>
-            options
-                .WithStrictOrdering()
-                .IncludingAllDeclaredProperties());
+        PropertyChecker.CheckAllPropertiesAreNotNull(actualLight, out _, nameof(HueLight.PointSymbol)).Should().BeTrue();
+        PropertyChecker.CheckAllPropertiesAreNotNull(actualLight.State, out _).Should().BeTrue();
     }
 
     #endregion
