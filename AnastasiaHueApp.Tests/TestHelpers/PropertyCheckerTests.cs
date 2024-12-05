@@ -62,32 +62,11 @@ public class PropertyCheckerTests
 
     [TestMethod]
     [DataRow("", "", "")]
-    [DataRow("Patryk", "Peda", "U-21 Polish Footballer")]
-    public void CheckAllPropertiesAreNotNull_CheckTestClass1PropertiesDictionaryCheckCorrectValue_ReturnsTrue(string? firstName, string? lastName, string? description)
-    {
-        // Arrange.
-        var testObj = new BeautifulTestClass1
-        {
-            FirstName = firstName,
-            LastName = lastName,
-            Description = description,
-        };
-
-        // Act.
-        PropertyChecker.CheckAllPropertiesAreNotNull(testObj, out var dic);
-
-        // Assert.
-        dic[nameof(BeautifulTestClass1.FirstName)].Should().BeTrue();
-        dic[nameof(BeautifulTestClass1.LastName)].Should().BeTrue();
-        dic[nameof(BeautifulTestClass1.Description)].Should().BeTrue();
-    }
-
-    [TestMethod]
-    [DataRow("", "", null)]
     [DataRow(null, null, null)]
     [DataRow("Patryk", null, null)]
     [DataRow("Patryk", "Peda", null)]
-    public void CheckAllPropertiesAreNotNull_CheckTestClass1PropertiesDictionaryCheckCorrectValue_ReturnsFalse(string? firstName, string? lastName, string? description)
+    [DataRow("Patryk", "Peda", "U-21 Polish Footballer")]
+    public void CheckAllPropertiesAreNotNull_CheckTestClass1PropertiesDictionaryCheckCorrectValue_ReturnsCorrectValue(string? firstName, string? lastName, string? description)
     {
         // Arrange.
         var testObj = new BeautifulTestClass1
