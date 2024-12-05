@@ -216,7 +216,7 @@ public class JsonRegistryTest
                  }
                }
              ]
-             """, 210)]
+             """, 201)]
     [DataRow("""
              [
                {
