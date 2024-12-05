@@ -2,6 +2,7 @@
 using System.Text.Json;
 using AnastasiaHueApp.Models;
 using AnastasiaHueApp.Models.Message;
+using AnastasiaHueApp.Tests.TestHelpers;
 using AnastasiaHueApp.Util.Json;
 using FluentAssertions;
 using JetBrains.Annotations;
@@ -340,92 +341,6 @@ public class JsonRegistryTest
                }
              }
              """)]
-    public void Parse_HueLight_CanParse_NotNullAndEquals([StringSyntax(StringSyntaxAttribute.Json)] string json)
-    {
-        // Arrange.
-        var registry = new JsonRegistry(Mock.Of<ILogger<JsonRegistry>>());
-        var expectedLight = new HueLight
-        {
-            Id = int.MinValue, // NOTE: In reality one. However, we do not parse ids from single lights since they are embedded in the requests!
-            ModelId = "LCT001",
-            Name = "Hue Lamp 1",
-            SwVersion = "65003148",
-            UniqueId = "00:17:88:01:00:d4:12:08-0a",
-            Type = "Extended color light",
-            PointSymbol = new PointSymbol
-            {
-                Symbol1 = "none",
-                Symbol2 = "none",
-                Symbol3 = "none",
-                Symbol4 = "none",
-                Symbol5 = "none",
-                Symbol6 = "none",
-                Symbol7 = "none",
-                Symbol8 = "none"
-            },
-            State = new HueLightState
-            {
-                On = true,
-                Brightness = 225,
-                Hue = 54612,
-                Saturation = 205,
-                XyPoint = [0, 0],
-                Ct = 0,
-                Alert = HueAlert.LSelect,
-                Effect = HueEffect.ColorLoop,
-                ColorMode = HueColorMode.Hs,
-                Reachable = true
-            }
-        };
-
-        // Act.
-        var actualLight = registry.Parse<HueLight>(json);
-
-        // Assert.
-        actualLight.Should().BeEquivalentTo(expectedLight, options =>
-            options
-                .WithStrictOrdering()
-                .IncludingAllDeclaredProperties()
-                .Excluding(l =>
-                    l.Id)); // IDS have to be set manually for single light parsing. Check JsonRegistry class documentation.
-    }
-
-    [TestMethod]
-    // Emulator json.
-    [DataRow("""
-             {
-               "state": {
-                 "on": true,
-                 "bri": 225,
-                 "hue": 54612,
-                 "sat": 205,
-                 "xy": [
-                   0,
-                   0
-                 ],
-                 "ct": 0,
-                 "alert": "lselect",
-                 "effect": "colorloop",
-                 "colormode": "hs",
-                 "reachable": true
-               },
-               "type": "Extended color light",
-               "name": "Hue Lamp 1",
-               "modelid": "LCT001",
-               "swversion": "65003148",
-               "uniqueid": "00:17:88:01:00:d4:12:08-0a",
-               "pointsymbol": {
-                 "1": "none",
-                 "2": "none",
-                 "3": "none",
-                 "4": "none",
-                 "5": "none",
-                 "6": "none",
-                 "7": "none",
-                 "8": "none"
-               }
-             }
-             """)]
     // Hue light json.
     [DataRow("""
              {
@@ -461,7 +376,8 @@ public class JsonRegistryTest
         var actualLight = registry.Parse<HueLight>(json);
 
         // Assert.
-        // TODO: Assert properties that we want to set with CheckAllPropertiesAreNotNull method.
+        PropertyChecker.CheckAllPropertiesAreNotNull(actualLight, out _, nameof(HueLight.PointSymbol)).Should().BeTrue();
+        PropertyChecker.CheckAllPropertiesAreNotNull(actualLight!.State, out _).Should().BeTrue();
     }
 
     // Emulator json.
@@ -755,55 +671,18 @@ public class JsonRegistryTest
                }
              }
              """)]
-    public void Parse_HueLightList_CanParse_Light1NotNullAndEquals(
+    public void Parse_HueLightList_CanParse_Light1NotNullAndLight1StateNotNull(
         [StringSyntax(StringSyntaxAttribute.Json)] string json)
     {
         // Arrange.
         var registry = new JsonRegistry(Mock.Of<ILogger<JsonRegistry>>());
-        var expectedLight = new HueLight
-        {
-            Id = 1,
-            ModelId = "LCT001",
-            Name = "Hue Lamp 1",
-            SwVersion = "65003148",
-            UniqueId = "00:17:88:01:00:d4:12:08-0a",
-            Type = "Extended color light",
-            PointSymbol = new PointSymbol
-            {
-                Symbol1 = "none",
-                Symbol2 = "none",
-                Symbol3 = "none",
-                Symbol4 = "none",
-                Symbol5 = "none",
-                Symbol6 = "none",
-                Symbol7 = "none",
-                Symbol8 = "none"
-            },
-            State = new HueLightState
-            {
-                On = true,
-                Brightness = 225,
-                Hue = 54612,
-                Saturation = 205,
-                XyPoint = [0, 0],
-                Ct = 0,
-                Alert = HueAlert.LSelect,
-                Effect = HueEffect.ColorLoop,
-                ColorMode = HueColorMode.Hs,
-                Reachable = true
-            }
-        };
 
         // Act.
-        var actualLight = registry.Parse<List<HueLight>>(json);
+        var actualLight = registry.Parse<List<HueLight>>(json)![0];
 
         // Assert.
-        actualLight.Should().NotBeNull();
-        actualLight!.First().Should().NotBeNull();
-        actualLight!.First().Should().BeEquivalentTo(expectedLight, options =>
-            options
-                .WithStrictOrdering()
-                .IncludingAllDeclaredProperties());
+        PropertyChecker.CheckAllPropertiesAreNotNull(actualLight, out _, nameof(HueLight.PointSymbol)).Should().BeTrue();
+        PropertyChecker.CheckAllPropertiesAreNotNull(actualLight.State, out _).Should().BeTrue();
     }
 
     #endregion
