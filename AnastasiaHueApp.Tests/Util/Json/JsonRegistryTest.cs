@@ -288,7 +288,7 @@ public class JsonRegistryTest
                  }
                }
              ]
-             """)]
+             """, "hdOIRli7m4e8ojJABvWxeoY-YznaMh5c7wBG5zmj")]
     public void Parse_UsernameResponse_CanParse_NotNullAndUsernameEquals(
         [StringSyntax(StringSyntaxAttribute.Json)]
         string json, string username)
@@ -395,7 +395,7 @@ public class JsonRegistryTest
                 Brightness = 225,
                 Hue = 54612,
                 Saturation = 205,
-                XyPoint = new Point(0, 0),
+                XyPoint = [0, 0],
                 Ct = 0,
                 Alert = HueAlert.LSelect,
                 Effect = HueEffect.ColorLoop,
@@ -735,7 +735,7 @@ public class JsonRegistryTest
                 Brightness = 225,
                 Hue = 54612,
                 Saturation = 205,
-                XyPoint = new Point(0, 0),
+                XyPoint = [0, 0],
                 Ct = 0,
                 Alert = HueAlert.LSelect,
                 Effect = HueEffect.ColorLoop,
