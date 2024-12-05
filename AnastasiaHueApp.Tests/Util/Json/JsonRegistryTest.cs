@@ -304,8 +304,8 @@ public class JsonRegistryTest
         response!.Username.Should().Be(username);
     }
 
-    // Emulator json.
     [TestMethod]
+    // Emulator json.
     [DataRow("""
              {
                "state": {
