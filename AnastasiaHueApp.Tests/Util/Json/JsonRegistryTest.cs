@@ -243,6 +243,17 @@ public class JsonRegistryTest
                }
              ]
              """, 7)]
+    [DataRow("""
+             [
+               {
+                 "error": {
+                   "type": 101,
+                   "address": "/",
+                   "description": "link button not pressed"
+                 }
+               }
+             ]
+             """, 101)]
     public void Parse_ErrorMessage_CanParse_NotNullAndTypeEquals([StringSyntax(StringSyntaxAttribute.Json)] string json,
         int errorType)
     {
@@ -258,6 +269,7 @@ public class JsonRegistryTest
     }
 
     [TestMethod]
+    // Emulator json.
     [DataRow("""
              [
                {
@@ -267,7 +279,16 @@ public class JsonRegistryTest
                }
              ]
              """, "5729c8e92cb6812aaa58471ce6b36cb")]
-    // TODO: Get real username response.
+    // Real hue json.
+    [DataRow("""
+             [
+               {
+                 "success": {
+                   "username": "hdOIRli7m4e8ojJABvWxeoY-YznaMh5c7wBG5zmj"
+                 }
+               }
+             ]
+             """)]
     public void Parse_UsernameResponse_CanParse_NotNullAndUsernameEquals(
         [StringSyntax(StringSyntaxAttribute.Json)]
         string json, string username)
