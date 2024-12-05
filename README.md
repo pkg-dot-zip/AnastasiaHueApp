@@ -56,6 +56,7 @@ This was an assigment for university.
 - [FluentAssertions](https://fluentassertions.com/) - A very extensive set of extension methods that allow you to more naturally specify the expected outcome of a TDD or BDD-style unit tests
 - [Moq](https://github.com/devlooped/moq) - The most popular and friendly mocking framework for .NET
 - [Serilog](https://serilog.net/) - Flexible, structured events — log file convenience
+- [Newtonsoft Json.NET](https://www.newtonsoft.com/json) - Popular high-performance JSON framework for .NET
 
 
 ## ✍️ Authors <a name = "authors"></a>
