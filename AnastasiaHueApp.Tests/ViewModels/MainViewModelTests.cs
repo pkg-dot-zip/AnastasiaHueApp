@@ -5,7 +5,6 @@ using AnastasiaHueApp.Util.Alerts;
 using AnastasiaHueApp.Util.Hue;
 using AnastasiaHueApp.Util.Shell;
 using AnastasiaHueApp.ViewModels;
-using Castle.Core.Logging;
 using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -42,7 +41,7 @@ public class MainViewModelTests
         var hueHandler = new Mock<IHueHandler>();
         hueHandler
             .Setup(h => h.AttemptLinkAsync())
-            .ReturnsAsync(() => new Either<UsernameResponse, ErrorResponse>(error));
+            .ReturnsAsync(new Either<UsernameResponse, ErrorResponse>(error));
 
         var viewModel = new MainViewModel(logger.Object, alertHandler.Object, hueHandler.Object, shellContainer.Object);
 
