@@ -118,7 +118,6 @@ public class HueHandler(
     /// <inheritdoc />
     public async Task<ErrorResponse?> LightSwitch(int id, bool on)
     {
-        if (id <= 0) throw new ArgumentOutOfRangeException(nameof(id));
         return await SetLightState(id, new HueLightState() { On = on });
     }
 
@@ -154,6 +153,7 @@ public class HueHandler(
     /// <returns>An <see cref="ErrorResponse"/> or <see langword="null"/>.</returns>
     private async Task<ErrorResponse?> SetLightState(int id, HueLightState state)
     {
+        if (id <= 0) throw new ArgumentOutOfRangeException(nameof(id));
         if (!IsAllowedToMakeCall(out var error)) return error;
 
         try
