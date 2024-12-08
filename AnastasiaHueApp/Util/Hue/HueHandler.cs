@@ -38,7 +38,7 @@ public class HueHandler(
 
             if (either.IsType<List<HueLight>>(out _)) return (true, username);
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return (false, null);
         }

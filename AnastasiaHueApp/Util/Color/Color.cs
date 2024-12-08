@@ -12,19 +12,19 @@ public class Color
     /// Hue directly given to the Hue Light. <br/>
     /// Ranges from <b>0 to 65535</b>.
     /// </summary>
-    public int Hue { get; private set; }
+    public int Hue { get; }
 
     /// <summary>
     /// Saturation directly given to the Hue Light. <br/>
     /// Ranges from <b>0 to 254</b>.
     /// </summary>
-    public int Saturation { get; private set; }
+    public int Saturation { get; }
 
     /// <summary>
     /// Brightness directly given to the Hue Light. <br/>
     /// Ranges from <b>0 to 254</b>.
     /// </summary>
-    public int Brightness { get; private set; }
+    public int Brightness { get; }
 
     private Color(int hue, int saturation, int brightness)
     {

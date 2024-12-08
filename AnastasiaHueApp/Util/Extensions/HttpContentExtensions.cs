@@ -1,6 +1,4 @@
-using System.Diagnostics;
 using AnastasiaHueApp.Util.Json;
-using System.Runtime.CompilerServices;
     
 namespace AnastasiaHueApp.Util.Extensions;
 
@@ -21,11 +19,9 @@ public static class HttpContentExtensions
     /// <typeparam name="T"><see cref="Type"/> to attempt parsing for.</typeparam>
     /// <param name="content">Content to parse. Will have to contain a json response parsable by <paramref name="registry"/>.</param>
     /// <param name="registry"><see cref="IJsonRegistry"/> to use for parsing <typeparamref name="T"/>.</param>
-    /// <param name="caller">Method or property name of the caller of this method.</param>
     /// <returns><typeparamref name="T"/> or <see langword="null"/>.</returns>
-    public static async Task<T?> ReadAsOrNullAsync<T>(this HttpContent content, IJsonRegistry registry, [CallerMemberName] string caller = "")
+    public static async Task<T?> ReadAsOrNullAsync<T>(this HttpContent content, IJsonRegistry registry)
     {
-        Debug.Write($"{nameof(ReadAsOrNullAsync)} called by {caller}");
         var json = await content.ReadAsJsonString();
         return registry.Parse<T>(json);
     }
@@ -40,11 +36,9 @@ public static class HttpContentExtensions
     /// <typeparam name="T2"><see cref="Type"/> to attempt parsing for.</typeparam>
     /// <param name="content">Content to parse. Will have to contain a json response parsable by <paramref name="registry"/>.</param>
     /// <param name="registry"><see cref="IJsonRegistry"/> to use for parsing <typeparamref name="T1"/> & <typeparamref name="T2"/>.</param>
-    /// <param name="caller">Method or property name of the caller of this method.</param>
     /// <returns>An instance of <see cref="Either{T1,T2}"/> holding <typeparamref name="T1"/> or <typeparamref name="T2"/>.</returns>
-    public static async Task<Either<T1, T2>> ReadAsEitherAsync<T1, T2>(this HttpContent content, IJsonRegistry registry, [CallerMemberName] string caller = "")
+    public static async Task<Either<T1, T2>> ReadAsEitherAsync<T1, T2>(this HttpContent content, IJsonRegistry registry)
     {
-        Debug.Write($"{nameof(ReadAsEitherAsync)} called by {caller}");
         var json = await content.ReadAsJsonString();
         var value1 = registry.Parse<T1>(json);
         var value2 = registry.Parse<T2>(json);

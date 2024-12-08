@@ -2,6 +2,9 @@
 
 namespace AnastasiaHueApp.Tests.TestHelpers;
 
+/// <summary>
+/// Helper util classes to avoid duplicate code in our unit tests.
+/// </summary>
 public static class PropertyChecker
 {
     public static bool CheckAllPropertiesAreNotNull<T>(
@@ -11,7 +14,7 @@ public static class PropertyChecker
     {
         propertyStatuses = new Dictionary<string, bool>();
 
-        if (obj == null) throw new ArgumentNullException(nameof(obj));
+        if (obj is null) throw new ArgumentNullException(nameof(obj));
 
         var properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance)
             .Where(p => !propertiesToIgnore.Contains(p.Name));
