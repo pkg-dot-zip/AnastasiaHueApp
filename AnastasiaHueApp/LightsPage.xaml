@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AnastasiaHueApp.LightsPage"
+             xmlns:viewModels="clr-namespace:AnastasiaHueApp.ViewModels"
+             xmlns:color="clr-namespace:AnastasiaHueApp.Util.Color"
+             xmlns:cards="clr-namespace:PanCardView;assembly=PanCardView"
+             xmlns:controls="clr-namespace:PanCardView.Controls;assembly=PanCardView"
+             xmlns:models="clr-namespace:AnastasiaHueApp.Models"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:DataType="viewModels:MainViewModel"
+             x:Name="LightsPageName">
+
+    <ContentPage.Resources>
+        <Style x:Key="MyFrameStyle" TargetType="Frame" BasedOn="{StaticResource FrameStyle}">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush>
+                        <GradientStop Color="{StaticResource Cerulean}" Offset="0.1" />
+                        <GradientStop Color="{StaticResource BerkeleyBlue}" Offset="1.0" />
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <DataTrigger TargetType="Frame" Binding="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.IsRefreshing}" Value="True">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <LinearGradientBrush>
+                                <GradientStop Color="{StaticResource Cerulean}" Offset="0.1" />
+                                <GradientStop Color="{StaticResource PantoneRed}" Offset="1.0" />
+                            </LinearGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </ContentPage.Resources>
+
+    <cards:CarouselView
+        ItemsSource="{Binding Lights}"
+        SelectedIndex="{Binding SelectedLightIndex}">
+
+        <cards:CarouselView.GestureRecognizers>
+            <SwipeGestureRecognizer Direction="Down" Command="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.RefreshLightsCommand}"/>
+        </cards:CarouselView.GestureRecognizers>
+
+        <cards:CarouselView.ItemTemplate>
+            <DataTemplate>
+                <ContentView x:DataType="models:HueLight">
+                    <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
+
+                        <Label Text="{Binding Id}" Style="{StaticResource TitleXL}" />
+                        <Label Text="{Binding Name}" Style="{StaticResource TitleL}" />
+
+                        <Frame Style="{StaticResource MyFrameStyle}">
+                            <ScrollView>
+                                <VerticalStackLayout>
+                                    <Label Text="{Binding ModelId}" Style="{StaticResource RegularText}" />
+                                    <Label Text="{Binding Type}" Style="{StaticResource RegularText}" />
+
+                                    <Switch IsToggled="{Binding State.On}" Style="{StaticResource SwitchStyle}">
+                                        <Switch.Behaviors>
+                                            <toolkit:EventToCommandBehavior
+                                                EventName="Toggled"
+                                                Command="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.SwitchLightCommand}" />
+                                        </Switch.Behaviors>
+                                    </Switch>
+
+                                    <Button Text="Blink"
+                                            Command="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.MakeLightBlinkFor10SecCommand}"
+                                            Style="{StaticResource ButtonStyle}"/>
+                                    <Button Text="ColorLoop"
+                                            Command="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.MakeLightColorLoopCommand}" 
+                                            Style="{StaticResource ButtonStyle}"/>
+
+
+                                    <Rectangle WidthRequest="100" HeightRequest="100" Stroke="{StaticResource Honeydew}" StrokeThickness="3" RadiusX="50" RadiusY="50"
+                                               Fill="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.SelectedColorBrush}"/>
+
+                                    <Slider
+                                        Maximum="65535"
+                                        ThumbColor="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.SelectedColor}"
+                                        Value="{Binding State.Hue}"
+                                        Style="{StaticResource SliderStyle}"
+                                        DragCompletedCommand="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.ChangeLightColorCommand }"/>
+                                    <Slider MinimumTrackColor="White"
+                                            MaximumTrackColor="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.SelectedColor}"
+                                            Maximum="254"
+                                            Value="{Binding State.Saturation}"
+                                            Style="{StaticResource SliderStyle}"
+                                            DragCompletedCommand="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.ChangeLightColorCommand }"/>
+                                    <Slider MinimumTrackColor="Black" MaximumTrackColor="White" Minimum="0"
+                                            Maximum="254"
+                                            Value="{Binding State.Brightness}"
+                                            Style="{StaticResource SliderStyle}"
+                                            DragCompletedCommand="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.ChangeLightColorCommand }"/>
+
+                                </VerticalStackLayout>
+                            </ScrollView>
+
+
+                        </Frame>
+                    </VerticalStackLayout>
+                </ContentView>
+            </DataTemplate>
+        </cards:CarouselView.ItemTemplate>
+
+        <ActivityIndicator IsRunning="{Binding Source={x:Reference LightsPageName}, Path=BindingContext.IsRefreshing}" Style="{StaticResource IndicatorStyle}"/>
+
+        <controls:LeftArrowControl />
+        <controls:RightArrowControl />
+        <controls:IndicatorsControl />
+    </cards:CarouselView>
+
+</ContentPage>

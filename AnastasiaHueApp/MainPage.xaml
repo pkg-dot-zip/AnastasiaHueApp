@@ -1,4 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
+
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AnastasiaHueApp.MainPage"
@@ -9,15 +10,18 @@
         <VerticalStackLayout
             Padding="30,0"
             Spacing="25">
-            <Image
-                Source="dotnet_bot.png"
-                HeightRequest="185"
-                Aspect="AspectFit"
-                SemanticProperties.Description="dot net bot in a hovercraft number nine" />
 
-            <Label
-                Text="{Binding Text}"/>
+            <Image
+                Source="light_bulbs_colors.png"
+                HeightRequest="320"
+                Aspect="AspectFit"/>
+
+            <Editor Text="{Binding BoxText}" FontFamily="{StaticResource MyFont}" />
+
+            <Button
+                Text="Attempt Link"
+                Command="{Binding RetrieveBridgeConfigCommand}"
+                Style="{StaticResource ButtonStyle}"/>
         </VerticalStackLayout>
     </ScrollView>
-
 </ContentPage>
